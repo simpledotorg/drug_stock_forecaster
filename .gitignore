@@ -25,6 +25,7 @@ yarn-error.log*
 *.local
 
 # Vue build outputs
+/dist/
 /build/
 
 # Vue CLI
