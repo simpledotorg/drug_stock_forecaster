@@ -150,7 +150,7 @@
         />
       </div>
 
-      <button type="submit" class="submit-button">Calculate</button>
+      <!-- <button type="submit" class="submit-button">Calculate</button> -->
     </form>
   </div>
 </template>
@@ -159,7 +159,7 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDrugCalcStore } from '../stores/drugsCalculator'
-// import { useDrugCalcQuerySync } from '../composables/useDrugCalcQuerySync.ts'
+// import { useDrugCalcQuerySync } from '../composables/useDrugCalcQuerySync'
 
 const store = useDrugCalcStore()
 // useDrugCalcQuerySync(store)

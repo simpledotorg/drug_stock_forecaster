@@ -65,7 +65,7 @@ td {
   border: 1px solid #ddd;
   padding: 0.5rem 0.75rem;
   text-align: right;
-  vertical-align: bottom;
+  vertical-align: top;
 }
 
 /* th {

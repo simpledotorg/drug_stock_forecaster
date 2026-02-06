@@ -9,11 +9,11 @@
       <DrugsCalculatorForm />
     </aside>
     <main>
-      <div class="header header-content">
+      <div class="header header-content" v-if="store.showForecast">
         <h2>Your forecast</h2>
         <button class="share-button">share forecast</button>
       </div>
-      <div class="content">
+      <div class="content" v-if="store.showForecast">
         <TheForecast />
         <Assumptions />
         <Calculation />
@@ -27,6 +27,9 @@ import DrugsCalculatorForm from './components/DrugsCalculatorForm.vue'
 import Calculation from './components/Calculation.vue'
 import TheForecast from './components/TheForecast.vue'
 import Assumptions from './components/Assumptions.vue'
+import { useDrugCalcStore } from './stores/drugsCalculator'
+
+const store = useDrugCalcStore()
 </script>
 
 <style>

@@ -1,16 +1,17 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 export const useDrugCalcStore = defineStore('drugCalc', () => {
 
     // Population data
-    const totalPopulation = ref(1000000)
+    const totalPopulation = ref(10000000)
     const adultPopulation = ref(80)
     const prevalenceHTN = ref(25)
     const existingPatients = ref(400000)
     const targetEnrolment = ref(20000)
     const treatmentAdherence = ref(65)
 
+    
     // Computed
     const estimatedHTNPopulation = computed(() => {
         return totalPopulation.value * adultPopulation.value / 100 * prevalenceHTN.value / 100
@@ -20,12 +21,8 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         return existingPatients.value / estimatedHTNPopulation.value * 100
     })
 
-    const targetNewEnrolmentInOneYear = computed(() => {
-        return targetEnrolment.value / estimatedHTNPopulation.value * 100
-    })
-
     const estimatedMonthlyEnrolment = computed(() => {
-        return targetEnrolment.value / 12
+        return Math.round(targetEnrolment.value / 12)
     })
 
     const totalAdultPopulation = computed(() => {
@@ -49,7 +46,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const patientsTreatedFromAdherence = computed(() => {
         const patientsTreated = []
         for (let i = 0; i < 12; i++) {
-            patientsTreated.push(expectedCumulativeEnrolment.value[i] * treatmentAdherence.value / 100)
+            patientsTreated.push(Math.round(expectedCumulativeEnrolment.value[i] * treatmentAdherence.value / 100))
         }
         return patientsTreated
     })
@@ -168,6 +165,25 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const losartan50mgCost = ref()
     const hydrochlorothiazide25mgCost = ref()
 
+    const isNumber = (v) => typeof v === 'number' && !Number.isNaN(v)
+    const inputsComplete = computed(() =>
+        isNumber(totalPopulation.value) &&
+        isNumber(adultPopulation.value) &&
+        isNumber(prevalenceHTN.value) &&
+        isNumber(existingPatients.value) &&
+        isNumber(targetEnrolment.value) &&
+        isNumber(treatmentAdherence.value) 
+        // &&
+        // isNumber(amoldipine5mgCost.value) &&
+        // isNumber(losartan50mgCost.value) &&
+        // isNumber(hydrochlorothiazide25mgCost.value)
+    )
+    // Once all inputs are complete, show forecast and never hide again
+    const showForecast = ref(false)
+    watch(inputsComplete, (complete) => {
+        if (complete) showForecast.value = true
+    }, { immediate: true })
+
     const protocolPercentageStep1 = ref(100)
     const protocolPercentageStep2 = ref(40)
     const protocolPercentageStep3 = ref(25)
@@ -186,7 +202,6 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         // Computed
         estimatedHTNPopulation,
         htnCoverage,
-        targetNewEnrolmentInOneYear,
         totalAdultPopulation,
         estimatedMonthlyEnrolment,
         expectedCumulativeEnrolment,
@@ -210,6 +225,9 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         amoldipine5mgCost,
         losartan50mgCost,
         hydrochlorothiazide25mgCost,
+        // Visibility (sticky once complete)
+        inputsComplete,
+        showForecast,
     }
 })
 
