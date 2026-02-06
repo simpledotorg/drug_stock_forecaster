@@ -150,7 +150,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         return {
             amlodipine5mgTabletsTotal: Step1TabletsTotal.value + Step3TabletsTotal.value,
             losartan50mgTabletsTotal: Step2TabletsTotal.value + Step3TabletsTotal.value,
-            hydrochlorothiazide25mgTabletsTotal: Step3TabletsTotal.value,
+            hydrochlorothiazide25mgTabletsTotal: Step4TabletsTotal.value,
         }
     })
 
