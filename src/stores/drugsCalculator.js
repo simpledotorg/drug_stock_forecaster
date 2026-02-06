@@ -72,6 +72,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         }
         return monthlyTablets
     })
+    
     const Step2TabletsTotal = computed(() => { // total losartan 50mg tablets
         return Step2Tablets.value.reduce((acc, curr) => acc + curr, 0)
     })
@@ -144,6 +145,24 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         }
         return yearlyBreakdown
     })
+
+    const tabletsForYearForecast = computed(() => {
+        return {
+            amlodipine5mgTabletsTotal: Step1TabletsTotal.value + Step3TabletsTotal.value,
+            losartan50mgTabletsTotal: Step2TabletsTotal.value + Step3TabletsTotal.value,
+            hydrochlorothiazide25mgTabletsTotal: Step3TabletsTotal.value,
+        }
+    })
+
+    const costForYearForecast = computed(() => {
+        return {
+            amlodipine5mgCost: amoldipine5mgCost.value * tabletsForYearForecast.value.amlodipine5mgTabletsTotal,
+            losartan50mgCost: losartan50mgCost.value * tabletsForYearForecast.value.losartan50mgTabletsTotal,
+            hydrochlorothiazide25mgCost: hydrochlorothiazide25mgCost.value * tabletsForYearForecast.value.hydrochlorothiazide25mgTabletsTotal,
+        }
+    })
+
+
     //  Drug data
     const amoldipine5mgCost = ref()
     const losartan50mgCost = ref()
@@ -186,6 +205,8 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         Step4TabletsTotal,
         Step5TabletsTotal,
         Step6TabletsTotal,
+        tabletsForYearForecast,
+        costForYearForecast,
         // Drug data
         amoldipine5mgCost,
         losartan50mgCost,

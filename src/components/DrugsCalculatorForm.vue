@@ -8,7 +8,6 @@
 
   </div> -->
   <div class="form-container">
-    <h2>Drugs Calculator</h2>
     <form @submit.prevent="handleSubmit" class="form">
       <div class="form-group">
         <label for="totalPopulation">Total Population</label>
@@ -23,7 +22,7 @@
       </div>
 
       <div class="form-group">
-        <label for="adultPopulation">Adult Population %</label>
+        <label for="adultPopulation">% Adult Population</label>
         <input
           id="adultPopulation"
           v-model.number="adultPopulation"
@@ -35,7 +34,7 @@
       </div>
 
       <div class="form-group">
-        <label for="prevalenceHTN">Prevalence of HTN in adults</label>
+        <label for="prevalenceHTN">% Prevalence of HTN in adults</label>
         <input
           id="prevalenceHTN"
           v-model.number="prevalenceHTN"
@@ -46,7 +45,7 @@
         />
       </div>
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="prevalenceHTN">Estimated HTN population</label>
         <input
           id="estimatedHTNPopulation"
@@ -58,7 +57,7 @@
           readonly
           disabled="true"
         />
-      </div>
+      </div> -->
 
 
 
@@ -74,7 +73,7 @@
         />
       </div>
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="currentCoverage">Current coverage</label>
         <input
           id="currentCoverage"
@@ -86,17 +85,17 @@
           readonly
           disabled="true"
         />
-      </div>
+      </div> -->
 
       <div class="form-group">
-        <label for="targetEnrolment">Target new enrolment for the year</label>
+        <label for="targetEnrolment">Yearly new enrolment target</label>
         <input
           id="targetEnrolment"
           v-model.number="targetEnrolment"
           type="number"
           step="any"
           class="input"
-          placeholder="Enter target new enrolment for the year"
+          placeholder="# patients to enrol"
         />
       </div>
 
@@ -114,18 +113,6 @@
         />
       </div>
 
-      <div class="form-group"></div>
-        <label for="targetNewEnrollementInOneYear">Target new enrollement in one year</label>
-        <input
-          id="targetNewEnrollementInOneYear"
-          v-model.number="store.targetNewEnrollementInOneYear"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="Enter target new enrollement in one year"
-          readonly
-          disabled="true"
-        />
       <!-- drugs -->
       <div class="form-group">
         <label for="amoldipine5mgCost">Amoldipine 5mg Cost</label>
@@ -135,7 +122,7 @@
           type="number"
           step="any"
           class="input"
-          placeholder="Amoldipine 5mg cost per tablet"
+          placeholder="Cost per tablet"
         />
       </div>
 
@@ -147,7 +134,7 @@
           type="number"
           step="any"
           class="input"
-          placeholder="Losartan 50mg cost per tablet"
+          placeholder="Cost per tablet"
         />
       </div>
 
@@ -159,7 +146,7 @@
           type="number"
           step="any"
           class="input"
-          placeholder="Hydrochlorothiazide 25mg cost per tablet"
+          placeholder="Cost per tablet"
         />
       </div>
 
@@ -197,41 +184,51 @@ const handleSubmit = () => {
 
 <style scoped>
 .form-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 0.5rem;
+  width: 100%;
+  overflow-y: scroll;
+  height: calc(100dvh - 66px);
+  padding: 1.5rem 1.75rem;
 }
 
 h2 {
   margin-bottom: 1rem;
   color: #333;
-  text-align: center;
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: grid;
+  /* grid-template-columns: repeat(4, 1fr); */
+  gap: 0.85rem;
+  width: 100%;
+  /* grid-auto-flow: row; */
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 label {
   font-weight: 500;
-  color: #555;
-  font-size: 0.95rem;
+  color: #444;
+  font-size: 0.85rem;
 }
 
 .input {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
   font-size: 1rem;
   transition: border-color 0.3s;
+}
+
+.input:disabled {
+  background-color: #eee;
+  color: #444;
+  border: 1px solid #ccc;
+  cursor: not-allowed;
 }
 
 .input:focus {
