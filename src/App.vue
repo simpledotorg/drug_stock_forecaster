@@ -71,6 +71,7 @@ h1 {
 h2 {
   font-size: 1.1em;
   line-height: 1.1;
+  
 }
 
 h3 {
@@ -81,6 +82,9 @@ h3 {
   font-weight: 600;
   color: #999;
   margin: 2rem 0 1rem;
+}
+h3:not(:first-child) {
+  margin-top: 4rem;
 }
 
 aside {

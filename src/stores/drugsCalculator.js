@@ -175,7 +175,6 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const protocolPercentageStep5 = ref(0)
     const protocolPercentageStep6 = ref(0)
 
-
     return {
         // State
         totalPopulation,
