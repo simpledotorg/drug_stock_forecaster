@@ -6,7 +6,7 @@
         <tr>
           <th>Month</th>
           <th>Cumulative enrolment</th>
-          <th>Patients adherence</th>
+          <th>Patients treated</th>
           <th>Amoldipine 5mg Tablets</th>
           <th>Losartan 50mg Tablets</th>
           <th>Amlodipine 5 + Losartan 50mg Tablets</th>

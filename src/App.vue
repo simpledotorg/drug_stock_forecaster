@@ -1,9 +1,3 @@
-<script setup>
-import DrugsCalculatorForm from './components/DrugsCalculatorForm.vue'
-import Calculation from './components/Calculation.vue'
-import TheForecast from './components/TheForecast.vue'
-</script>
-
 <template>
   <div class="app">
     <!-- <header>
@@ -21,26 +15,19 @@ import TheForecast from './components/TheForecast.vue'
       </div>
       <div class="content">
         <TheForecast />
-        <h3>Assumptions</h3>
-        <p>
-          <table>
-            <thead>
-                <th>Total population</th>
-                <th>100,000</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Adult population</td>
-                <td>80%</td>
-              </tr>
-            </tbody>
-          </table>
-        </p>
+        <Assumptions />
         <Calculation />
       </div>
     </main>
   </div>
 </template>
+
+<script setup>
+import DrugsCalculatorForm from './components/DrugsCalculatorForm.vue'
+import Calculation from './components/Calculation.vue'
+import TheForecast from './components/TheForecast.vue'
+import Assumptions from './components/Assumptions.vue'
+</script>
 
 <style>
 @import './style.css';

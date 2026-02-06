@@ -4,11 +4,11 @@ import { ref, computed } from 'vue'
 export const useDrugCalcStore = defineStore('drugCalc', () => {
 
     // Population data
-    const totalPopulation = ref(100000)
+    const totalPopulation = ref(1000000)
     const adultPopulation = ref(80)
     const prevalenceHTN = ref(25)
-    const existingPatients = ref(20000)
-    const targetEnrolment = ref(5000)
+    const existingPatients = ref(400000)
+    const targetEnrolment = ref(20000)
     const treatmentAdherence = ref(65)
 
     // Computed
@@ -25,7 +25,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     })
 
     const estimatedMonthlyEnrolment = computed(() => {
-        return Math.round(targetEnrolment.value / 12)
+        return targetEnrolment.value / 12
     })
 
     const totalAdultPopulation = computed(() => {
@@ -49,7 +49,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const patientsTreatedFromAdherence = computed(() => {
         const patientsTreated = []
         for (let i = 0; i < 12; i++) {
-            patientsTreated.push(Math.round(expectedCumulativeEnrolment.value[i] * treatmentAdherence.value / 100))
+            patientsTreated.push(expectedCumulativeEnrolment.value[i] * treatmentAdherence.value / 100)
         }
         return patientsTreated
     })
@@ -57,7 +57,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const Step1Tablets = computed(() => { // amlodipine 5mg tablets
         const monthlyTablets = []
         for (let i = 0; i < 12; i++) {
-            monthlyTablets.push(Math.round(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep1.value / 100))
+            monthlyTablets.push(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep1.value / 100)
         }
         return monthlyTablets
     })
@@ -68,7 +68,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const Step2Tablets = computed(() => { // losartan 50mg tablets
         const monthlyTablets = []
         for (let i = 0; i < 12; i++) {
-            monthlyTablets.push(Math.round(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep2.value / 100))
+            monthlyTablets.push(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep2.value / 100)
         }
         return monthlyTablets
     })
@@ -80,7 +80,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const Step3Tablets = computed(() => { // amlodipine 5 + losartan 50mg tablets
         const monthlyTablets = []
         for (let i = 0; i < 12; i++) {
-            monthlyTablets.push(Math.round(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep3.value / 100))
+            monthlyTablets.push(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep3.value / 100)
         }
         return monthlyTablets
     })
