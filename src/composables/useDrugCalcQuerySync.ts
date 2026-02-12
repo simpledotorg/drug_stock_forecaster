@@ -42,9 +42,10 @@ export function useDrugCalcQuerySync(store: any) {
     }
   }
 
+  // First load: URL → store (populate inputs from query params)
   applyQueryToStore()
 
-  // 2) Store → URL: one watcher for any change → build query and replace (immediate so URL updates on load when form has data)
+  // After initial load: store → URL when user changes any input
   function pushStoreToUrl() {
     const query: Record<string, string> = {}
     for (let i = 0; i < QUERY_KEYS.length; i++) {
@@ -56,8 +57,6 @@ export function useDrugCalcQuerySync(store: any) {
     }
     router.replace({ path: route.path, query }).catch(() => {})
   }
-
-  pushStoreToUrl()
 
   watch(
     () => QUERY_KEYS.map((key) => refs[key]?.value),
