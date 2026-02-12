@@ -44,19 +44,24 @@ export function useDrugCalcQuerySync(store: any) {
 
   applyQueryToStore()
 
-  // 2) Store → URL: one watcher for any change → build query and replace
+  // 2) Store → URL: one watcher for any change → build query and replace (immediate so URL updates on load when form has data)
+  function pushStoreToUrl() {
+    const query: Record<string, string> = {}
+    for (let i = 0; i < QUERY_KEYS.length; i++) {
+      const key = QUERY_KEYS[i]
+      const v = refs[key]?.value
+      if (v === null || v === undefined || v === '') continue
+      if (typeof v === 'number' && !Number.isFinite(v)) continue
+      query[key] = String(v)
+    }
+    router.replace({ path: route.path, query }).catch(() => {})
+  }
+
+  pushStoreToUrl()
+
   watch(
     () => QUERY_KEYS.map((key) => refs[key]?.value),
-    (values) => {
-      const query: Record<string, string> = {}
-      values.forEach((v, i) => {
-        const key = QUERY_KEYS[i]
-        if (v === null || v === undefined || v === '') return
-        if (typeof v === 'number' && !Number.isFinite(v)) return
-        query[key] = String(v)
-      })
-      router.replace({ query }).catch(() => {})
-    },
+    pushStoreToUrl,
     { deep: true }
   )
 

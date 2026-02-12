@@ -156,13 +156,12 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDrugCalcStore } from '../stores/drugsCalculator'
-// import { useDrugCalcQuerySync } from '../composables/useDrugCalcQuerySync'
+import { useDrugCalcQuerySync } from '../composables/useDrugCalcQuerySync'
 
 const store = useDrugCalcStore()
-// useDrugCalcQuerySync(store)
+useDrugCalcQuerySync(store)
 
 const {
   totalPopulation,
