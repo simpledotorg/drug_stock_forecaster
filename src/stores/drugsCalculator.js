@@ -4,12 +4,12 @@ import { ref, computed, watch } from 'vue'
 export const useDrugCalcStore = defineStore('drugCalc', () => {
 
     // Population data
-    const totalPopulation = ref(10000000)
-    const adultPopulation = ref(80)
-    const prevalenceHTN = ref(25)
-    const existingPatients = ref(400000)
-    const targetEnrolment = ref(20000)
-    const treatmentAdherence = ref(65)
+    const totalPopulation = ref()
+    const adultPopulation = ref()
+    const prevalenceHTN = ref()
+    const existingPatients = ref()
+    const targetEnrolment = ref()
+    const treatmentAdherence = ref()
 
     
     // Computed
