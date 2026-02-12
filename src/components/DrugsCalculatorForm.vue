@@ -185,7 +185,7 @@ const handleSubmit = () => {
 .form-container {
   width: 100%;
   overflow-y: scroll;
-  height: calc(100dvh - 66px);
+  min-height: calc(100dvh - 66px);
   padding: 1.5rem 1.75rem;
 }
 
