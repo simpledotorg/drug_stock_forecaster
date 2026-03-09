@@ -1,16 +1,40 @@
 <template>
     <div>
-        <h3>Year forecast</h3>
-        <p>Estimated total cost</p>
+        <h3>Estimated cost</h3>
         <table class="total-cost">
+            <!-- <thead>
+                <tr>
+                    <th>Total cost</th>
+                </tr>
+            </thead> -->
             <tbody>
                 <tr class="total-cost-row" :class="{ 'missing-costs': !store.costForYearForecast.amlodipine5mgCost || !store.costForYearForecast.losartan50mgCost || !store.costForYearForecast.hydrochlorothiazide25mgCost }">
+                    <th>Total cost</th>
                     <td>{{ store.costForYearForecast.amlodipine5mgCost && store.costForYearForecast.losartan50mgCost && store.costForYearForecast.hydrochlorothiazide25mgCost ? formatNumber(store.costForYearForecast.amlodipine5mgCost + store.costForYearForecast.losartan50mgCost + store.costForYearForecast.hydrochlorothiazide25mgCost) : "Missing tablet costs" }}</td>
                 </tr>
             </tbody>
         </table>
         <br/>
-        <p>Estimated total quantities</p>
+        <table>
+            <thead>
+                <tr>
+                    <th class="blank-header"></th>
+                    <th>Amlodipine 5mg</th>
+                    <th>Losartan 50mg</th>
+                    <th>Hydrochlorothiazide 25mg</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Total cost per drug</th>
+                    <td>{{ formatNumber(store.tabletsForYearForecast.amlodipine5mgTabletsTotal) }}</td>
+                    <td>{{ formatNumber(store.tabletsForYearForecast.losartan50mgTabletsTotal) }}</td>
+                    <td>{{ formatNumber(store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal) }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <h3>Estimated quantities</h3>
         <table>
             <thead>
                 <tr>
@@ -27,25 +51,19 @@
                     <td>{{ formatNumber(store.tabletsForYearForecast.losartan50mgTabletsTotal) }}</td>
                     <td>{{ formatNumber(store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal) }}</td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th>Cartons <span class="small-text">(30 tablets per carton)</span></th>
                     <td>{{ formatNumber(Math.round(store.tabletsForYearForecast.amlodipine5mgTabletsTotal / 30)) }}</td>
                     <td>{{ formatNumber(Math.round(store.tabletsForYearForecast.losartan50mgTabletsTotal / 30)) }}</td>
                     <td>{{ formatNumber(Math.round(store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal / 30)) }}</td>
-                </tr>
-                <tr class="blank-row">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <!-- <tr>
-                    <th>Cost per tablet</th>
-                    <td> {{ formatNumber(store.amoldipine5mgCost) }}</td>
-                    <td>{{ formatNumber(store.losartan50mgCost) }}</td>
-                    <td>{{ formatNumber(store.hydrochlorothiazide25mgCost) }}</td>
                 </tr> -->
-                <tr>
+                <!-- <tr class="blank-row">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr> -->
+                <!-- <tr>
                     <th>Total cost</th>
                     <td>
                         <div class="cost-cell-container">
@@ -89,7 +107,7 @@
                             </template>
                         </div>
                     </td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </div>
@@ -128,13 +146,13 @@ td {
 }
 
 .total-cost {
-    font-size: 1.25rem;
+    /* font-size: 1.25rem;
     font-weight: 600;
-    color: #333;
+    color: #333; */
     width: 25%;
-    td {
+    /* td {
         text-align: left;
-    }
+    } */
 }
 
 .small-text {

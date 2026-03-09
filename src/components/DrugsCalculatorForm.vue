@@ -9,68 +9,37 @@
   </div> -->
   <div class="form-container">
     <form @submit.prevent="handleSubmit" class="form">
+
       <div class="form-group">
-        <label for="totalPopulation">Total Population</label>
-        <input
-          id="totalPopulation"
-          v-model.number="totalPopulation"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="Enter total population"
-        />
+        <label for="forecastMonths">Months to forecast</label>
+        <input id="forecastMonths" v-model.number="forecastMonths" type="number" step="any" class="input"
+          placeholder="12" />
       </div>
 
       <div class="form-group">
-        <label for="adultPopulation">% Adult Population</label>
-        <input
-          id="adultPopulation"
-          v-model.number="adultPopulation"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="% of total poplation are adults"
-        />
+        <label for="totalPopulation">Total population</label>
+        <input id="totalPopulation" v-model.number="totalPopulation" type="number" step="any" class="input"
+          placeholder="1,000,000" />
+      </div>
+
+      <div class="form-group">
+        <label for="adultPopulation">% Total population that are adults</label>
+        <input id="adultPopulation" v-model.number="adultPopulation" type="number" step="any" class="input"
+          placeholder="80" maxlength="3" min="0" max="100" />
+        <p class="small-text">Usually ~80% are adults</p>
       </div>
 
       <div class="form-group">
         <label for="prevalenceHTN">% Prevalence of HTN in adults</label>
-        <input
-          id="prevalenceHTN"
-          v-model.number="prevalenceHTN"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="Enter prevalence of HTN in adults"
-        />
+        <input id="prevalenceHTN" v-model.number="prevalenceHTN" type="number" step="any" class="input" placeholder="33"
+          maxlength="3" min="0" max="100" />
+        <p class="small-text">~33% world wide average</p>
       </div>
 
-      <!-- <div class="form-group">
-        <label for="prevalenceHTN">Estimated HTN population</label>
-        <input
-          id="estimatedHTNPopulation"
-          v-model.number="store.estimatedHTNPopulation"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="Enter prevalence of HTN in adults"
-          readonly
-          disabled="true"
-        />
-      </div> -->
-
-
-
       <div class="form-group">
-        <label for="existingPatients">Existing regular patients</label>
-        <input
-          id="existingPatients"
-          v-model.number="existingPatients"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="Enter existing regular patients"
-        />
+        <label for="existingPatients">Existing patients enrolled</label>
+        <input id="existingPatients" v-model.number="existingPatients" type="number" step="any" class="input"
+          placeholder="Total enrolments" />
       </div>
 
       <!-- <div class="form-group">
@@ -88,66 +57,54 @@
       </div> -->
 
       <div class="form-group">
-        <label for="targetEnrolment">Yearly new enrolment target</label>
-        <input
-          id="targetEnrolment"
-          v-model.number="targetEnrolment"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="# patients to enrol"
-        />
+        <label for="targetEnrolment">Expected new enrolments for period</label>
+        <input id="targetEnrolment" v-model.number="targetEnrolment" type="number" step="any" class="input"
+          placeholder="Total enrolments for period" />
       </div>
 
 
 
       <div class="form-group">
-        <label for="treatmentAdherence">% Expected treatment adherence</label>
-        <input
-          id="treatmentAdherence"
-          v-model.number="treatmentAdherence"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="Enter expected treatment adherence"
-        />
+        <label for="treatmentAdherence">% Treatment adherence</label>
+        <input id="treatmentAdherence" v-model.number="treatmentAdherence" type="number" step="any" class="input"
+          placeholder="65" maxlength="3" min="0" max="100" />
+        <p ref="adherenceTooltipRef" class="small-text tooltip-trigger"
+          :class="{ 'tooltip-open': showAdherenceTooltip }" @mouseenter="showAdherenceTooltip = true"
+          @mouseleave="showAdherenceTooltip = false" @click.stop="showAdherenceTooltip = !showAdherenceTooltip">
+          <span class="small-text tooltip-trigger-text">How do I calculate this?</span>
+          <span class="tooltip-bubble">
+            <span>
+              This number is the percentage of patients that attended for treatment in past 3 months.
+            </span>
+            <span>
+              <b>Numerator:</b> Patients that attended for treatment in past 3 months.
+            </span>
+            <span>
+              <b>Denominator:</b> Total patients enrolled.
+            </span>
+          </span>
+        </p>
+
       </div>
 
+      <h4 class="form-group-title">Cost per tablet</h4>
       <!-- drugs -->
       <div class="form-group">
-        <label for="amoldipine5mgCost">Amoldipine 5mg Cost</label>
-        <input
-          id="amoldipine5mgCost"
-          v-model.number="amoldipine5mgCost"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="Cost per tablet"
-        />
+        <label for="amoldipine5mgCost">Amoldipine 5mg</label>
+        <input id="amoldipine5mgCost" v-model.number="amoldipine5mgCost" type="number" step="any" class="input"
+          placeholder="Cost per tablet" />
       </div>
 
       <div class="form-group">
-        <label for="losartan50mgCost">Losartan 50mg Cost</label>
-        <input
-          id="losartan50mgCost"
-          v-model.number="losartan50mgCost"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="Cost per tablet"
-        />
+        <label for="losartan50mgCost">Losartan 50mg</label>
+        <input id="losartan50mgCost" v-model.number="losartan50mgCost" type="number" step="any" class="input"
+          placeholder="Cost per tablet" />
       </div>
 
       <div class="form-group">
-        <label for="hydrochlorothiazide25mgCost">Hydrochlorothiazide 25mg Cost</label>
-        <input
-          id="hydrochlorothiazide25mgCost"
-          v-model.number="hydrochlorothiazide25mgCost"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="Cost per tablet"
-        />
+        <label for="hydrochlorothiazide25mgCost">Hydrochlorothiazide 25mg</label>
+        <input id="hydrochlorothiazide25mgCost" v-model.number="hydrochlorothiazide25mgCost" type="number" step="any"
+          class="input" placeholder="Cost per tablet" />
       </div>
 
       <!-- <button type="submit" class="submit-button">Calculate</button> -->
@@ -156,6 +113,7 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDrugCalcStore } from '../stores/drugsCalculator'
 import { useDrugCalcQuerySync } from '../composables/useDrugCalcQuerySync'
@@ -163,7 +121,24 @@ import { useDrugCalcQuerySync } from '../composables/useDrugCalcQuerySync'
 const store = useDrugCalcStore()
 useDrugCalcQuerySync(store)
 
+const adherenceTooltipRef = ref(null)
+const showAdherenceTooltip = ref(false)
+
+function closeAdherenceTooltipOnClickOutside(e) {
+  if (adherenceTooltipRef.value && !adherenceTooltipRef.value.contains(e.target)) {
+    showAdherenceTooltip.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', closeAdherenceTooltipOnClickOutside)
+})
+onUnmounted(() => {
+  document.removeEventListener('click', closeAdherenceTooltipOnClickOutside)
+})
+
 const {
+  forecastMonths,
   totalPopulation,
   adultPopulation,
   prevalenceHTN,
@@ -184,9 +159,6 @@ const handleSubmit = () => {
 <style scoped>
 .form-container {
   width: 100%;
-  overflow-y: scroll;
-  min-height: calc(100dvh - 66px);
-  padding: 1.5rem 1.75rem;
 }
 
 h2 {
@@ -208,19 +180,36 @@ h2 {
   gap: 0.25rem;
 }
 
-label {
-  font-weight: 500;
+.form-group-title {
+  font-size: 0.8rem;
+  font-weight: 800;
   color: #444;
+  margin-top: 0.4rem;
+  margin-bottom: -0.3rem;
+  text-transform: uppercase;
+}
+
+label {
+  font-weight: 600;
+  /* color: #444;
+  */
+  color: #333;
+
   font-size: 0.85rem;
 }
 
 .input {
-  padding: 0.7rem 0.8rem;
+  padding: 0.7rem 0.7rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
   font-size: 1rem;
   transition: border-color 0.3s;
+}
+
+.input.percentage {
+  width: 62px;
+  padding-right: 0.15rem;
 }
 
 .input:disabled {
@@ -234,6 +223,11 @@ label {
   outline: none;
   border-color: #42b883;
   box-shadow: 0 0 0 3px rgba(66, 184, 131, 0.1);
+}
+
+.input::placeholder {
+  color: #999;
+  font-size: 0.9rem;
 }
 
 .submit-button {
@@ -256,5 +250,71 @@ label {
 .submit-button:active {
   transform: scale(0.98);
 }
-</style>
 
+.small-text {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.tooltip-trigger {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  cursor: help;
+  align-self: flex-start;
+}
+
+.tooltip-trigger-text {
+  display: inline-block;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: #ccc;
+}
+
+.tooltip-bubble {
+  position: absolute;
+  bottom: calc(100% + 0.3rem);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  max-width: 240px;
+  width: 100%;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  background: #2d2d2d;
+  color: #f0f0f0;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  white-space: normal;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tooltip-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border: 6px solid transparent;
+  border-top-color: #2d2d2d;
+}
+
+.tooltip-trigger:hover .tooltip-bubble,
+.tooltip-trigger.tooltip-open .tooltip-bubble {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (hover: none) {
+  .tooltip-trigger {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+</style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Calculation</h3>
+    <h3>Monthly breakdown</h3>
     <table>
       <thead>
         <tr>

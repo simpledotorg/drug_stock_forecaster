@@ -12,6 +12,7 @@ function toNumber(v: unknown): number | undefined {
 }
 
 const QUERY_KEYS = [
+  'forecastMonths',
   'totalPopulation',
   'adultPopulation',
   'prevalenceHTN',

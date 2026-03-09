@@ -1,38 +1,61 @@
 <template>
-  <div class="app">
-    <!-- <header>
-    </header> -->
-    <aside>
-      <div class="header">
-        <h2>Drug stock forecaster</h2>
-      </div>
-      <DrugsCalculatorForm />
-    </aside>
-    <main>
-      <div class="header header-content" v-if="store.showForecast">
-        <h2>Your forecast</h2>
-        <div class="share-button-container">
-          <p class="small-text">Share this forecast with others using the webpage link</p>
-          <button class="share-button" :class="{ 'copied': isCopied }" @click="shareForecast">
-            <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              aria-hidden="true">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-            </svg>
-            <Transition name="fade" mode="out-in">
-              <span v-if="!isCopied">{{ shareButtonText }}</span>
-              <span v-else>Copied</span>
-            </Transition>
-          </button>
+  <div>
+    <header>
+      <h1>Drug stock forecaster</h1>
+    </header>
+    <div class="app">
+      <aside>
+        <div class="aside-content">
+          <div>
+
+            <h2>Enter forecast information</h2>
+            <p class="small-text">
+              Enter the population and drug data to get a forecast for the year ahead.
+            </p>
+          </div>
+          <DrugsCalculatorForm />
         </div>
-      </div>
-      <div class="content" v-if="store.showForecast">
-        <TheForecast />
-        <Assumptions />
-        <Calculation />
-      </div>
-    </main>
+      </aside>
+      <main>
+        <div class="header header-content" v-if="store.showForecast">
+        </div>
+        <div class="content" v-if="store.showForecast">
+          <div class="content-header">
+
+            <h2>Forecast
+              <span class="small-text forecast-period-text">{{ store.forecastMonths }} month period</span>
+            </h2>
+            <div class="share-button-container">
+              <p class="small-text">Share this forecast with others using the webpage link</p>
+              <button class="share-button" :class="{ 'copied': isCopied }" @click="shareForecast">
+                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                <Transition name="fade" mode="out-in">
+                  <span v-if="!isCopied">{{ shareButtonText }}</span>
+                  <span v-else>Copied</span>
+                </Transition>
+              </button>
+            </div>
+          </div>
+          <TheForecast />
+          <Assumptions />
+          <Calculation />
+          <footer>
+            <p class="small-text">
+              This is a tool to help you forecast the stock required for the year ahead.
+            </p>
+            <p class="small-text">
+              Source: <a href="https://www.who.int/news-room/fact-sheets/detail/hypertension" target="_blank">WHO Fact
+                Sheet on Hypertension</a>
+            </p>
+          </footer>
+        </div>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -53,15 +76,20 @@ const shareForecast = () => {
 }
 
 const isCopied = ref(false)
+const copyResetTimer = ref(null)
 const shareButtonText = computed(() => {
   return isCopied.value ? 'Copied' : 'Copy link'
 })
 
 function setIsCopieTimeout() {
+  if (copyResetTimer.value !== null) {
+    clearTimeout(copyResetTimer.value)
+  }
   isCopied.value = true
-  setTimeout(() => {
+  copyResetTimer.value = setTimeout(() => {
     isCopied.value = false
-  }, 3000)
+    copyResetTimer.value = null
+  }, 2500)
 }
 </script>
 
@@ -79,6 +107,10 @@ body {
   /* background-color: #f5f5f5; */
 }
 
+/* main {
+  background-color: #f5f5f5;
+} */
+
 .app {
   min-height: 100dvh;
   width: 100vw;
@@ -86,21 +118,27 @@ body {
   grid-template-columns: 300px 1fr;
 }
 
+header {
+  /* background-color: #eaf5ff; */
+  padding: 1rem 1.75rem;
+  border-bottom: 1px solid #ebebeb;
+}
+
 h1 {
-  font-size: 2em;
+  font-size: 1.25rem;
   line-height: 1.1;
 }
 
 h2 {
-  font-size: 1.1em;
+  font-size: 1.5em;
   line-height: 1.1;
-
+  margin-bottom: 0.5rem;
 }
 
 h3 {
-  font-size: 1em;
+  font-size: 0.9em;
   line-height: 1.1;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 600;
   color: #999;
@@ -115,8 +153,16 @@ aside {
   width: 100%;
   /* background-color: #f5f5f5; */
   border-right: 1px solid #dedede;
-  display: grid;
-  grid-template-rows: 66px 1fr;
+  /* display: grid; */
+  /* grid-template-rows: 66px 1fr; */
+  /* min-height: calc(100dvh - 66px); */
+}
+
+.aside-content {
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .header {
@@ -130,12 +176,16 @@ aside {
   align-items: center;
 }
 
-.header-content {
-  padding: 0 var(--main-content-padding-y);
-}
+
 
 .content {
   padding: 0 var(--main-content-padding-y) 4rem;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: space-between;
 }
 
 .share-button-container {
@@ -158,7 +208,7 @@ aside {
   transition: background-color 0.3s;
 
   span {
-    width:60px;
+    width: 60px;
     text-align: center;
   }
 }
@@ -191,6 +241,12 @@ aside {
   font-size: 0.8rem;
   color: #777;
   font-weight: 400;
+}
+
+.forecast-period-text {
+  color: #777;
+  font-weight: 400;
+  margin-left: 0.6rem;
 }
 
 .fade-enter-active,

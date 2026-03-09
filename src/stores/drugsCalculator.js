@@ -10,6 +10,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const existingPatients = ref()
     const targetEnrolment = ref()
     const treatmentAdherence = ref()
+    const forecastMonths = ref(12)
 
     
     // Computed
@@ -22,7 +23,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     })
 
     const estimatedMonthlyEnrolment = computed(() => {
-        return Math.round(targetEnrolment.value / 12)
+        return Math.round(targetEnrolment.value / forecastMonths.value)
     })
 
     const totalAdultPopulation = computed(() => {
@@ -64,7 +65,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
 
     const Step2Tablets = computed(() => { // losartan 50mg tablets
         const monthlyTablets = []
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < forecastMonths.value; i++) {
             monthlyTablets.push(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep2.value / 100)
         }
         return monthlyTablets
@@ -76,7 +77,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
 
     const Step3Tablets = computed(() => { // amlodipine 5 + losartan 50mg tablets
         const monthlyTablets = []
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < forecastMonths.value; i++) {
             monthlyTablets.push(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep3.value / 100)
         }
         return monthlyTablets
@@ -87,7 +88,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
 
     const Step4Tablets = computed(() => { // hydrochlorothiazide 25mg tablets
         const monthlyTablets = []
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < forecastMonths.value; i++) {
             monthlyTablets.push(Math.round(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep4.value / 100))
         }
         return monthlyTablets
@@ -98,7 +99,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
 
     const Step5Tablets = computed(() => { // unknown
         const monthlyTablets = []
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < forecastMonths.value; i++) {
             monthlyTablets.push(Math.round(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep5.value / 100))
         }
         return monthlyTablets
@@ -109,7 +110,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
 
     const Step6Tablets = computed(() => { // unknown
         const monthlyTablets = []
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < forecastMonths.value; i++) {
             monthlyTablets.push(Math.round(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep6.value / 100))
         }
         return monthlyTablets
@@ -121,7 +122,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const yearlyBreakdown = computed(() => {
         // convert all 12 month figures into a JSON object
         const yearlyBreakdown = {}
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < forecastMonths.value; i++) {
             yearlyBreakdown[`month${i + 1}`] = {
                 month: i + 1,
                 expectedCumulativeEnrolment: expectedCumulativeEnrolment.value[i],
@@ -199,6 +200,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         existingPatients,
         targetEnrolment,
         treatmentAdherence,
+        forecastMonths,
         // Computed
         estimatedHTNPopulation,
         htnCoverage,
