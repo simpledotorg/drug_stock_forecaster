@@ -27,9 +27,9 @@
             <tbody>
                 <tr>
                     <th>Total cost per drug</th>
-                    <td>{{ formatNumber(store.tabletsForYearForecast.amlodipine5mgTabletsTotal) }}</td>
-                    <td>{{ formatNumber(store.tabletsForYearForecast.losartan50mgTabletsTotal) }}</td>
-                    <td>{{ formatNumber(store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal) }}</td>
+                    <td>{{ formatNumber(store.tabletsForYearForecast.amlodipine5mgTabletsTotal * store.amoldipine5mgCost) }}</td>
+                    <td>{{ formatNumber(store.tabletsForYearForecast.losartan50mgTabletsTotal * store.losartan50mgCost) }}</td>
+                    <td>{{ formatNumber(store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal * store.hydrochlorothiazide25mgCost) }}</td>
                 </tr>
             </tbody>
         </table>
