@@ -10,13 +10,9 @@
   <div class="form-container">
     <form @submit.prevent="handleSubmit" class="form">
 
-      <div class="form-group">
-        <label for="forecastMonths">Months to forecast</label>
-        <input id="forecastMonths" v-model.number="forecastMonths" type="number" step="any" class="input"
-          placeholder="12" />
-      </div>
 
-      <div class="form-group">
+
+      <!-- <div class="form-group">
         <label for="totalPopulation">Total population</label>
         <input id="totalPopulation" v-model.number="totalPopulation" type="number" step="any" class="input"
           placeholder="1,000,000" />
@@ -34,12 +30,23 @@
         <input id="prevalenceHTN" v-model.number="prevalenceHTN" type="number" step="any" class="input" placeholder="33"
           maxlength="3" min="0" max="100" />
         <p class="small-text">~33% world wide average</p>
-      </div>
-
+      </div> -->
+      <h4 class="form-group-title">Program data</h4>
       <div class="form-group">
-        <label for="existingPatients">Existing patients enrolled</label>
-        <input id="existingPatients" v-model.number="existingPatients" type="number" step="any" class="input"
-          placeholder="Total enrolments" />
+        <label for="patientsUnderCare">Patients under care</label>
+        <input id="patientsUnderCare" v-model.number="patientsUnderCare" type="number" step="any" class="input"
+          placeholder="200000" />
+        <p ref="patientsUnderCareTooltipRef" class="small-text tooltip-trigger"
+          :class="{ 'tooltip-open': showpatientsUnderCareTooltip }" @mouseenter="showpatientsUnderCareTooltip = true"
+          @mouseleave="showpatientsUnderCareTooltip = false"
+          @click.stop="showpatientsUnderCareTooltip = !showpatientsUnderCareTooltip">
+          <span class="small-text tooltip-trigger-text">What does this mean?</span>
+          <span class="tooltip-bubble">
+            <span>
+              The total number of patients enrolled in the hypertension program that visited in the past 12 months.
+            </span>
+          </span>
+        </p>
       </div>
 
       <!-- <div class="form-group">
@@ -57,9 +64,9 @@
       </div> -->
 
       <div class="form-group">
-        <label for="targetEnrolment">Expected new enrolments for period</label>
+        <label for="targetEnrolment">Target enrolment over {{ forecastMonths }} months</label>
         <input id="targetEnrolment" v-model.number="targetEnrolment" type="number" step="any" class="input"
-          placeholder="Total enrolments for period" />
+          placeholder="10000" />
       </div>
 
 
@@ -84,7 +91,15 @@
             </span>
           </span>
         </p>
+      </div>
 
+      <div class="form-group">
+        <label for="patientsUnderCare">Treatment protocol</label>
+        <select id="patientsUnderCare" v-model.number="protocol" type="number" step="any" class="input"
+          placeholder="Total enrolments">
+          <option value="1">Phillippines</option>
+          <option value="1" disabled>More options coming soon</option>
+        </select>
       </div>
 
       <h4 class="form-group-title">Cost per tablet</h4>
@@ -106,7 +121,27 @@
         <input id="hydrochlorothiazide25mgCost" v-model.number="hydrochlorothiazide25mgCost" type="number" step="any"
           class="input" placeholder="Cost per tablet" />
       </div>
-
+      <!-- <div class="form-group">
+        <label for="forecastMonths">Months to forecast</label>
+        <input id="forecastMonths" v-model.number="forecastMonths" type="number" step="any" class="input"
+          placeholder="12" />
+      </div> -->
+      <div class="form-group">
+        <label for="currencySymbol">Currency</label>
+        <div class="currency-group">
+          <input id="currencySymbol" v-model="currencySymbol" type="text" class="input" placeholder="$" />
+          <!-- <div class="radio-group"> -->
+          <label class="radio-option">
+            <input type="radio" v-model="currencySymbolPosition" value="start" />
+            <span>Before</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" v-model="currencySymbolPosition" value="end" />
+            <span>After</span>
+          </label>
+          <!-- </div> -->
+        </div>
+      </div>
       <!-- <button type="submit" class="submit-button">Calculate</button> -->
     </form>
   </div>
@@ -123,10 +158,15 @@ useDrugCalcQuerySync(store)
 
 const adherenceTooltipRef = ref(null)
 const showAdherenceTooltip = ref(false)
+const patientsUnderCareTooltipRef = ref(null)
+const showpatientsUnderCareTooltip = ref(false)
 
 function closeAdherenceTooltipOnClickOutside(e) {
   if (adherenceTooltipRef.value && !adherenceTooltipRef.value.contains(e.target)) {
     showAdherenceTooltip.value = false
+  }
+  if (patientsUnderCareTooltipRef.value && !patientsUnderCareTooltipRef.value.contains(e.target)) {
+    showpatientsUnderCareTooltip.value = false
   }
 }
 
@@ -142,13 +182,17 @@ const {
   totalPopulation,
   adultPopulation,
   prevalenceHTN,
-  existingPatients,
+  patientsUnderCare,
   targetEnrolment,
   treatmentAdherence,
   amoldipine5mgCost,
   losartan50mgCost,
   hydrochlorothiazide25mgCost,
+  currencySymbol,
+  currencySymbolPosition,
 } = storeToRefs(store)
+
+const protocol = ref(1)
 
 const handleSubmit = () => {
   console.log('Form submitted:', value)
@@ -159,6 +203,7 @@ const handleSubmit = () => {
 <style scoped>
 .form-container {
   width: 100%;
+  min-width: 0;
 }
 
 h2 {
@@ -203,7 +248,7 @@ label {
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
-  font-size: 1rem;
+  font-size: 0.9rem;
   transition: border-color 0.3s;
 }
 
@@ -310,6 +355,32 @@ label {
 .tooltip-trigger.tooltip-open .tooltip-bubble {
   opacity: 1;
   visibility: visible;
+}
+
+/* .radio-group {
+  display: flex;
+  gap: 1rem;
+} */
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.radio-option input[type="radio"] {
+  accent-color: #42b883;
+  margin: 0;
+  cursor: pointer;
+}
+
+.currency-group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
 }
 
 @media (hover: none) {

@@ -7,37 +7,37 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const totalPopulation = ref()
     const adultPopulation = ref()
     const prevalenceHTN = ref()
-    const existingPatients = ref()
-    const targetEnrolment = ref()
-    const treatmentAdherence = ref()
+    const patientsUnderCare = ref(200000)
+    const targetEnrolment = ref(8000)
+    const treatmentAdherence = ref(65)
     const forecastMonths = ref(12)
+    const treatmentProtocol = ref(1)
+    const currencySymbol = ref('₱')
+    const currencySymbolPosition = ref('start')
 
-    
+    const showCalculation = ref(false)
     // Computed
     const estimatedHTNPopulation = computed(() => {
         return totalPopulation.value * adultPopulation.value / 100 * prevalenceHTN.value / 100
     })
 
     const htnCoverage = computed(() => {
-        return existingPatients.value / estimatedHTNPopulation.value * 100
+        return patientsUnderCare.value / estimatedHTNPopulation.value * 100
     })
 
     const estimatedMonthlyEnrolment = computed(() => {
-        return Math.round(targetEnrolment.value / forecastMonths.value)
+        return Math.ceil(targetEnrolment.value / forecastMonths.value)
     })
 
     const totalAdultPopulation = computed(() => {
         return totalPopulation.value * adultPopulation.value / 100
     })
 
-    // 12 month figures
     const expectedCumulativeEnrolment = computed(() => {
-        console.log('expectedCumulativeEnrolment', estimatedMonthlyEnrolment.value)
-        console.log('existingPatients', existingPatients.value)
         if (!estimatedMonthlyEnrolment.value || !estimatedMonthlyEnrolment.value) return []
         const cumulativeEnrolment = []
-        let cumulative = existingPatients.value
-        for (let i = 0; i < 12; i++) {
+        let cumulative = patientsUnderCare.value
+        for (let i = 0; i < forecastMonths.value; i++) {
             cumulative += estimatedMonthlyEnrolment.value
             cumulativeEnrolment.push(cumulative)
         }
@@ -46,16 +46,16 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
 
     const patientsTreatedFromAdherence = computed(() => {
         const patientsTreated = []
-        for (let i = 0; i < 12; i++) {
-            patientsTreated.push(Math.round(expectedCumulativeEnrolment.value[i] * treatmentAdherence.value / 100))
+        for (let i = 0; i < forecastMonths.value; i++) {
+            patientsTreated.push(Math.ceil(expectedCumulativeEnrolment.value[i] * treatmentAdherence.value / 100))
         }
         return patientsTreated
     })
 
     const Step1Tablets = computed(() => { // amlodipine 5mg tablets
         const monthlyTablets = []
-        for (let i = 0; i < 12; i++) {
-            monthlyTablets.push(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep1.value / 100)
+        for (let i = 0; i < forecastMonths.value; i++) {
+            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep1.value / 100))
         }
         return monthlyTablets
     })
@@ -66,7 +66,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const Step2Tablets = computed(() => { // losartan 50mg tablets
         const monthlyTablets = []
         for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep2.value / 100)
+            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep2.value / 100))
         }
         return monthlyTablets
     })
@@ -78,7 +78,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const Step3Tablets = computed(() => { // amlodipine 5 + losartan 50mg tablets
         const monthlyTablets = []
         for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep3.value / 100)
+            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep3.value / 100))
         }
         return monthlyTablets
     })
@@ -89,7 +89,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const Step4Tablets = computed(() => { // hydrochlorothiazide 25mg tablets
         const monthlyTablets = []
         for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(Math.round(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep4.value / 100))
+            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep4.value / 100))
         }
         return monthlyTablets
     })
@@ -100,7 +100,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const Step5Tablets = computed(() => { // unknown
         const monthlyTablets = []
         for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(Math.round(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep5.value / 100))
+            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep5.value / 100))
         }
         return monthlyTablets
     })
@@ -111,7 +111,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const Step6Tablets = computed(() => { // unknown
         const monthlyTablets = []
         for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(Math.round(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep6.value / 100))
+            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep6.value / 100))
         }
         return monthlyTablets
     })
@@ -154,10 +154,13 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
 
     const costForYearForecast = computed(() => {
         return {
-            amlodipine5mgCost: amoldipine5mgCost.value * tabletsForYearForecast.value.amlodipine5mgTabletsTotal,
-            losartan50mgCost: losartan50mgCost.value * tabletsForYearForecast.value.losartan50mgTabletsTotal,
-            hydrochlorothiazide25mgCost: hydrochlorothiazide25mgCost.value * tabletsForYearForecast.value.hydrochlorothiazide25mgTabletsTotal,
+            amlodipine5mgCost: Math.ceil(amoldipine5mgCost.value * tabletsForYearForecast.value.amlodipine5mgTabletsTotal),
+            losartan50mgCost: Math.ceil(losartan50mgCost.value * tabletsForYearForecast.value.losartan50mgTabletsTotal),
+            hydrochlorothiazide25mgCost: Math.ceil(hydrochlorothiazide25mgCost.value * tabletsForYearForecast.value.hydrochlorothiazide25mgTabletsTotal),
         }
+    })
+    const totalCostForYearForecast = computed(() => {
+        return costForYearForecast.value.amlodipine5mgCost + costForYearForecast.value.losartan50mgCost + costForYearForecast.value.hydrochlorothiazide25mgCost
     })
 
 
@@ -171,7 +174,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         isNumber(totalPopulation.value) &&
         isNumber(adultPopulation.value) &&
         isNumber(prevalenceHTN.value) &&
-        isNumber(existingPatients.value) &&
+        isNumber(patientsUnderCare.value) &&
         isNumber(targetEnrolment.value) &&
         isNumber(treatmentAdherence.value) 
         // &&
@@ -180,10 +183,10 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         // isNumber(hydrochlorothiazide25mgCost.value)
     )
     // Once all inputs are complete, show forecast and never hide again
-    const showForecast = ref(false)
-    watch(inputsComplete, (complete) => {
-        if (complete) showForecast.value = true
-    }, { immediate: true })
+    // const showForecast = ref(false)
+    // watch(inputsComplete, (complete) => {
+    //     if (complete) showForecast.value = true
+    // }, { immediate: true })
 
     const protocolPercentageStep1 = ref(100)
     const protocolPercentageStep2 = ref(40)
@@ -197,7 +200,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         totalPopulation,
         adultPopulation,
         prevalenceHTN,
-        existingPatients,
+        patientsUnderCare,
         targetEnrolment,
         treatmentAdherence,
         forecastMonths,
@@ -223,13 +226,18 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         Step6TabletsTotal,
         tabletsForYearForecast,
         costForYearForecast,
+        totalCostForYearForecast,
         // Drug data
         amoldipine5mgCost,
         losartan50mgCost,
         hydrochlorothiazide25mgCost,
         // Visibility (sticky once complete)
         inputsComplete,
-        showForecast,
+        // showForecast,
+        showCalculation,
+        treatmentProtocol,
+        currencySymbol,
+        currencySymbolPosition,
     }
 })
 

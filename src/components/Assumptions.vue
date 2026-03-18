@@ -25,7 +25,7 @@
             <tbody>
                 <tr>
                     <td> {{ formatNumber(store.estimatedHTNPopulation) }} </td>
-                    <td> {{ formatNumber(store.existingPatients) }} </td>
+                    <td> {{ formatNumber(store.patientsUnderCare) }} </td>
                     <td> {{ formatNumber(store.targetEnrolment) }} </td>
                 </tr>
             </tbody>

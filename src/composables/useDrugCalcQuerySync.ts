@@ -11,12 +11,12 @@ function toNumber(v: unknown): number | undefined {
   return Number.isFinite(n) ? n : undefined
 }
 
-const QUERY_KEYS = [
+const NUMERIC_KEYS = [
   'forecastMonths',
   'totalPopulation',
   'adultPopulation',
   'prevalenceHTN',
-  'existingPatients',
+  'patientsUnderCare',
   'targetEnrolment',
   'treatmentAdherence',
   'amoldipine5mgCost',
@@ -24,16 +24,22 @@ const QUERY_KEYS = [
   'hydrochlorothiazide25mgCost',
 ] as const
 
+const STRING_KEYS = [
+  'currencySymbol',
+  'currencySymbolPosition',
+] as const
+
+const ALL_KEYS = [...NUMERIC_KEYS, ...STRING_KEYS] as const
+
 export function useDrugCalcQuerySync(store: any) {
   const route = useRoute()
   const router = useRouter()
 
   const refs = storeToRefs(store)
 
-  // 1) URL → store: run once on init (and when route query changes, e.g. back/forward)
   function applyQueryToStore() {
     const q = route.query
-    for (const key of QUERY_KEYS) {
+    for (const key of NUMERIC_KEYS) {
       const storeRef = refs[key]
       if (!storeRef) continue
       if (q[key] != null && q[key] !== '') {
@@ -41,16 +47,21 @@ export function useDrugCalcQuerySync(store: any) {
         if (val !== undefined) storeRef.value = val
       }
     }
+    for (const key of STRING_KEYS) {
+      const storeRef = refs[key]
+      if (!storeRef) continue
+      if (q[key] != null && q[key] !== '') {
+        const raw = Array.isArray(q[key]) ? q[key][0] : q[key]
+        if (typeof raw === 'string') storeRef.value = raw
+      }
+    }
   }
 
-  // First load: URL → store (populate inputs from query params)
   applyQueryToStore()
 
-  // After initial load: store → URL when user changes any input
   function pushStoreToUrl() {
     const query: Record<string, string> = {}
-    for (let i = 0; i < QUERY_KEYS.length; i++) {
-      const key = QUERY_KEYS[i]
+    for (const key of ALL_KEYS) {
       const v = refs[key]?.value
       if (v === null || v === undefined || v === '') continue
       if (typeof v === 'number' && !Number.isFinite(v)) continue
@@ -60,11 +71,10 @@ export function useDrugCalcQuerySync(store: any) {
   }
 
   watch(
-    () => QUERY_KEYS.map((key) => refs[key]?.value),
+    () => ALL_KEYS.map((key) => refs[key]?.value),
     pushStoreToUrl,
     { deep: true }
   )
 
-  // 3) When route query changes (e.g. back/forward), sync into store
   watch(() => route.query, applyQueryToStore, { deep: true })
 }

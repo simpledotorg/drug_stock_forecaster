@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <button class="see-more-button" @click="store.showCalculation = !store.showCalculation">
+    {{ store.showCalculation ? 'Hide' : 'Show' }} montly breakdown
+    <span class="see-more-chevron" :class="{ 'is-open': !store.showCalculation }" aria-hidden="true">{{ store.showCalculation ? '-' : '+' }}</span>
+  </button>
+  <div v-if="store.showCalculation">
     <h3>Monthly breakdown</h3>
     <table>
       <thead>
@@ -79,5 +83,57 @@ thead th {
 .total-row {
   font-weight: bold;
   background-color: #f0f0f0;
+}
+
+.see-more-button {
+  background-color: transparent;
+
+  color: #0f56e4;
+  font-size: 0.9re;
+  font-weight: 500;
+  width: 100%;
+  cursor: pointer;
+  padding: 8px 0;
+  margin: 2rem 0 -1.2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: none;
+  /* border-top: 1px solid #ddd; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.see-more-button:hover {
+  background-color: #f9f9f9;
+}
+
+.see-more-chevron {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 8px;
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+  /* width: 24px;
+  height: 24px; */
+  /* border: 1px solid #ddd; */
+  border-radius: 100%;
+  /* text-box-trim: trim-both; */
+  color: #aaa
+}
+
+.see-more-chevron.is-open {
+  /* transform: rotate(-90deg); */
+}
+
+.see-more-button:hover {
+  color: #216bff;
+}
+
+.see-more-button:tabindexfocus {
+  outline: 1px solid #216bff;
+  box-shadow: 0 0 0 3px rgba(66, 184, 131, 0.1);
 }
 </style>

@@ -1,59 +1,69 @@
 <template>
-  <div>
-    <header>
-      <h1>Drug stock forecaster</h1>
-    </header>
+
+  <div class="wrapper">
+    <header></header>
+    <div class="share-button-container print-hide">
+      <p class="small-text">Share this forecast with others using the webpage link</p>
+      <button class="share-button" :class="{ 'copied': isCopied }" @click="shareForecast">
+        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+        <Transition name="fade" mode="out-in">
+          <span v-if="!isCopied">{{ shareButtonText }}</span>
+          <span v-else>Copied</span>
+        </Transition>
+      </button>
+    </div>
     <div class="app">
       <aside>
         <div class="aside-content">
-          <div>
-
-            <h2>Enter forecast information</h2>
-            <p class="small-text">
-              Enter the population and drug data to get a forecast for the year ahead.
-            </p>
-          </div>
+          <!-- <div>
+              <p class="small-text">
+                Enter data to get a drug forecast for {{ store.monthsToForecast }} months.
+              </p>
+            </div> -->
           <DrugsCalculatorForm />
         </div>
       </aside>
       <main>
-        <div class="header header-content" v-if="store.showForecast">
-        </div>
-        <div class="content" v-if="store.showForecast">
+        <div class="content">
           <div class="content-header">
 
-            <h2>Forecast
-              <span class="small-text forecast-period-text">{{ store.forecastMonths }} month period</span>
-            </h2>
-            <div class="share-button-container">
-              <p class="small-text">Share this forecast with others using the webpage link</p>
-              <button class="share-button" :class="{ 'copied': isCopied }" @click="shareForecast">
-                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  aria-hidden="true">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                </svg>
-                <Transition name="fade" mode="out-in">
-                  <span v-if="!isCopied">{{ shareButtonText }}</span>
-                  <span v-else>Copied</span>
-                </Transition>
-              </button>
+            <h2>Drug stock forecast</h2>
+            <div class="period-input-container">
+              <div class="period-button-group">
+                <button class="button" @click="store.forecastMonths += 1"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                  </svg></button>
+                <button class="button" @click="store.forecastMonths -= 1"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg></button>
+              </div>
+              <p class="">
+                <input type="number" v-model="store.forecastMonths" class="period-input" placeholder="12" min="1" />
+                month forecast
+              </p>
             </div>
           </div>
           <TheForecast />
-          <Assumptions />
+          <!-- <Assumptions /> -->
           <Calculation />
-          <footer>
-            <p class="small-text">
-              This is a tool to help you forecast the stock required for the year ahead.
-            </p>
-            <p class="small-text">
+        </div>
+        <footer>
+          <p class="small-text text-right">
+            Created by <a href="https://resolvetosavelives.org" target="_blank">Resolve to Save Lives</a>
+          </p>
+          <!-- <p class="small-text">
               Source: <a href="https://www.who.int/news-room/fact-sheets/detail/hypertension" target="_blank">WHO Fact
                 Sheet on Hypertension</a>
-            </p>
-          </footer>
-        </div>
+            </p> -->
+        </footer>
       </main>
     </div>
   </div>
@@ -64,7 +74,7 @@ import { ref, computed } from 'vue'
 import DrugsCalculatorForm from './components/DrugsCalculatorForm.vue'
 import Calculation from './components/Calculation.vue'
 import TheForecast from './components/TheForecast.vue'
-import Assumptions from './components/Assumptions.vue'
+// import Assumptions from './components/Assumptions.vue'
 import { useDrugCalcStore } from './stores/drugsCalculator'
 
 const store = useDrugCalcStore()
@@ -96,6 +106,10 @@ function setIsCopieTimeout() {
 <style>
 @import './style.css';
 
+a {
+  color: #0f56e4;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -111,17 +125,24 @@ body {
   background-color: #f5f5f5;
 } */
 
-.app {
+.wrapper {
   min-height: 100dvh;
   width: 100vw;
+  max-width: 1400px;
+  margin: 0 auto 5rem;
+  padding: 0 2rem;
+}
+
+.app {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 240px 1fr;
+  gap: 2rem;
 }
 
 header {
   /* background-color: #eaf5ff; */
   padding: 1rem 1.75rem;
-  border-bottom: 1px solid #ebebeb;
+  /* border-bottom: 1px solid #ebebeb; */
 }
 
 h1 {
@@ -132,7 +153,7 @@ h1 {
 h2 {
   font-size: 1.5em;
   line-height: 1.1;
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
 }
 
 h3 {
@@ -149,20 +170,13 @@ h3:not(:first-child) {
   margin-top: 4rem;
 }
 
-aside {
-  width: 100%;
-  /* background-color: #f5f5f5; */
-  border-right: 1px solid #dedede;
-  /* display: grid; */
-  /* grid-template-rows: 66px 1fr; */
-  /* min-height: calc(100dvh - 66px); */
-}
-
 .aside-content {
-  padding: 1.5rem 1.75rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  /* padding: 0.5rem 1rem 1rem; */
+  /* background-color: #eee; */
+  /* border: 1px solid #ddd; */
 }
 
 .header {
@@ -179,33 +193,47 @@ aside {
 
 
 .content {
-  padding: 0 var(--main-content-padding-y) 4rem;
+  padding: 3rem;
+  width: 100%;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
+  border-radius: 2px;
 }
+
+
 
 .content-header {
   display: flex;
   justify-content: space-between;
-  align-items: space-between;
+  align-items: center;
 }
 
 .share-button-container {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 0.75rem;
+  padding: 0.75rem 0;
 }
 
 .share-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.5rem 0.2rem 0.5rem 0.7rem;
+  justify-content: center;
+  gap: 0.1rem;
+  height: 32px;
   background-color: #eee;
   color: black;
   border: none;
   border-radius: 6px;
   border: 1px solid #ddd;
-  width: 106px;
+  width: 90px;
   transition: background-color 0.3s;
+  font-size: 0.75rem;
 
   span {
     width: 60px;
@@ -213,18 +241,21 @@ aside {
   }
 }
 
-.copy-icon {
-  flex-shrink: 0;
-}
-
 .share-button:hover {
-  background-color: #eee;
+  background-color: #e3e3e3;
   border: 1px solid #ddd;
 }
 
 .share-button:active {
   transform: scale(0.98);
 }
+
+.copy-icon {
+  flex-shrink: 0;
+  width: 14px;
+  margin-left: 4px;
+}
+
 
 /* .share-button:focus {
   outline: none;
@@ -243,6 +274,10 @@ aside {
   font-weight: 400;
 }
 
+.text-right {
+  text-align: right;
+}
+
 .forecast-period-text {
   color: #777;
   font-weight: 400;
@@ -251,11 +286,67 @@ aside {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.15s ease;
+  transition: opacity 0.1s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.print-hide {
+  @media print {
+    display: none;
+  }
+}
+
+footer {
+  padding: 0.4rem 0;
+}
+
+.period-button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+
+  button {
+    background-color: #fff;
+    border: 1px solid #e0dfdf;
+    border-radius: 6px;
+    text-align: center;
+    display: inline-block;
+    height: 16px;
+    width: 24px;
+
+    svg {
+      width: 10px;
+      height: 100%;
+    }
+  }
+}
+
+.period-input {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  border: 1px solid #e0dfdf;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  text-align: center;
+  display: inline-block;
+  width: 40px;
+  height: 30px;
+  font-size: 1rem;
+}
+
+.period-input::-webkit-outer-spin-button,
+.period-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.period-input-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 </style>
