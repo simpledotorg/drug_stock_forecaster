@@ -1,14 +1,27 @@
 <template>
     <div>
         <!-- <h3>Estimated cost</h3> -->
-        <p class="summary-text">Estimated total cost of <strong><span v-if="store.currencySymbolPosition === 'start'">{{ store.currencySymbol }}</span>{{ store.costForYearForecast.amlodipine5mgCost && store.costForYearForecast.losartan50mgCost && store.costForYearForecast.hydrochlorothiazide25mgCost ? formatNumber(store.costForYearForecast.amlodipine5mgCost + store.costForYearForecast.losartan50mgCost + store.costForYearForecast.hydrochlorothiazide25mgCost) : "Missing tablet costs" }}<span v-if="store.currencySymbolPosition === 'end'">{{ store.currencySymbol }}</span></strong> for {{ store.forecastMonths }} months of treatment</p>
+        <p class="summary-text">Estimated total cost for for {{ store.forecastMonths }} months of treatment:
+            <span class="final-cost">
+                <strong>
+                    <span v-if="store.currencySymbolPosition === 'start'">{{ store.currencySymbol }}</span>
+                    {{ store.costForYearForecast.amlodipine5mgCost && store.costForYearForecast.losartan50mgCost &&
+                        store.costForYearForecast.hydrochlorothiazide25mgCost ?
+                        formatNumber(store.costForYearForecast.amlodipine5mgCost +
+                            store.costForYearForecast.losartan50mgCost + store.costForYearForecast.hydrochlorothiazide25mgCost)
+                        : "Missing tablet costs" }}
+                    <span v-if="store.currencySymbolPosition === 'end'" style="margin-right: 0.25rem;">
+                        {{ store.currencySymbol }}</span>
+                </strong>
+            </span>
+        </p>
         <!-- <table class="total-cost"> -->
-            <!-- <thead>
+        <!-- <thead>
                 <tr>
                     <th>Total cost</th>
                 </tr>
             </thead> -->
-            <!-- <tbody>
+        <!-- <tbody>
                 <tr class="total-cost-row" :class="{ 'missing-costs': !store.costForYearForecast.amlodipine5mgCost || !store.costForYearForecast.losartan50mgCost || !store.costForYearForecast.hydrochlorothiazide25mgCost }">
                     <th>Total cost</th>
                     <td>{{ store.costForYearForecast.amlodipine5mgCost && store.costForYearForecast.losartan50mgCost && store.costForYearForecast.hydrochlorothiazide25mgCost ? formatNumber(store.costForYearForecast.amlodipine5mgCost + store.costForYearForecast.losartan50mgCost + store.costForYearForecast.hydrochlorothiazide25mgCost) : "Missing tablet costs" }}</td>
@@ -36,35 +49,60 @@
             <tbody>
                 <tr class="total-row">
                     <th>Total</th>
-                    <td class="number-cell">{{ formatNumber(store.tabletsForYearForecast.amlodipine5mgTabletsTotal + store.tabletsForYearForecast.losartan50mgTabletsTotal + store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal) }}</td>
-                    <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'" class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{ store.costForYearForecast.amlodipine5mgCost && store.costForYearForecast.losartan50mgCost && store.costForYearForecast.hydrochlorothiazide25mgCost ? formatNumber(store.costForYearForecast.amlodipine5mgCost + store.costForYearForecast.losartan50mgCost + store.costForYearForecast.hydrochlorothiazide25mgCost) : "Missing tablet costs" }}<span v-if="store.currencySymbolPosition === 'end'" class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span></td>
+                    <td class="number-cell">{{ formatNumber(store.tabletsForYearForecast.amlodipine5mgTabletsTotal +
+                        store.tabletsForYearForecast.losartan50mgTabletsTotal +
+                        store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal) }}</td>
+                    <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'"
+                            class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
+                                store.costForYearForecast.amlodipine5mgCost && store.costForYearForecast.losartan50mgCost &&
+                                    store.costForYearForecast.hydrochlorothiazide25mgCost ?
+                                    formatNumber(store.costForYearForecast.amlodipine5mgCost +
+                                        store.costForYearForecast.losartan50mgCost +
+                                        store.costForYearForecast.hydrochlorothiazide25mgCost) : "Missing tablet costs" }}<span
+                            v-if="store.currencySymbolPosition === 'end'"
+                            class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span></td>
                 </tr>
                 <tr class="blank-row">
                     <td></td>
-                    <td></td>   
+                    <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <th>Amlodipine 5mg</th>
-                    <td class="number-cell">{{ formatNumber(store.tabletsForYearForecast.amlodipine5mgTabletsTotal) }}</td>
-                    <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'" class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol}}</span>{{ formatNumber(store.costForYearForecast.amlodipine5mgCost) }}<span v-if="store.currencySymbolPosition === 'end'" class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol}}</span></td>
+                    <td class="number-cell">{{ formatNumber(store.tabletsForYearForecast.amlodipine5mgTabletsTotal) }}
+                    </td>
+                    <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'"
+                            class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
+                                formatNumber(store.costForYearForecast.amlodipine5mgCost) }}<span
+                            v-if="store.currencySymbolPosition === 'end'"
+                            class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span></td>
                 </tr>
                 <tr>
                     <th>Losartan 50mg</th>
-                    <td class="number-cell">{{ formatNumber(store.tabletsForYearForecast.losartan50mgTabletsTotal) }}</td>
-                    <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'" class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol}}</span>{{ formatNumber(store.costForYearForecast.losartan50mgCost) }}<span v-if="store.currencySymbolPosition === 'end'" class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol}}</span></td>
+                    <td class="number-cell">{{ formatNumber(store.tabletsForYearForecast.losartan50mgTabletsTotal) }}
+                    </td>
+                    <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'"
+                            class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
+                                formatNumber(store.costForYearForecast.losartan50mgCost) }}<span
+                            v-if="store.currencySymbolPosition === 'end'"
+                            class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span></td>
                 </tr>
                 <tr>
                     <th>Hydrochlorothiazide 25mg</th>
-                    <td class="number-cell">{{ formatNumber(store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal) }}</td>
-                    <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'" class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol}}</span>{{ formatNumber(store.costForYearForecast.hydrochlorothiazide25mgCost) }}<span v-if="store.currencySymbolPosition === 'end'" class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol}}</span></td>
+                    <td class="number-cell">{{
+                        formatNumber(store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal) }}</td>
+                    <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'"
+                            class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
+                                formatNumber(store.costForYearForecast.hydrochlorothiazide25mgCost) }}<span
+                            v-if="store.currencySymbolPosition === 'end'"
+                            class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span></td>
                 </tr>
             </tbody>
         </table>
 
 
 
-<!--         
+        <!--         
         <table>
             <thead>
                 <tr>
@@ -101,19 +139,19 @@
                     <td>{{ formatNumber(store.tabletsForYearForecast.losartan50mgTabletsTotal) }}</td>
                     <td>{{ formatNumber(store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal) }}</td>
                 </tr> -->
-                <!-- <tr>
+        <!-- <tr>
                     <th>Cartons <span class="small-text">(30 tablets per carton)</span></th>
                     <td>{{ formatNumber(Math.round(store.tabletsForYearForecast.amlodipine5mgTabletsTotal / 30)) }}</td>
                     <td>{{ formatNumber(Math.round(store.tabletsForYearForecast.losartan50mgTabletsTotal / 30)) }}</td>
                     <td>{{ formatNumber(Math.round(store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal / 30)) }}</td>
                 </tr> -->
-                <!-- <tr class="blank-row">
+        <!-- <tr class="blank-row">
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                 </tr> -->
-                <!-- <tr>
+        <!-- <tr>
                     <th>Total cost</th>
                     <td>
                         <div class="cost-cell-container">
@@ -123,42 +161,42 @@
                                     <p class="small-text">- per tab</p>
                                 </label>
                             </template>
-                            <template v-else>
+<template v-else>
                                 <p>{{ formatNumber(store.costForYearForecast.amlodipine5mgCost) }}</p>
                                 <p class="small-text">{{ formatNumber(store.amoldipine5mgCost) }} per tab</p>
                             </template>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="cost-cell-container">
-                            <template v-if="!store.losartan50mgCost">
+</div>
+</td>
+<td>
+    <div class="cost-cell-container">
+        <template v-if="!store.losartan50mgCost">
                                 <label for="losartan50mgCost">
                                     <p class="add-cost-label">+ ADD TABLET COST</p>
                                     <p class="small-text">- per tab</p>
                                 </label>
                             </template>
-                            <template v-else>
+        <template v-else>
                                 <p>{{ formatNumber(store.costForYearForecast.losartan50mgCost) }}</p>
                                 <p class="small-text">{{ formatNumber(store.losartan50mgCost) }} per tab</p>
                             </template>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="cost-cell-container">
-                            <template v-if="!store.hydrochlorothiazide25mgCost">
+    </div>
+</td>
+<td>
+    <div class="cost-cell-container">
+        <template v-if="!store.hydrochlorothiazide25mgCost">
                                 <label for="hydrochlorothiazide25mgCost">
                                     <p class="add-cost-label" >+ ADD TABLET COST</p>
                                     <p class="small-text">- per tab</p>
                                 </label>
                             </template>
-                            <template v-else>
+        <template v-else>
                                 <p>{{ formatNumber(store.costForYearForecast.hydrochlorothiazide25mgCost) }}</p>
                                 <p class="small-text">{{ formatNumber(store.hydrochlorothiazide25mgCost) }} per tab</p>
                             </template>
-                        </div>
-                    </td>
-                </tr> -->
-            <!-- </tbody>
+    </div>
+</td>
+</tr> -->
+        <!-- </tbody>
         </table> -->
     </div>
 </template>
@@ -204,7 +242,8 @@ table {
     margin-top: 0.75rem;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #ddd;
     padding: 0.5rem 0.75rem;
     width: 25%;
@@ -253,7 +292,7 @@ td {
 }
 
 .cost-unit {
-  margin-right: 0.25rem;
+    margin-right: 0.25rem;
 }
 
 .cost-cell-container {
@@ -340,7 +379,21 @@ td {
     flex-shrink: 0;
 }
 
-.swatch-amlodipine { background: #4a90d9; }
-.swatch-losartan { background: #e8a838; }
-.swatch-hctz { background: #5cb85c; }
+.swatch-amlodipine {
+    background: #4a90d9;
+}
+
+.swatch-losartan {
+    background: #e8a838;
+}
+
+.swatch-hctz {
+    background: #5cb85c;
+}
+
+.final-cost {
+    font-size: 1.2em;
+    font-weight: 400;
+    padding-left: 1rem;
+}
 </style>

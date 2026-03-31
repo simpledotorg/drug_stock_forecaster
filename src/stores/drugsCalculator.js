@@ -163,6 +163,12 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         return costForYearForecast.value.amlodipine5mgCost + costForYearForecast.value.losartan50mgCost + costForYearForecast.value.hydrochlorothiazide25mgCost
     })
 
+    const finalCost = computed(() => {
+        const c = costForYearForecast.value
+        if (!c.amlodipine5mgCost || !c.losartan50mgCost || !c.hydrochlorothiazide25mgCost) return null
+        return c.amlodipine5mgCost + c.losartan50mgCost + c.hydrochlorothiazide25mgCost
+    })
+
 
     //  Drug data
     const amoldipine5mgCost = ref()
@@ -227,6 +233,7 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         tabletsForYearForecast,
         costForYearForecast,
         totalCostForYearForecast,
+        finalCost,
         // Drug data
         amoldipine5mgCost,
         losartan50mgCost,

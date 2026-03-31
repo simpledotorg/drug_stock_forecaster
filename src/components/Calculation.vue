@@ -1,5 +1,5 @@
 <template>
-  <button class="see-more-button" @click="store.showCalculation = !store.showCalculation">
+  <button class="see-more-button hide-on-print" @click="store.showCalculation = !store.showCalculation">
     {{ store.showCalculation ? 'Hide' : 'Show' }} montly breakdown
     <span class="see-more-chevron" :class="{ 'is-open': !store.showCalculation }" aria-hidden="true">{{ store.showCalculation ? '-' : '+' }}</span>
   </button>

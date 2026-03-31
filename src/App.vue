@@ -30,42 +30,56 @@
       <main>
         <div class="content">
           <div class="content-header">
-
             <h2>Drug stock forecast</h2>
             <div class="period-input-container">
-              <div class="period-button-group">
+              <!-- <div class="period-button-group">
                 <button class="button" @click="store.forecastMonths += 1"><svg xmlns="http://www.w3.org/2000/svg"
                     width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="18 15 12 9 6 15"></polyline>
-                  </svg></button>
+                  </svg>
+                </button>
                 <button class="button" @click="store.forecastMonths -= 1"><svg xmlns="http://www.w3.org/2000/svg"
                     width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg></button>
-              </div>
-              <p class="">
+                  </svg>
+                </button>
+              </div> -->
+              <!-- <div class="period"> -->
+              <div class="period-button-input-group hide-on-print">
+                <button class="button" @click="store.forecastMonths += 1"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                  </svg>
+                </button>
                 <input type="number" v-model="store.forecastMonths" class="period-input" placeholder="12" min="1" />
-                month forecast
-              </p>
+                <button class="button" @click="store.forecastMonths -= 1"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+              </div>
+              <p><span class="show-on-print">{{ store.forecastMonths }}</span> month forecast</p>
             </div>
           </div>
           <TheForecast />
           <!-- <Assumptions /> -->
           <Calculation />
         </div>
-        <footer>
-          <p class="small-text text-right">
-            Created by <a href="https://resolvetosavelives.org" target="_blank">Resolve to Save Lives</a>
-          </p>
-          <!-- <p class="small-text">
-              Source: <a href="https://www.who.int/news-room/fact-sheets/detail/hypertension" target="_blank">WHO Fact
-                Sheet on Hypertension</a>
-            </p> -->
-        </footer>
       </main>
     </div>
+    <footer>
+      <p class="small-text created-by">
+        Created by <a href="https://resolvetosavelives.org" target="_blank">Resolve to Save Lives</a>
+      </p>
+      <!-- <p class="small-text">
+          Source: <a href="https://www.who.int/news-room/fact-sheets/detail/hypertension" target="_blank">WHO Fact
+            Sheet on Hypertension</a>
+        </p> -->
+    </footer>
   </div>
 </template>
 
@@ -127,9 +141,11 @@ body {
 
 .wrapper {
   min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   width: 100vw;
   max-width: 1400px;
-  margin: 0 auto 5rem;
+  margin: 0 auto;
   padding: 0 2rem;
 }
 
@@ -137,6 +153,15 @@ body {
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 2rem;
+  flex: 1;
+
+  @media print {
+    grid-template-columns: 1fr;
+
+    aside {
+      order: 1;
+    }
+  }
 }
 
 header {
@@ -191,19 +216,19 @@ h3:not(:first-child) {
 }
 
 
-
-.content {
-  padding: 3rem;
-  width: 100%;
-  background-color: #fff;
-  border-top: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  border-bottom: 1px solid #ccc;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
-  border-radius: 2px;
+@media not print {
+  .content {
+    padding: 3rem;
+    width: 100%;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
+    border-radius: 2px;
+  }
 }
-
 
 
 .content-header {
@@ -301,22 +326,28 @@ h3:not(:first-child) {
 }
 
 footer {
-  padding: 0.4rem 0;
+  margin-top: 40px;
+  padding: 0.8rem 0 1rem;
+  border-top: 1px solid #ddd;
 }
 
-.period-button-group {
+.period-button-input-group {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
 
-  button {
+  .button {
     background-color: #fff;
     border: 1px solid #e0dfdf;
     border-radius: 6px;
     text-align: center;
     display: inline-block;
     height: 16px;
-    width: 24px;
+    width: 40px;
+
+    @media print {
+      display: none;
+    }
 
     svg {
       width: 10px;
@@ -336,6 +367,11 @@ footer {
   width: 40px;
   height: 30px;
   font-size: 1rem;
+
+  @media print {
+    width: auto;
+    border: none;
+  }
 }
 
 .period-input::-webkit-outer-spin-button,
@@ -345,8 +381,25 @@ footer {
 }
 
 .period-input-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 32px 1fr;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.75rem;
+  @media print {
+    grid-template-columns: 1fr;
+  }
+}
+
+.created-by {
+  width: 100%;
+  text-align: center;
+
+  @media print {
+    display: none;
+  }
+}
+
+.button {
+  width: 100%;
 }
 </style>

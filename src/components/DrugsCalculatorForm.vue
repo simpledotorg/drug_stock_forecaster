@@ -31,7 +31,7 @@
           maxlength="3" min="0" max="100" />
         <p class="small-text">~33% world wide average</p>
       </div> -->
-      <h4 class="form-group-title">Program data</h4>
+      <h4 class="form-group-title new-page">Program data</h4>
       <div class="form-group">
         <label for="patientsUnderCare">Patients under care</label>
         <input id="patientsUnderCare" v-model.number="patientsUnderCare" type="number" step="any" class="input"
@@ -126,7 +126,7 @@
         <input id="forecastMonths" v-model.number="forecastMonths" type="number" step="any" class="input"
           placeholder="12" />
       </div> -->
-      <div class="form-group">
+      <div class="form-group hide-on-print">
         <label for="currencySymbol">Currency</label>
         <div class="currency-group">
           <input id="currencySymbol" v-model="currencySymbol" type="text" class="input" placeholder="$" />
@@ -211,12 +211,28 @@ h2 {
   color: #333;
 }
 
+@media print {
+  h4 {
+    grid-column: span 3;
+  }
+
+  .new-page {
+    break-before: page;
+    padding-top: 2rem;
+  }
+}
+
 .form {
   display: grid;
   /* grid-template-columns: repeat(4, 1fr); */
   gap: 0.85rem;
   width: 100%;
+
   /* grid-auto-flow: row; */
+  @media print {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 
 .form-group {
