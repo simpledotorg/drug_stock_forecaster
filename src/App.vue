@@ -1,41 +1,8 @@
 <template>
 
-  <div class="wrapper">
+    <div class="wrapper">
     <header></header>
-    <div class="share-button-container print-hide">
-      <p class="small-text">Share this forecast with others using the webpage link</p>
-      <button v-if="canNativeShare" class="share-button" type="button" @click="shareForecastNative">
-        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="18" cy="5" r="3" />
-          <circle cx="6" cy="12" r="3" />
-          <circle cx="18" cy="19" r="3" />
-          <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" />
-          <line x1="15.4" y1="6.5" x2="8.6" y2="10.5" />
-        </svg>
-        <span>Share</span>
-      </button>
-      <button class="share-button" :class="{ 'copied': isCopied }" @click="shareForecast">
-        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-        </svg>
-        <Transition name="fade" mode="out-in">
-          <span v-if="!isCopied">{{ shareButtonText }}</span>
-          <span v-else>Copied</span>
-        </Transition>
-      </button>
-      <button class="share-button" type="button" @click="printForecast">
-        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="6 9 6 2 18 2 18 9" />
-          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-          <rect x="6" y="14" width="12" height="8" />
-        </svg>
-        <span>Print</span>
-      </button>
-    </div>
+    <ForecastControls />
     <div class="app">
       <aside>
         <div class="aside-content">
@@ -51,40 +18,7 @@
         <div class="content">
           <div class="content-header">
             <h2>Drug stock forecast</h2>
-            <div class="period-input-container">
-              <!-- <div class="period-button-group">
-                <button class="button" @click="store.forecastMonths += 1"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="18 15 12 9 6 15"></polyline>
-                  </svg>
-                </button>
-                <button class="button" @click="store.forecastMonths -= 1"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </button>
-              </div> -->
-              <!-- <div class="period"> -->
-              <div class="period-button-input-group hide-on-print">
-                <button class="button" @click="store.forecastMonths += 1">
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="18 15 12 9 6 15"></polyline>
-                  </svg>
-                </button>
-                <input type="number" v-model="store.forecastMonths" class="period-input" placeholder="12" min="1" />
-                <button class="button" @click="store.forecastMonths -= 1"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </button>
-              </div>
-              <p><span class="show-on-print">{{ store.forecastMonths }}</span> month forecast</p>
-            </div>
+            <ForecastPeriodControl />
           </div>
           <TheForecast />
           <!-- <Assumptions /> -->
@@ -105,60 +39,15 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
 import DrugsCalculatorForm from './components/DrugsCalculatorForm.vue'
 import Calculation from './components/Calculation.vue'
 import TheForecast from './components/TheForecast.vue'
+import ForecastControls from './features/drug-forecast/components/ForecastControls.vue'
+import ForecastPeriodControl from './features/drug-forecast/components/ForecastPeriodControl.vue'
 // import Assumptions from './components/Assumptions.vue'
 import { useDrugCalcStore } from './stores/drugsCalculator'
 
 const store = useDrugCalcStore()
-
-const shareForecast = () => {
-  const url = window.location.href
-  navigator.clipboard.writeText(url)
-  setIsCopieTimeout()
-}
-
-const canNativeShare = computed(() => {
-  return typeof navigator !== 'undefined' && typeof navigator.share === 'function'
-})
-
-const shareForecastNative = async () => {
-  const url = window.location.href
-  try {
-    await navigator.share({
-      title: 'Drug stock forecast',
-      text: 'Drug stock forecast',
-      url,
-    })
-  } catch (e) {
-    // user cancelled, or share failed → fallback to copy
-    navigator.clipboard.writeText(url)
-    setIsCopieTimeout()
-  }
-}
-
-const printForecast = () => {
-  window.print()
-}
-
-const isCopied = ref(false)
-const copyResetTimer = ref(null)
-const shareButtonText = computed(() => {
-  return isCopied.value ? 'Copied' : 'Copy link'
-})
-
-function setIsCopieTimeout() {
-  if (copyResetTimer.value !== null) {
-    clearTimeout(copyResetTimer.value)
-  }
-  isCopied.value = true
-  copyResetTimer.value = setTimeout(() => {
-    isCopied.value = false
-    copyResetTimer.value = null
-  }, 2500)
-}
 </script>
 
 <style>
