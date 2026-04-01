@@ -69,6 +69,10 @@ const {
     break-before: page;
     padding-top: 2rem;
   }
+
+  .form-container {
+    padding-top: 0.5rem;
+  }
 }
 
 .form {
@@ -89,8 +93,8 @@ const {
 }
 
 .form-group-title {
-  font-size: 0.8rem;
-  font-weight: 800;
+  font-size: 0.85rem;
+  font-weight: 1000;
   color: #444;
   margin-top: 0.4rem;
   margin-bottom: -0.3rem;
@@ -105,15 +109,15 @@ label {
 
 .input {
   padding: 0.7rem 0.7rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
+  border-radius: 12px;
   background-color: #fff;
   font-size: 0.9rem;
   transition: border-color 0.3s;
 }
 
 .input-select {
-  padding-left: 0.4rem;
+  padding-left: 0.75rem;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -133,8 +137,10 @@ label {
 
 .input:focus {
   outline: none;
-  border-color: #42b883;
-  box-shadow: 0 0 0 3px rgba(66, 184, 131, 0.1);
+  border-color: color-mix(in oklab, var(--accent) 45%, var(--faint));
+  box-shadow:
+    0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent),
+    0 10px 18px rgba(15, 23, 42, 0.08);
 }
 
 .input::placeholder {
@@ -208,9 +214,9 @@ label {
   grid-template-columns: 1fr 1fr;
   width: 100%;
   max-width: 200px;
-  border: 1px solid #b3d0b4;
-  border-radius: 12px;
-  background: #fff;
+  border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--paper) 94%, var(--bg1));
   overflow: hidden;
 }
 
@@ -240,24 +246,24 @@ label {
   padding: 0.65rem 0.6rem;
   font-weight: 600;
   font-size: 0.8rem;
-  color: #333;
+  color: color-mix(in oklab, var(--ink) 88%, var(--muted));
   background: transparent;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .segmented-control__option--left span {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
 }
 
 .segmented-control__option--right span {
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
 }
 
 .segmented-control__option input[type='radio']:checked + span {
-  background: #2bbc5b;
-  color: #fff;
+  background: color-mix(in oklab, var(--accent2) 32%, var(--paper));
+  color: var(--ink);
 }
 
 .segmented-control__option input[type='radio']:focus-visible + span {

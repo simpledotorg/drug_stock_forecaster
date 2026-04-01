@@ -77,6 +77,29 @@ const store = useDrugCalcStore()
 </script>
 
 <style scoped>
+@media print {
+  .table-scroll {
+    overflow: visible;
+  }
+
+  .table-scroll table {
+    min-width: 0;
+  }
+
+  th,
+  td {
+    border: 1px solid rgba(0, 0, 0, 0.35);
+  }
+
+  .total-row {
+    background: #fff;
+  }
+
+  .blank-row {
+    background: transparent;
+  }
+}
+
 .table-scroll {
   width: 100%;
   overflow-x: auto;

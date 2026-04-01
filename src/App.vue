@@ -27,6 +27,7 @@
       </main>
     </div>
     <footer class="hide-on-print">
+      <p class="small-text"><strong>Disclaimer:</Strong> By using this tool you acknowldge the figures calculated are machine generated and represent estimated figures, not accurate recommendations. RTSL cannot be held responsible for any errors or omissions in the figures or for outcomes that occur as a result of the using this tool.</p>
       <p class="small-text created-by">
         Created by <a href="https://resolvetosavelives.org" target="_blank">Resolve to Save Lives</a>
       </p>
@@ -54,40 +55,29 @@ const store = useDrugCalcStore()
 @import './style.css';
 
 a {
-  color: #0f56e4;
+  color: color-mix(in oklab, var(--accent) 88%, var(--ink));
 }
-
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.87);
-
-}
-
 
 .wrapper {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  max-width: 1400px;
+  width: 100%;
+  max-width: 1320px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: var(--space-4);
+  gap: var(--space-3);
 }
 
 .app {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 2rem;
+  grid-template-columns: 272px 1fr;
+  gap: var(--space-5);
   flex: 1;
 
-  @media (max-width: 900px) {
+  @media (max-width: 980px) {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
   @media print {
@@ -101,11 +91,15 @@ body {
 
 @media (max-width: 900px) {
   .wrapper {
-    padding: 0 1rem;
+    padding: var(--space-3);
+  }
+
+  .app aside .aside-content {
+    padding: var(--space-3);
   }
 
   .content {
-    padding: 1.25rem;
+    padding: var(--space-4);
   }
 
   .content-header {
@@ -122,7 +116,7 @@ body {
 
 header {
   /* background-color: #eaf5ff; */
-  padding: 1rem 1.75rem;
+  padding: var(--space-3) var(--space-4);
   /* border-bottom: 1px solid #ebebeb; */
 }
 
@@ -132,9 +126,12 @@ h1 {
 }
 
 h2 {
-  font-size: 1.5em;
+  font-family: var(--font-display);
+  font-size: 1.9rem;
   line-height: 1.1;
   /* margin-bottom: 0.5rem; */
+  letter-spacing: -0.02em;
+  margin: 0.4rem 0
 }
 
 h3 {
@@ -154,7 +151,7 @@ h3:not(:first-child) {
 .aside-content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-3);
   /* padding: 0.5rem 1rem 1rem; */
   /* background-color: #eee; */
   /* border: 1px solid #ddd; */
@@ -174,16 +171,34 @@ h3:not(:first-child) {
 
 @media not print {
   .content {
-    padding: 3rem;
+    padding: var(--space-6);
     width: 100%;
-    background-color: #fff;
-    border-top: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    border-left: 1px solid #ddd;
-    border-bottom: 1px solid #ccc;
-    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
-    border-radius: 2px;
+    background-color: var(--paper);
+    border: 1px solid var(--faint);
+    box-shadow: var(--shadow-1);
+    border-radius: var(--radius-lg);
   }
+}
+
+.content {
+  position: relative;
+  overflow: clip;
+}
+
+.content::before {
+  content: none;
+}
+
+.app aside .aside-content {
+  background: color-mix(in oklab, var(--paper) 92%, var(--bg1));
+  border: 1px solid var(--faint);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+  padding: var(--space-4);
+}
+
+.app main .content {
+  min-width: 0;
 }
 
 
@@ -197,38 +212,39 @@ h3:not(:first-child) {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.75rem;
-  padding: 0.75rem 0;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
 }
 
 .share-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.1rem;
-  height: 32px;
-  background-color: #eee;
-  color: black;
-  border: none;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  width: 90px;
-  transition: background-color 0.3s;
-  font-size: 0.75rem;
+  gap: 0.35rem;
+  height: 36px;
+  padding: 0 0.75rem;
+  background: color-mix(in oklab, var(--paper) 92%, var(--bg0));
+  color: var(--ink);
+  border: 1px solid var(--faint);
+  border-radius: 999px;
+  width: auto;
+  transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease;
+  font-size: 0.8rem;
+  font-weight: 600;
 
   span {
-    width: 60px;
+    width: auto;
     text-align: center;
   }
 }
 
 .share-button:hover {
-  background-color: #e3e3e3;
-  border: 1px solid #ddd;
+  background: color-mix(in oklab, var(--paper) 86%, var(--bg1));
+  border-color: color-mix(in oklab, var(--accent) 28%, var(--faint));
 }
 
 .share-button:active {
-  transform: scale(0.98);
+  transform: translateY(1px);
 }
 
 .copy-icon {
@@ -244,25 +260,19 @@ h3:not(:first-child) {
 } */
 
 .share-button.copied {
-  background-color: #92e6c0;
-  color: #054729;
-  border: 1px solid #69cfa1;
+  background: color-mix(in oklab, var(--accent2) 18%, var(--paper));
+  color: color-mix(in oklab, var(--accent2) 35%, var(--ink));
+  border-color: color-mix(in oklab, var(--accent2) 50%, var(--faint));
 }
 
 .small-text {
   font-size: 0.8rem;
-  color: #777;
+  color: var(--muted);
   font-weight: 400;
 }
 
 .text-right {
   text-align: right;
-}
-
-.forecast-period-text {
-  color: #777;
-  font-weight: 400;
-  margin-left: 0.6rem;
 }
 
 .fade-enter-active,
@@ -283,70 +293,8 @@ h3:not(:first-child) {
 
 footer {
   margin-top: 40px;
-  padding: 0.8rem 0 1rem;
-  border-top: 1px solid #ddd;
-}
-
-.period-button-input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-
-  .button {
-    /* background-color: #e4eaff;
-    border: 1px solid #c0c7fe; */
-
-    background-color: #fff;
-    border: 1px solid #e0dfdf;
-    border-radius: 6px;
-    text-align: center;
-    display: inline-block;
-    height: 20px;
-    width: 40px;
-
-    @media print {
-      display: none;
-    }
-
-    svg {
-      width: 14px;
-      height: 100%;
-    }
-  }
-}
-
-.period-input {
-  -moz-appearance: textfield;
-  appearance: textfield;
-  border: 1px solid #e0dfdf;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  text-align: center;
-  display: inline-block;
-  width: 40px;
-  height: 30px;
-  font-size: 1rem;
-
-  @media print {
-    width: auto;
-    border: none;
-  }
-}
-
-.period-input::-webkit-outer-spin-button,
-.period-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.period-input-container {
-  display: grid;
-  grid-template-columns: 32px 1fr;
-  align-items: center;
-  gap: 0.75rem;
-  @media print {
-    grid-template-columns: 1fr;
-  }
+  padding: var(--space-1) 0 var(--space-4);
+  border-top: 1px solid var(--faint);
 }
 
 .created-by {
@@ -355,6 +303,29 @@ footer {
 
   @media print {
     display: none;
+  }
+}
+
+@media print {
+  .wrapper {
+    max-width: none;
+    padding: 0;
+    gap: 0;
+  }
+
+  .app aside .aside-content {
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .content {
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
   }
 }
 </style>
