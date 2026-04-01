@@ -4,6 +4,17 @@
     <header></header>
     <div class="share-button-container print-hide">
       <p class="small-text">Share this forecast with others using the webpage link</p>
+      <button v-if="canNativeShare" class="share-button" type="button" @click="shareForecastNative">
+        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="18" cy="5" r="3" />
+          <circle cx="6" cy="12" r="3" />
+          <circle cx="18" cy="19" r="3" />
+          <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" />
+          <line x1="15.4" y1="6.5" x2="8.6" y2="10.5" />
+        </svg>
+        <span>Share</span>
+      </button>
       <button class="share-button" :class="{ 'copied': isCopied }" @click="shareForecast">
         <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -14,6 +25,15 @@
           <span v-if="!isCopied">{{ shareButtonText }}</span>
           <span v-else>Copied</span>
         </Transition>
+      </button>
+      <button class="share-button" type="button" @click="printForecast">
+        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 6 2 18 2 18 9" />
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+          <rect x="6" y="14" width="12" height="8" />
+        </svg>
+        <span>Print</span>
       </button>
     </div>
     <div class="app">
@@ -100,6 +120,29 @@ const shareForecast = () => {
   setIsCopieTimeout()
 }
 
+const canNativeShare = computed(() => {
+  return typeof navigator !== 'undefined' && typeof navigator.share === 'function'
+})
+
+const shareForecastNative = async () => {
+  const url = window.location.href
+  try {
+    await navigator.share({
+      title: 'Drug stock forecast',
+      text: 'Drug stock forecast',
+      url,
+    })
+  } catch (e) {
+    // user cancelled, or share failed → fallback to copy
+    navigator.clipboard.writeText(url)
+    setIsCopieTimeout()
+  }
+}
+
+const printForecast = () => {
+  window.print()
+}
+
 const isCopied = ref(false)
 const copyResetTimer = ref(null)
 const shareButtonText = computed(() => {
@@ -153,12 +196,38 @@ body {
   gap: 2rem;
   flex: 1;
 
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
   @media print {
     grid-template-columns: 1fr;
 
     aside {
       order: 1;
     }
+  }
+}
+
+@media (max-width: 900px) {
+  .wrapper {
+    padding: 0 1rem;
+  }
+
+  .content {
+    padding: 1.25rem;
+  }
+
+  .content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .share-button-container {
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 }
 
