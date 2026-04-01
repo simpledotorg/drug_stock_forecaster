@@ -1,9 +1,167 @@
 import { defineStore } from 'pinia'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
+
+/**
+ * Add drugs here. Each protocol step references drug ids from this catalog.
+ * Helps to ensure tablet counts are calculated correctly.
+ */
+function createInitialDrugCatalog() {
+    return [
+        { id: 'amlodipine-5mg', name: 'Amlodipine 5mg', costPerTablet: undefined },
+        { id: 'losartan-50mg', name: 'Losartan 50mg', costPerTablet: undefined },
+        { id: 'hctz-25mg', name: 'Hydrochlorothiazide 25mg', costPerTablet: undefined },
+        { id: 'telmisartan-40mg', name: 'Telmisartan 40mg', costPerTablet: undefined },
+        { id: 'atorvastatin-20mg', name: 'Atorvastatin 20mg', costPerTablet: undefined },
+    ]
+}
+
+/**
+ * Add protocols here.
+ * - steps: stacked treatment lines (same shape: label, drugIds, percentage).
+ * - otherDrugs: optional; omit if none. Same line shape as steps when present.
+ */
+function otherDrugsForProtocol(protocol) {
+    return protocol?.otherDrugs ?? []
+}
+
+function createInitialProtocols() {
+    return [
+        {
+            id: 'philippines-htn',
+            name: 'Philippines (HTN)',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100 },
+                { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 40 },
+                {
+                    label: 'Amlodipine 5mg + Losartan 50mg',
+                    drugIds: ['amlodipine-5mg', 'losartan-50mg'],
+                    percentage: 25,
+                },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5 },
+            ],
+        },
+        {
+            id: 'aalh',
+            name: 'AALH',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100 },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40 },
+                {
+                    label: 'Losartan 50mg',
+                    drugIds: ['losartan-50mg'],
+                    percentage: 25,
+                },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5 },
+            ],
+        },
+        {
+            id: 'aath',
+            name: 'AATH with Statin',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100 },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40 },
+                {
+                    label: 'Losartan 50mg',
+                    drugIds: ['losartan-50mg'],
+                    percentage: 25,
+                },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5 },
+            ],
+            otherDrugs: [
+                { label: 'Atorvastatin 20mg', drugIds: ['atorvastatin-20mg'], percentage: 30 },
+            ],
+        },
+        {
+            id: 'alh',
+            name: 'ALH',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100 },
+                {
+                    label: 'Losartan 50mg',
+                    drugIds: ['losartan-50mg'],
+                    percentage: 40,
+                },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 25 },
+            ],
+        },
+        {
+            id: 'attah',
+            name: 'ATTAH',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100 },
+                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 40 },
+                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25 },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 12 },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5 },
+            ],
+        },
+        {
+            id: 'alalh',
+            name: 'AL(AL)H',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100 },
+                { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 40 },
+                { label: 'Amlodipine 5mg + Losartan 50mg', drugIds: ['amlodipine-5mg', 'losartan-50mg'], percentage: 25 },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5 },
+            ],
+        },
+        {
+            id: 'aallh',
+            name: 'AALLH',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100 },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 50 },
+                { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 30 },
+                { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 15 },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5 },
+            ],
+        },
+        
+    ]
+}
+
+/** Collect unique drug ids from protocol step / other-drug lines. */
+function collectDrugIdsFromLines(lines) {
+    const ids = new Set()
+    if (!lines) return ids
+    for (const line of lines) {
+        for (const id of line.drugIds) ids.add(id)
+    }
+    return ids
+}
+
+function forecastLinesForPatients(lines, months, patientsTreated) {
+    if (!lines?.length) return []
+    return lines.map((line) => {
+        const monthly = []
+        const pct = line.percentage ?? 0
+        for (let i = 0; i < months; i++) {
+            const base = patientsTreated[i] ?? 0
+            monthly.push(Math.ceil((base * 30 * pct) / 100))
+        }
+        return {
+            label: line.label,
+            drugIds: line.drugIds,
+            percentage: pct,
+            monthly,
+            total: monthly.reduce((a, b) => a + b, 0),
+        }
+    })
+}
+
+function drugCostWritable(catalogRef, drugId) {
+    return computed({
+        get() {
+            return catalogRef.value.find((d) => d.id === drugId)?.costPerTablet
+        },
+        set(v) {
+            const d = catalogRef.value.find((x) => x.id === drugId)
+            if (d) d.costPerTablet = v
+        },
+    })
+}
 
 export const useDrugCalcStore = defineStore('drugCalc', () => {
-
-    // Population data
     const totalPopulation = ref()
     const adultPopulation = ref()
     const prevalenceHTN = ref()
@@ -11,18 +169,51 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const targetEnrolment = ref(8000)
     const treatmentAdherence = ref(65)
     const forecastMonths = ref(12)
-    const treatmentProtocol = ref(1)
     const currencySymbol = ref('₱')
     const currencySymbolPosition = ref('start')
-
     const showCalculation = ref(false)
-    // Computed
+
+    const drugCatalog = ref(createInitialDrugCatalog())
+    const protocols = ref(createInitialProtocols())
+    const activeProtocolId = ref(protocols.value[0]?.id ?? '')
+
+    const activeProtocol = computed(() =>
+        protocols.value.find((p) => p.id === activeProtocolId.value),
+    )
+
+    const activeOtherDrugs = computed(() => otherDrugsForProtocol(activeProtocol.value))
+
+    /** Catalog rows for drugs used in stacked steps or otherDrugs (for cost inputs). */
+    const catalogDrugsForActiveProtocol = computed(() => {
+        const protocol = activeProtocol.value
+        if (!protocol) return []
+        const seen = new Set()
+        const ids = []
+        const addFromLines = (lines) => {
+            if (!lines) return
+            for (const line of lines) {
+                for (const id of line.drugIds) {
+                    if (!seen.has(id)) {
+                        seen.add(id)
+                        ids.push(id)
+                    }
+                }
+            }
+        }
+        addFromLines(protocol.steps)
+        addFromLines(otherDrugsForProtocol(protocol))
+        return ids
+            .map((id) => drugCatalog.value.find((d) => d.id === id))
+            .filter(Boolean)
+            .sort((a, b) => a.name.localeCompare(b.name))
+    })
+
     const estimatedHTNPopulation = computed(() => {
-        return totalPopulation.value * adultPopulation.value / 100 * prevalenceHTN.value / 100
+        return (totalPopulation.value * adultPopulation.value) / 100 * (prevalenceHTN.value / 100)
     })
 
     const htnCoverage = computed(() => {
-        return patientsUnderCare.value / estimatedHTNPopulation.value * 100
+        return (patientsUnderCare.value / estimatedHTNPopulation.value) * 100
     })
 
     const estimatedMonthlyEnrolment = computed(() => {
@@ -30,11 +221,11 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     })
 
     const totalAdultPopulation = computed(() => {
-        return totalPopulation.value * adultPopulation.value / 100
+        return (totalPopulation.value * adultPopulation.value) / 100
     })
 
     const expectedCumulativeEnrolment = computed(() => {
-        if (!estimatedMonthlyEnrolment.value || !estimatedMonthlyEnrolment.value) return []
+        if (!estimatedMonthlyEnrolment.value) return []
         const cumulativeEnrolment = []
         let cumulative = patientsUnderCare.value
         for (let i = 0; i < forecastMonths.value; i++) {
@@ -47,162 +238,149 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
     const patientsTreatedFromAdherence = computed(() => {
         const patientsTreated = []
         for (let i = 0; i < forecastMonths.value; i++) {
-            patientsTreated.push(Math.ceil(expectedCumulativeEnrolment.value[i] * treatmentAdherence.value / 100))
+            patientsTreated.push(
+                Math.ceil((expectedCumulativeEnrolment.value[i] * treatmentAdherence.value) / 100),
+            )
         }
         return patientsTreated
     })
 
-    const Step1Tablets = computed(() => { // amlodipine 5mg tablets
-        const monthlyTablets = []
-        for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep1.value / 100))
-        }
-        return monthlyTablets
-    })
-    const Step1TabletsTotal = computed(() => { // total amlodipine 5mg tablets
-        return Step1Tablets.value.reduce((acc, curr) => acc + curr, 0)
-    })
-
-    const Step2Tablets = computed(() => { // losartan 50mg tablets
-        const monthlyTablets = []
-        for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep2.value / 100))
-        }
-        return monthlyTablets
-    })
-    
-    const Step2TabletsTotal = computed(() => { // total losartan 50mg tablets
-        return Step2Tablets.value.reduce((acc, curr) => acc + curr, 0)
+    const stepForecasts = computed(() => {
+        const protocol = activeProtocol.value
+        if (!protocol?.steps?.length) return []
+        return forecastLinesForPatients(
+            protocol.steps,
+            forecastMonths.value,
+            patientsTreatedFromAdherence.value,
+        )
     })
 
-    const Step3Tablets = computed(() => { // amlodipine 5 + losartan 50mg tablets
-        const monthlyTablets = []
-        for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep3.value / 100))
-        }
-        return monthlyTablets
-    })
-    const Step3TabletsTotal = computed(() => { // total amlodipine 5 + losartan 50mg tablets
-        return Step3Tablets.value.reduce((acc, curr) => acc + curr, 0)
-    })
-
-    const Step4Tablets = computed(() => { // hydrochlorothiazide 25mg tablets
-        const monthlyTablets = []
-        for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep4.value / 100))
-        }
-        return monthlyTablets
-    })
-    const Step4TabletsTotal = computed(() => { // total hydrochlorothiazide 25mg tablets
-        return Step4Tablets.value.reduce((acc, curr) => acc + curr, 0)
+    /** Parallel meds (not part of stacked HTN steps); same tablet math, own %. */
+    const otherDrugForecasts = computed(() => {
+        const protocol = activeProtocol.value
+        const lines = otherDrugsForProtocol(protocol)
+        if (!lines.length) return []
+        return forecastLinesForPatients(
+            lines,
+            forecastMonths.value,
+            patientsTreatedFromAdherence.value,
+        )
     })
 
-    const Step5Tablets = computed(() => { // unknown
-        const monthlyTablets = []
-        for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep5.value / 100))
-        }
-        return monthlyTablets
-    })
-    const Step5TabletsTotal = computed(() => { // total unknown
-        return Step5Tablets.value.reduce((acc, curr) => acc + curr, 0)
-    })
-
-    const Step6Tablets = computed(() => { // unknown
-        const monthlyTablets = []
-        for (let i = 0; i < forecastMonths.value; i++) {
-            monthlyTablets.push(Math.ceil(patientsTreatedFromAdherence.value[i] * 30 * protocolPercentageStep6.value / 100))
-        }
-        return monthlyTablets
-    })
-    const Step6TabletsTotal = computed(() => { // total unknown
-        return Step6Tablets.value.reduce((acc, curr) => acc + curr, 0)
-    })
-
-    const yearlyBreakdown = computed(() => {
-        // convert all 12 month figures into a JSON object
-        const yearlyBreakdown = {}
-        for (let i = 0; i < forecastMonths.value; i++) {
-            yearlyBreakdown[`month${i + 1}`] = {
-                month: i + 1,
-                expectedCumulativeEnrolment: expectedCumulativeEnrolment.value[i],
-                patientsTreatedFromAdherence: patientsTreatedFromAdherence.value[i],
-                amoldipine5mgTablets: Step1Tablets.value[i],
-                amoldipine5mgTabletsTotal: Step1TabletsTotal.value,
-                losartan50mgTablets: Step2Tablets.value[i],
-                losartan50mgTabletsTotal: Step2TabletsTotal.value,
-                amlodipine5losartan50mgTablets: Step3Tablets.value[i],
-                amlodipine5losartan50mgTabletsTotal: Step3TabletsTotal.value,
-                hydrochlorothiazide25mgTablets: Step4Tablets.value[i],
-                hydrochlorothiazide25mgTabletsTotal: Step4TabletsTotal.value,
-                unknown: Step5Tablets.value[i],
-                unknownTotal: Step5TabletsTotal.value,
-                unknown: Step6Tablets.value[i],
-                unknownTotal: Step6TabletsTotal.value,
+    const drugForecastList = computed(() => {
+        const months = forecastMonths.value
+        const byId = new Map()
+        const addFromForecastLines = (lines) => {
+            for (const line of lines) {
+                for (const drugId of line.drugIds) {
+                    if (!byId.has(drugId)) {
+                        byId.set(drugId, { monthly: Array.from({ length: months }, () => 0) })
+                    }
+                    const entry = byId.get(drugId)
+                    for (let i = 0; i < line.monthly.length; i++) {
+                        entry.monthly[i] += line.monthly[i]
+                    }
+                }
             }
         }
-        return yearlyBreakdown
+        addFromForecastLines(stepForecasts.value)
+        addFromForecastLines(otherDrugForecasts.value)
+        const list = []
+        for (const [drugId, { monthly }] of byId) {
+            const drug = drugCatalog.value.find((d) => d.id === drugId)
+            const total = monthly.reduce((a, b) => a + b, 0)
+            const cpt = drug?.costPerTablet
+            const lineCost =
+                typeof cpt === 'number' && !Number.isNaN(cpt) ? Math.ceil(cpt * total) : null
+            list.push({
+                id: drugId,
+                name: drug?.name ?? drugId,
+                costPerTablet: cpt,
+                totalTablets: total,
+                monthlyTablets: monthly,
+                lineCost,
+            })
+        }
+        list.sort((a, b) => a.name.localeCompare(b.name))
+        return list
+    })
+
+    /** Dashboard: protocol-step drugs vs other-only (same drug can appear in both; listed under protocol with combined total). */
+    const dashboardDrugSections = computed(() => {
+        const p = activeProtocol.value
+        const inSteps = collectDrugIdsFromLines(p?.steps)
+        const inOther = collectDrugIdsFromLines(otherDrugsForProtocol(p))
+        const list = drugForecastList.value
+        const byName = (a, b) => a.name.localeCompare(b.name)
+        return {
+            protocolDrugs: list.filter((d) => inSteps.has(d.id)).sort(byName),
+            otherOnlyDrugs: list.filter((d) => inOther.has(d.id) && !inSteps.has(d.id)).sort(byName),
+        }
+    })
+
+    const totalTabletsAllForecastDrugs = computed(() =>
+        drugForecastList.value.reduce((s, d) => s + d.totalTablets, 0),
+    )
+
+    const finalCost = computed(() => {
+        const list = drugForecastList.value
+        if (!list.length) return null
+        if (list.some((d) => d.lineCost === null)) return null
+        return list.reduce((s, d) => s + d.lineCost, 0)
+    })
+
+    const totalCostForYearForecast = finalCost
+
+    const costForYearForecast = computed(() => {
+        const o = {}
+        for (const d of drugForecastList.value) {
+            o[d.id] = d.lineCost
+        }
+        return o
     })
 
     const tabletsForYearForecast = computed(() => {
-        return {
-            amlodipine5mgTabletsTotal: Step1TabletsTotal.value + Step3TabletsTotal.value,
-            losartan50mgTabletsTotal: Step2TabletsTotal.value + Step3TabletsTotal.value,
-            hydrochlorothiazide25mgTabletsTotal: Step4TabletsTotal.value,
+        const o = {}
+        for (const d of drugForecastList.value) {
+            o[d.id] = d.totalTablets
         }
+        return o
     })
 
-    const costForYearForecast = computed(() => {
-        return {
-            amlodipine5mgCost: Math.ceil(amoldipine5mgCost.value * tabletsForYearForecast.value.amlodipine5mgTabletsTotal),
-            losartan50mgCost: Math.ceil(losartan50mgCost.value * tabletsForYearForecast.value.losartan50mgTabletsTotal),
-            hydrochlorothiazide25mgCost: Math.ceil(hydrochlorothiazide25mgCost.value * tabletsForYearForecast.value.hydrochlorothiazide25mgTabletsTotal),
+    const yearlyBreakdown = computed(() => {
+        const steps = stepForecasts.value
+        const other = otherDrugForecasts.value
+        const n = forecastMonths.value
+        const rows = []
+        for (let i = 0; i < n; i++) {
+            rows.push({
+                month: i + 1,
+                expectedCumulativeEnrolment: expectedCumulativeEnrolment.value[i],
+                patientsTreatedFromAdherence: patientsTreatedFromAdherence.value[i],
+                stepTablets: steps.map((s) => s.monthly[i]),
+                otherDrugTablets: other.map((s) => s.monthly[i]),
+            })
         }
-    })
-    const totalCostForYearForecast = computed(() => {
-        return costForYearForecast.value.amlodipine5mgCost + costForYearForecast.value.losartan50mgCost + costForYearForecast.value.hydrochlorothiazide25mgCost
+        return rows
     })
 
-    const finalCost = computed(() => {
-        const c = costForYearForecast.value
-        if (!c.amlodipine5mgCost || !c.losartan50mgCost || !c.hydrochlorothiazide25mgCost) return null
-        return c.amlodipine5mgCost + c.losartan50mgCost + c.hydrochlorothiazide25mgCost
-    })
-
-
-    //  Drug data
-    const amoldipine5mgCost = ref()
-    const losartan50mgCost = ref()
-    const hydrochlorothiazide25mgCost = ref()
+    const amoldipine5mgCost = drugCostWritable(drugCatalog, 'amlodipine-5mg')
+    const losartan50mgCost = drugCostWritable(drugCatalog, 'losartan-50mg')
+    const hydrochlorothiazide25mgCost = drugCostWritable(drugCatalog, 'hctz-25mg')
+    const telmisartan40mgCost = drugCostWritable(drugCatalog, 'telmisartan-40mg')
 
     const isNumber = (v) => typeof v === 'number' && !Number.isNaN(v)
-    const inputsComplete = computed(() =>
-        isNumber(totalPopulation.value) &&
-        isNumber(adultPopulation.value) &&
-        isNumber(prevalenceHTN.value) &&
-        isNumber(patientsUnderCare.value) &&
-        isNumber(targetEnrolment.value) &&
-        isNumber(treatmentAdherence.value) 
-        // &&
-        // isNumber(amoldipine5mgCost.value) &&
-        // isNumber(losartan50mgCost.value) &&
-        // isNumber(hydrochlorothiazide25mgCost.value)
+    const inputsComplete = computed(
+        () =>
+            isNumber(totalPopulation.value) &&
+            isNumber(adultPopulation.value) &&
+            isNumber(prevalenceHTN.value) &&
+            isNumber(patientsUnderCare.value) &&
+            isNumber(targetEnrolment.value) &&
+            isNumber(treatmentAdherence.value),
     )
-    // Once all inputs are complete, show forecast and never hide again
-    // const showForecast = ref(false)
-    // watch(inputsComplete, (complete) => {
-    //     if (complete) showForecast.value = true
-    // }, { immediate: true })
-
-    const protocolPercentageStep1 = ref(100)
-    const protocolPercentageStep2 = ref(40)
-    const protocolPercentageStep3 = ref(25)
-    const protocolPercentageStep4 = ref(5)
-    const protocolPercentageStep5 = ref(0)
-    const protocolPercentageStep6 = ref(0)
 
     return {
-        // State
         totalPopulation,
         adultPopulation,
         prevalenceHTN,
@@ -210,41 +388,35 @@ export const useDrugCalcStore = defineStore('drugCalc', () => {
         targetEnrolment,
         treatmentAdherence,
         forecastMonths,
-        // Computed
+        currencySymbol,
+        currencySymbolPosition,
+        showCalculation,
+        drugCatalog,
+        protocols,
+        activeProtocolId,
+        activeProtocol,
+        activeOtherDrugs,
+        catalogDrugsForActiveProtocol,
         estimatedHTNPopulation,
         htnCoverage,
         totalAdultPopulation,
         estimatedMonthlyEnrolment,
         expectedCumulativeEnrolment,
         patientsTreatedFromAdherence,
-        Step1Tablets,
-        Step2Tablets,
-        Step3Tablets,
-        Step4Tablets,
-        Step5Tablets,
-        Step6Tablets,
-        yearlyBreakdown,
-        Step1TabletsTotal,
-        Step2TabletsTotal,
-        Step3TabletsTotal,
-        Step4TabletsTotal,
-        Step5TabletsTotal,
-        Step6TabletsTotal,
-        tabletsForYearForecast,
-        costForYearForecast,
-        totalCostForYearForecast,
+        stepForecasts,
+        otherDrugForecasts,
+        drugForecastList,
+        dashboardDrugSections,
+        totalTabletsAllForecastDrugs,
         finalCost,
-        // Drug data
+        totalCostForYearForecast,
+        costForYearForecast,
+        tabletsForYearForecast,
+        yearlyBreakdown,
         amoldipine5mgCost,
         losartan50mgCost,
         hydrochlorothiazide25mgCost,
-        // Visibility (sticky once complete)
+        telmisartan40mgCost,
         inputsComplete,
-        // showForecast,
-        showCalculation,
-        treatmentProtocol,
-        currencySymbol,
-        currencySymbolPosition,
     }
 })
-

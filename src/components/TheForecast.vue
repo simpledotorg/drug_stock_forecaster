@@ -5,10 +5,8 @@
             <span class="final-cost">
                 <strong>
                     <span v-if="store.currencySymbolPosition === 'start'">{{ store.currencySymbol }}</span>
-                    {{ store.costForYearForecast.amlodipine5mgCost && store.costForYearForecast.losartan50mgCost &&
-                        store.costForYearForecast.hydrochlorothiazide25mgCost ?
-                        formatNumber(store.costForYearForecast.amlodipine5mgCost +
-                            store.costForYearForecast.losartan50mgCost + store.costForYearForecast.hydrochlorothiazide25mgCost)
+                    {{ store.finalCost != null ?
+                        formatNumber(store.finalCost)
                         : "Missing tablet costs" }}
                     <span v-if="store.currencySymbolPosition === 'end'" style="margin-right: 0.25rem;">
                         {{ store.currencySymbol }}</span>
@@ -49,16 +47,10 @@
             <tbody>
                 <tr class="total-row">
                     <th>Total</th>
-                    <td class="number-cell">{{ formatNumber(store.tabletsForYearForecast.amlodipine5mgTabletsTotal +
-                        store.tabletsForYearForecast.losartan50mgTabletsTotal +
-                        store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal) }}</td>
+                    <td class="number-cell">{{ formatNumber(store.totalTabletsAllForecastDrugs) }}</td>
                     <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'"
                             class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
-                                store.costForYearForecast.amlodipine5mgCost && store.costForYearForecast.losartan50mgCost &&
-                                    store.costForYearForecast.hydrochlorothiazide25mgCost ?
-                                    formatNumber(store.costForYearForecast.amlodipine5mgCost +
-                                        store.costForYearForecast.losartan50mgCost +
-                                        store.costForYearForecast.hydrochlorothiazide25mgCost) : "Missing tablet costs" }}<span
+                                store.finalCost != null ? formatNumber(store.finalCost) : "Missing tablet costs" }}<span
                             v-if="store.currencySymbolPosition === 'end'"
                             class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span></td>
                 </tr>
@@ -67,36 +59,29 @@
                     <td></td>
                     <td></td>
                 </tr>
-                <tr>
-                    <th>Amlodipine 5mg</th>
-                    <td class="number-cell">{{ formatNumber(store.tabletsForYearForecast.amlodipine5mgTabletsTotal) }}
-                    </td>
+                <tr v-for="row in store.dashboardDrugSections.protocolDrugs" :key="'p-' + row.id">
+                    <th>{{ row.name }}</th>
+                    <td class="number-cell">{{ formatNumber(row.totalTablets) }}</td>
                     <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'"
                             class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
-                                formatNumber(store.costForYearForecast.amlodipine5mgCost) }}<span
+                                row.lineCost != null ? formatNumber(row.lineCost) : "—" }}<span
                             v-if="store.currencySymbolPosition === 'end'"
                             class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span></td>
                 </tr>
-                <tr>
-                    <th>Losartan 50mg</th>
-                    <td class="number-cell">{{ formatNumber(store.tabletsForYearForecast.losartan50mgTabletsTotal) }}
-                    </td>
-                    <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'"
-                            class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
-                                formatNumber(store.costForYearForecast.losartan50mgCost) }}<span
-                            v-if="store.currencySymbolPosition === 'end'"
-                            class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span></td>
-                </tr>
-                <tr>
-                    <th>Hydrochlorothiazide 25mg</th>
-                    <td class="number-cell">{{
-                        formatNumber(store.tabletsForYearForecast.hydrochlorothiazide25mgTabletsTotal) }}</td>
-                    <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'"
-                            class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
-                                formatNumber(store.costForYearForecast.hydrochlorothiazide25mgCost) }}<span
-                            v-if="store.currencySymbolPosition === 'end'"
-                            class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span></td>
-                </tr>
+                <template v-if="store.dashboardDrugSections.otherOnlyDrugs.length">
+                    <tr class="drug-section-label">
+                        <th colspan="3">Other medications</th>
+                    </tr>
+                    <tr v-for="row in store.dashboardDrugSections.otherOnlyDrugs" :key="'o-' + row.id">
+                        <th>{{ row.name }}</th>
+                        <td class="number-cell">{{ formatNumber(row.totalTablets) }}</td>
+                        <td class="number-cell"><span v-if="store.currencySymbolPosition === 'start'"
+                                class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
+                                    row.lineCost != null ? formatNumber(row.lineCost) : "—" }}<span
+                                v-if="store.currencySymbolPosition === 'end'"
+                                class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span></td>
+                    </tr>
+                </template>
             </tbody>
         </table>
 
@@ -210,27 +195,28 @@ const store = useDrugCalcStore()
 const formatNumber = (num) => {
     return num?.toLocaleString() || 0
 }
-// Piechart
-const hasCosts = computed(() => {
-    const c = store.costForYearForecast
-    return c.amlodipine5mgCost && c.losartan50mgCost && c.hydrochlorothiazide25mgCost
-})
+// Piechart (commented template)
+const PIE_COLORS = ['#4a90d9', '#e8a838', '#5cb85c', '#c77dff', '#ff6b6b', '#20c997']
 
-const pieData = computed(() => {
-    const c = store.costForYearForecast
-    const total = c.amlodipine5mgCost + c.losartan50mgCost + c.hydrochlorothiazide25mgCost
-    if (!total) return { amlodipinePct: 0, losartanPct: 0, hctzPct: 0 }
-    const amlodipinePct = Math.round((c.amlodipine5mgCost / total) * 100)
-    const losartanPct = Math.round((c.losartan50mgCost / total) * 100)
-    const hctzPct = 100 - amlodipinePct - losartanPct
-    return { amlodipinePct, losartanPct, hctzPct }
+const hasCosts = computed(() => store.finalCost != null)
+
+const pieSegments = computed(() => {
+    const list = store.drugForecastList.filter((d) => d.lineCost != null && d.lineCost > 0)
+    const total = list.reduce((s, d) => s + d.lineCost, 0)
+    if (!total) return []
+    let acc = 0
+    return list.map((d, i) => {
+        const pct = Math.round((d.lineCost / total) * 100)
+        const start = acc
+        acc += pct
+        return { name: d.name, pct, start, end: acc, color: PIE_COLORS[i % PIE_COLORS.length] }
+    })
 })
 
 const pieGradient = computed(() => {
-    const { amlodipinePct, losartanPct } = pieData.value
-    const stop1 = amlodipinePct
-    const stop2 = stop1 + losartanPct
-    return `conic-gradient(#4a90d9 0% ${stop1}%, #e8a838 ${stop1}% ${stop2}%, #5cb85c ${stop2}% 100%)`
+    const segs = pieSegments.value
+    if (!segs.length) return 'conic-gradient(#ddd 0% 100%)'
+    return `conic-gradient(${segs.map((s) => `${s.color} ${s.start}% ${s.end}%`).join(', ')})`
 })
 // - Piechart
 </script>
@@ -394,6 +380,18 @@ td {
 .final-cost {
     font-size: 1.2em;
     font-weight: 400;
-    padding-left: 1rem;
+    padding-left: 0.5rem;
+}
+
+.drug-section-label th {
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #666;
+    background: #f6f6f6;
+    border-top: 1px solid #ddd;
+    padding-top: 0.65rem;
+    padding-bottom: 0.35rem;
 }
 </style>

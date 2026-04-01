@@ -40,8 +40,8 @@
           :class="{ 'tooltip-open': showpatientsUnderCareTooltip }" @mouseenter="showpatientsUnderCareTooltip = true"
           @mouseleave="showpatientsUnderCareTooltip = false"
           @click.stop="showpatientsUnderCareTooltip = !showpatientsUnderCareTooltip">
-          <span class="small-text tooltip-trigger-text">What does this mean?</span>
-          <span class="tooltip-bubble">
+          <span class="small-text tooltip-trigger-text hide-on-print">What does this mean?</span>
+          <span class="tooltip-bubble hide-on-print">
             <span>
               The total number of patients enrolled in the hypertension program that visited in the past 12 months.
             </span>
@@ -78,8 +78,8 @@
         <p ref="adherenceTooltipRef" class="small-text tooltip-trigger"
           :class="{ 'tooltip-open': showAdherenceTooltip }" @mouseenter="showAdherenceTooltip = true"
           @mouseleave="showAdherenceTooltip = false" @click.stop="showAdherenceTooltip = !showAdherenceTooltip">
-          <span class="small-text tooltip-trigger-text">How do I calculate this?</span>
-          <span class="tooltip-bubble">
+          <span class="small-text tooltip-trigger-text hide-on-print">How do I calculate this?</span>
+          <span class="tooltip-bubble hide-on-print">
             <span>
               This number is the percentage of patients that attended for treatment in past 3 months.
             </span>
@@ -94,32 +94,27 @@
       </div>
 
       <div class="form-group">
-        <label for="patientsUnderCare">Treatment protocol</label>
-        <select id="patientsUnderCare" v-model.number="protocol" type="number" step="any" class="input"
-          placeholder="Total enrolments">
-          <option value="1">Phillippines</option>
-          <option value="1" disabled>More options coming soon</option>
+        <label for="activeProtocolId">Treatment protocol</label>
+        <select id="activeProtocolId" v-model="activeProtocolId" class="input">
+          <option v-for="p in protocols" :key="p.id" :value="p.id">{{ p.name }}</option>
         </select>
       </div>
 
+      <!-- <template v-if="activeOtherDrugs.length">
+        <h4 class="form-group-title">Other medications (% of treated patients)</h4>
+        <p class="small-text protocol-hint">Not part of the stacked treatment steps; optional add-on demand.</p>
+        <div v-for="(row, idx) in activeOtherDrugs" :key="'other-' + idx" class="form-group">
+          <label :for="'other-pct-' + idx">{{ row.label }}</label>
+          <input :id="'other-pct-' + idx" v-model.number="row.percentage" type="number" step="any" min="0" max="100"
+            class="input percentage" placeholder="%" />
+        </div>
+      </template> -->
+
       <h4 class="form-group-title">Cost per tablet</h4>
-      <!-- drugs -->
-      <div class="form-group">
-        <label for="amoldipine5mgCost">Amoldipine 5mg</label>
-        <input id="amoldipine5mgCost" v-model.number="amoldipine5mgCost" type="number" step="any" class="input"
+      <div v-for="drug in catalogDrugsForActiveProtocol" :key="drug.id" class="form-group">
+        <label :for="'cost-' + drug.id">{{ drug.name }}</label>
+        <input :id="'cost-' + drug.id" v-model.number="drug.costPerTablet" type="number" step="any" class="input"
           placeholder="Cost per tablet" />
-      </div>
-
-      <div class="form-group">
-        <label for="losartan50mgCost">Losartan 50mg</label>
-        <input id="losartan50mgCost" v-model.number="losartan50mgCost" type="number" step="any" class="input"
-          placeholder="Cost per tablet" />
-      </div>
-
-      <div class="form-group">
-        <label for="hydrochlorothiazide25mgCost">Hydrochlorothiazide 25mg</label>
-        <input id="hydrochlorothiazide25mgCost" v-model.number="hydrochlorothiazide25mgCost" type="number" step="any"
-          class="input" placeholder="Cost per tablet" />
       </div>
       <!-- <div class="form-group">
         <label for="forecastMonths">Months to forecast</label>
@@ -185,14 +180,14 @@ const {
   patientsUnderCare,
   targetEnrolment,
   treatmentAdherence,
-  amoldipine5mgCost,
-  losartan50mgCost,
-  hydrochlorothiazide25mgCost,
+  catalogDrugsForActiveProtocol,
+  protocols,
+  activeProtocolId,
+  activeProtocol,
+  activeOtherDrugs,
   currencySymbol,
   currencySymbolPosition,
 } = storeToRefs(store)
-
-const protocol = ref(1)
 
 const handleSubmit = () => {
   console.log('Form submitted:', value)
@@ -315,6 +310,12 @@ label {
 .small-text {
   font-size: 0.8rem;
   color: #666;
+}
+
+.protocol-hint {
+  margin-top: -0.25rem;
+  margin-bottom: 0.35rem;
+  grid-column: 1 / -1;
 }
 
 .tooltip-trigger {

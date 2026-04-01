@@ -11,12 +11,14 @@
           <th>Month</th>
           <th>Cumulative enrolment</th>
           <th>Patients treated</th>
-          <th>Amoldipine 5mg Tablets</th>
-          <th>Losartan 50mg Tablets</th>
-          <th>Amlodipine 5 + Losartan 50mg Tablets</th>
-          <th>Hydrochlorothiazide 25mg Tablets</th>
-          <!-- <th>Unknown</th> -->
-          <!-- <th>Unknown</th> -->
+          <th v-for="(step, idx) in store.activeProtocol?.steps ?? []" :key="'s' + idx">{{ step.label }}</th>
+          <th
+            v-for="(line, idx) in store.activeOtherDrugs"
+            :key="'o' + idx"
+            class="other-col"
+          >
+            {{ line.label }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -24,23 +26,15 @@
           <td>{{ month.month }}</td>
           <td>{{ formatNumber(month.expectedCumulativeEnrolment) }}</td>
           <td>{{ formatNumber(month.patientsTreatedFromAdherence) }}</td>
-          <td>{{ formatNumber(month.amoldipine5mgTablets) }}</td>
-          <td>{{ formatNumber(month.losartan50mgTablets) }}</td>
-          <td>{{ formatNumber(month.amlodipine5losartan50mgTablets) }}</td>
-          <td>{{ formatNumber(month.hydrochlorothiazide25mgTablets) }}</td>
-          <!-- <td>{{ formatNumber(month.unknown) }}</td> -->
-          <!-- <td>{{ formatNumber(month.unknown) }}</td> -->
+          <td v-for="(t, idx) in month.stepTablets" :key="'st' + idx">{{ formatNumber(t) }}</td>
+          <td v-for="(t, idx) in month.otherDrugTablets" :key="'ot' + idx" class="other-col">{{ formatNumber(t) }}</td>
         </tr>
         <tr class="total-row">
           <td>Total</td>
           <td></td>
           <td></td>
-          <td>{{ formatNumber(store.Step1TabletsTotal) }}</td>
-          <td>{{ formatNumber(store.Step2TabletsTotal) }}</td>
-          <td>{{ formatNumber(store.Step3TabletsTotal) }}</td>
-          <td>{{ formatNumber(store.Step4TabletsTotal) }}</td>
-          <!-- <td>{{ formatNumber(store.Step5TabletsTotal) }}</td>
-            <td>{{ formatNumber(store.Step6TabletsTotal) }}</td> -->
+          <td v-for="(step, idx) in store.stepForecasts" :key="'stt' + idx">{{ formatNumber(step.total) }}</td>
+          <td v-for="(step, idx) in store.otherDrugForecasts" :key="'ott' + idx" class="other-col">{{ formatNumber(step.total) }}</td>
         </tr>
       </tbody>
     </table>
@@ -72,12 +66,12 @@ td {
   vertical-align: top;
 }
 
-/* th {
-  background-color: #f0f0f0;
-} */
-
 thead th {
   font-weight: 600;
+}
+
+.other-col {
+  background: #faf8fc;
 }
 
 .total-row {
@@ -87,7 +81,6 @@ thead th {
 
 .see-more-button {
   background-color: transparent;
-
   color: #0f56e4;
   font-size: 0.9re;
   font-weight: 500;
@@ -95,11 +88,7 @@ thead th {
   cursor: pointer;
   padding: 8px 0;
   margin: 2rem 0 -1.2rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
   border: none;
-  /* border-top: 1px solid #ddd; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -107,6 +96,7 @@ thead th {
 
 .see-more-button:hover {
   background-color: #f9f9f9;
+  color: #216bff;
 }
 
 .see-more-chevron {
@@ -115,21 +105,8 @@ thead th {
   align-items: center;
   padding-right: 8px;
   font-size: 1.2rem;
-  transition: transform 0.2s ease;
-  /* width: 24px;
-  height: 24px; */
-  /* border: 1px solid #ddd; */
   border-radius: 100%;
-  /* text-box-trim: trim-both; */
-  color: #aaa
-}
-
-.see-more-chevron.is-open {
-  /* transform: rotate(-90deg); */
-}
-
-.see-more-button:hover {
-  color: #216bff;
+  color: #aaa;
 }
 
 .see-more-button:tabindexfocus {

@@ -48,15 +48,16 @@
               </div> -->
               <!-- <div class="period"> -->
               <div class="period-button-input-group hide-on-print">
-                <button class="button" @click="store.forecastMonths += 1"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                <button class="button" @click="store.forecastMonths += 1">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                     stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="18 15 12 9 6 15"></polyline>
                   </svg>
                 </button>
                 <input type="number" v-model="store.forecastMonths" class="period-input" placeholder="12" min="1" />
                 <button class="button" @click="store.forecastMonths -= 1"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                     stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                   </svg>
@@ -71,7 +72,7 @@
         </div>
       </main>
     </div>
-    <footer>
+    <footer class="hide-on-print">
       <p class="small-text created-by">
         Created by <a href="https://resolvetosavelives.org" target="_blank">Resolve to Save Lives</a>
       </p>
@@ -132,12 +133,9 @@ body {
   line-height: 1.5;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.87);
-  /* background-color: #f5f5f5; */
+
 }
 
-/* main {
-  background-color: #f5f5f5;
-} */
 
 .wrapper {
   min-height: 100dvh;
@@ -334,15 +332,18 @@ footer {
 .period-button-input-group {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.2rem;
 
   .button {
+    /* background-color: #e4eaff;
+    border: 1px solid #c0c7fe; */
+
     background-color: #fff;
     border: 1px solid #e0dfdf;
     border-radius: 6px;
     text-align: center;
     display: inline-block;
-    height: 16px;
+    height: 20px;
     width: 40px;
 
     @media print {
@@ -350,7 +351,7 @@ footer {
     }
 
     svg {
-      width: 10px;
+      width: 14px;
       height: 100%;
     }
   }
@@ -397,9 +398,5 @@ footer {
   @media print {
     display: none;
   }
-}
-
-.button {
-  width: 100%;
 }
 </style>
