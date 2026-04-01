@@ -36,12 +36,13 @@
             <div class="pie-chart" :style="{ background: pieGradient }"></div>
         </div> -->
 
+        <div class="table-scroll">
         <table>
             <thead>
                 <tr>
                     <th class="blank-header"></th>
                     <th>Tablets</th>
-                    <th>Cost ({{ store.currencySymbol }})</th>
+                    <th>Cost <span v-if="store.currencySymbol !== ''">({{ store.currencySymbol }})</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -84,6 +85,7 @@
                 </template>
             </tbody>
         </table>
+        </div>
 
 
 
@@ -222,6 +224,16 @@ const pieGradient = computed(() => {
 </script>
 
 <style scoped>
+.table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table {
+    min-width: 520px;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
