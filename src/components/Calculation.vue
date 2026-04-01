@@ -5,8 +5,13 @@
   </button>
   <div v-if="store.showCalculation">
     <h3>Monthly breakdown</h3>
+    <div class="table-scroll">
     <table>
       <thead>
+        <tr>
+          <td colspan="3" class="blank-header"></td>
+          <td v-for="(step, idx) in store.stepForecasts" :key="'stt' + idx" class="step-col">Step {{ idx + 1 }}</td>
+        </tr>
         <tr>
           <th>Month</th>
           <th>Cumulative enrolment</th>
@@ -38,6 +43,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </template>
 
@@ -53,6 +59,16 @@ const formatNumber = (num) => {
 </script>
 
 <style scoped>
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table {
+  min-width: 760px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
