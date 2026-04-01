@@ -1,8 +1,10 @@
 <template>
 
-    <div class="wrapper">
-    <header></header>
-    <ForecastControls />
+  <div class="wrapper">
+    <header class="header-container">
+      <h1>Drug stock forecast calculator</h1>
+      <ForecastControls />
+    </header>
     <div class="app">
       <aside>
         <div class="aside-content">
@@ -27,7 +29,9 @@
       </main>
     </div>
     <footer class="hide-on-print">
-      <p class="small-text"><strong>Disclaimer:</Strong> By using this tool you acknowldge the figures calculated are machine generated and represent estimated figures, not accurate recommendations. RTSL cannot be held responsible for any errors or omissions in the figures or for outcomes that occur as a result of the using this tool.</p>
+      <p class="small-text"><strong>Disclaimer:</Strong> By using this tool you acknowldge the figures calculated are
+        machine generated and represent estimated figures, not accurate recommendations. RTSL cannot be held responsible
+        for any errors or omissions in the figures or for outcomes that occur as a result of the using this tool.</p>
       <p class="small-text created-by">
         Created by <a href="https://resolvetosavelives.org" target="_blank">Resolve to Save Lives</a>
       </p>
@@ -116,13 +120,25 @@ a {
 
 header {
   /* background-color: #eaf5ff; */
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   /* border-bottom: 1px solid #ebebeb; */
+}
+
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
 }
 
 h1 {
   font-size: 1.25rem;
   line-height: 1.1;
+  font-family: var(--font-display);
 }
 
 h2 {
@@ -213,17 +229,17 @@ h3:not(:first-child) {
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-2);
-  padding: var(--space-2) 0;
 }
 
 .share-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   gap: 0.35rem;
   height: 36px;
-  padding: 0 0.75rem;
-  background: color-mix(in oklab, var(--paper) 92%, var(--bg0));
+  padding: 0 1rem 0 0.65rem;
+  background: white;
   color: var(--ink);
   border: 1px solid var(--faint);
   border-radius: 999px;
@@ -231,11 +247,17 @@ h3:not(:first-child) {
   transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease;
   font-size: 0.8rem;
   font-weight: 600;
+  box-shadow: var(--shadow-2);
 
   span {
     width: auto;
     text-align: center;
   }
+}
+
+/* Stable width when label swaps “Copy link” ↔ “Copied” */
+.share-button--copy {
+  min-width: 7.75rem;
 }
 
 .share-button:hover {

@@ -233,7 +233,7 @@ watch(
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  min-width: 4.4rem;
+  min-width: 4.6rem;
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.22;
@@ -323,7 +323,7 @@ watch(
   align-items: center;
   justify-content: center;
   flex: 0 1 auto;
-  min-width: 4ch;
+  min-width: 7ch;
   width: 4.75ch;
   padding: 0.45rem 0.4rem;
 }

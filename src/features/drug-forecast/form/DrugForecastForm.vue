@@ -215,7 +215,7 @@ label {
   width: 100%;
   max-width: 200px;
   border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
-  border-radius: 999px;
+  border-radius: 12px;
   background: color-mix(in oklab, var(--paper) 94%, var(--bg1));
   overflow: hidden;
 }
@@ -251,7 +251,7 @@ label {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.segmented-control__option--left span {
+/* .segmented-control__option--left span {
   border-top-left-radius: 999px;
   border-bottom-left-radius: 999px;
 }
@@ -259,7 +259,7 @@ label {
 .segmented-control__option--right span {
   border-top-right-radius: 999px;
   border-bottom-right-radius: 999px;
-}
+} */
 
 .segmented-control__option input[type='radio']:checked + span {
   background: color-mix(in oklab, var(--accent2) 32%, var(--paper));
