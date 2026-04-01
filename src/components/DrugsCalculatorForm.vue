@@ -95,8 +95,8 @@
 
       <div class="form-group">
         <label for="activeProtocolId">Treatment protocol</label>
-        <select id="activeProtocolId" v-model="activeProtocolId" class="input">
-          <option v-for="p in protocols" :key="p.id" :value="p.id">{{ p.name }}</option>
+        <select id="activeProtocolId" v-model="activeProtocolId" class="input input-select">
+          <option v-for="p in protocols" :key="p.id" :value="p.id">{{ p.name }}</option> 
         </select>
       </div>
 
@@ -261,6 +261,18 @@ label {
   background-color: #fff;
   font-size: 0.9rem;
   transition: border-color 0.3s;
+}
+
+.input-select {
+  padding-left: 0.4rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2rem;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='black'><path d='M5 7l5 5 5-5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1rem;
 }
 
 .input.percentage {
