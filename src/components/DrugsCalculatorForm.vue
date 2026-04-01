@@ -1,36 +1,6 @@
 <template>
-  <!-- <div style="position: fixed; top: 0; right: 0; width: 20%; height: 300px; z-index: 1000; overflow-y: scroll;">
-    {{ store.estimatedMonthlyEnrolment }}
-  {{ store.expectedCumulativeEnrolment }}
-  {{ store.patientsTreatedFromAdherence }}
-  {{ store.amoldipine5mgTablets }}
-  {{ store.yearlyBreakdown }}
-
-  </div> -->
   <div class="form-container">
     <form @submit.prevent="handleSubmit" class="form">
-
-
-
-      <!-- <div class="form-group">
-        <label for="totalPopulation">Total population</label>
-        <input id="totalPopulation" v-model.number="totalPopulation" type="number" step="any" class="input"
-          placeholder="1,000,000" />
-      </div>
-
-      <div class="form-group">
-        <label for="adultPopulation">% Total population that are adults</label>
-        <input id="adultPopulation" v-model.number="adultPopulation" type="number" step="any" class="input"
-          placeholder="80" maxlength="3" min="0" max="100" />
-        <p class="small-text">Usually ~80% are adults</p>
-      </div>
-
-      <div class="form-group">
-        <label for="prevalenceHTN">% Prevalence of HTN in adults</label>
-        <input id="prevalenceHTN" v-model.number="prevalenceHTN" type="number" step="any" class="input" placeholder="33"
-          maxlength="3" min="0" max="100" />
-        <p class="small-text">~33% world wide average</p>
-      </div> -->
       <h4 class="form-group-title new-page">Program data</h4>
       <div class="form-group">
         <label for="patientsUnderCare">Patients under care</label>
@@ -49,27 +19,11 @@
         </p>
       </div>
 
-      <!-- <div class="form-group">
-        <label for="currentCoverage">Current coverage</label>
-        <input
-          id="currentCoverage"
-          v-model.number="store.htnCoverage"
-          type="number"
-          step="any"
-          class="input"
-          placeholder="Enter estimated HTN population"
-          readonly
-          disabled="true"
-        />
-      </div> -->
-
       <div class="form-group">
         <label for="targetEnrolment">Target enrolment over {{ forecastMonths }} months</label>
         <input id="targetEnrolment" v-model.number="targetEnrolment" type="number" step="any" class="input"
           placeholder="10000" />
       </div>
-
-
 
       <div class="form-group">
         <label for="treatmentAdherence">% Treatment adherence</label>
@@ -100,41 +54,27 @@
         </select>
       </div>
 
-      <!-- <template v-if="activeOtherDrugs.length">
-        <h4 class="form-group-title">Other medications (% of treated patients)</h4>
-        <p class="small-text protocol-hint">Not part of the stacked treatment steps; optional add-on demand.</p>
-        <div v-for="(row, idx) in activeOtherDrugs" :key="'other-' + idx" class="form-group">
-          <label :for="'other-pct-' + idx">{{ row.label }}</label>
-          <input :id="'other-pct-' + idx" v-model.number="row.percentage" type="number" step="any" min="0" max="100"
-            class="input percentage" placeholder="%" />
-        </div>
-      </template> -->
-
       <h4 class="form-group-title">Cost per tablet</h4>
       <div v-for="drug in catalogDrugsForActiveProtocol" :key="drug.id" class="form-group">
         <label :for="'cost-' + drug.id">{{ drug.name }}</label>
         <input :id="'cost-' + drug.id" v-model.number="drug.costPerTablet" type="number" step="any" class="input"
           placeholder="Cost per tablet" />
       </div>
-      <!-- <div class="form-group">
-        <label for="forecastMonths">Months to forecast</label>
-        <input id="forecastMonths" v-model.number="forecastMonths" type="number" step="any" class="input"
-          placeholder="12" />
-      </div> -->
+
       <div class="form-group hide-on-print">
         <label for="currencySymbol">Currency</label>
         <div class="currency-group">
           <input id="currencySymbol" v-model="currencySymbol" type="text" class="input" placeholder="$" />
-          <!-- <div class="radio-group"> -->
-          <label class="radio-option">
-            <input type="radio" v-model="currencySymbolPosition" value="start" />
-            <span>Before</span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" v-model="currencySymbolPosition" value="end" />
-            <span>After</span>
-          </label>
-          <!-- </div> -->
+          <div class="segmented-control" role="group" aria-label="Currency symbol position">
+            <label class="segmented-control__option">
+              <input type="radio" v-model="currencySymbolPosition" value="start" />
+              <span>Before</span>
+            </label>
+            <label class="segmented-control__option">
+              <input type="radio" v-model="currencySymbolPosition" value="end" />
+              <span>After</span>
+            </label>
+          </div>
         </div>
       </div>
       <!-- <button type="submit" class="submit-button">Calculate</button> -->
@@ -386,30 +326,84 @@ label {
   visibility: visible;
 }
 
-/* .radio-group {
-  display: flex;
-  gap: 1rem;
-} */
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  font-weight: 400;
-  cursor: pointer;
+.segmented-control {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 200px;
+  border: 1px solid #b3d0b4;
+  /* box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05); */
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
 }
 
-.radio-option input[type="radio"] {
-  accent-color: #42b883;
+.segmented-control__option {
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.segmented-control__option input[type="radio"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
   margin: 0;
   cursor: pointer;
 }
 
+.segmented-control__option span {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 0.6rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #333;
+  background: transparent;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.segmented-control__option--left span {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.segmented-control__option--right span {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.segmented-control__option + .segmented-control__option span {
+  /* border-left: 1px solid #e6e6e6; */
+}
+
+.segmented-control__option input[type="radio"]:checked + span {
+  background: #2bbc5b;
+  color: #fff;
+}
+
+.segmented-control__option input[type="radio"]:focus-visible + span {
+  outline: 2px solid rgba(66, 184, 131, 0.55);
+  outline-offset: -2px;
+}
+
 .currency-group {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 3fr 9fr;
   gap: 0.5rem;
+}
+
+/* Inputs have a large min-content width; min-width: 0 lets the 1fr track actually constrain them. */
+.currency-group > .input {
+  min-width: 0;
+  width: 100%;
 }
 
 @media (hover: none) {
