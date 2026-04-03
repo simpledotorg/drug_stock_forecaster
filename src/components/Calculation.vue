@@ -19,11 +19,8 @@
           <tr class="step-header-row">
             <td colspan="3" class="blank-header"></td>
             <td v-for="(_, idx) in store.stepForecasts" :key="'stt' + idx" class="step-col">
-              <span
-                class="step-tooltip-wrap"
-                :class="{ 'step-tooltip-wrap--bubble-end': idx === store.stepForecasts.length - 1 }"
-                tabindex="0"
-              >
+              <span class="step-tooltip-wrap"
+                :class="{ 'step-tooltip-wrap--bubble-end': idx === store.stepForecasts.length - 1 }" tabindex="0">
                 <span class="step-tooltip-text">Step {{ idx + 1 }}</span>
                 <span class="step-tooltip-bubble hide-on-print" role="tooltip">
                   <span class="step-tooltip-bubble__title">Protocol step {{ idx + 1 }}</span>
@@ -65,7 +62,8 @@
         </tbody>
       </table>
     </div>
-    <p class="small-text text-right">Calculations use a base drug strength. <br/> Drug doses are cumulative, each column shows what's added at that step, not the full regimen.</p>
+    <p class="small-text text-right">Drug doses are cumulative, each column shows what's added at that step, not the
+      full regimen. <br />Calculations use a base drug strength.</p>
 
   </div>
 </template>
