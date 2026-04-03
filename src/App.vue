@@ -227,8 +227,7 @@ h3:not(:first-child) {
 
 .content {
   position: relative;
-  /* visible so in-page tooltips (e.g. step headers) are not clipped by the card */
-  overflow: visible;
+  overflow: clip;
 }
 
 .content::before {

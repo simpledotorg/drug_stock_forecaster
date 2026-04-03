@@ -1,6 +1,6 @@
 <template>
   <div class="share-button-container hide-on-print">
-    <p class="forecast-controls__intro">Share this forecast with others using the webpage link</p>
+    <p class="forecast-controls__intro">Share <span class="hide-on-mobile">this forecast</span> with others using the webpage link</p>
     <button
       class="share-button share-button--copy"
       :class="{ copied: isCopied }"
@@ -28,7 +28,7 @@
       </svg>
       <span>Share</span>
     </button> -->
-    <button class="share-button" type="button" @click="printForecast">
+    <button class="share-button hide-on-mobile" type="button" @click="printForecast">
       <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <polyline points="6 9 6 2 18 2 18 9" />
