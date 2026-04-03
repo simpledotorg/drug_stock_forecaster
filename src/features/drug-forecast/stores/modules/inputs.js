@@ -8,7 +8,7 @@ export function createInputsModule() {
   const targetEnrolment = ref(8000)
   const treatmentAdherence = ref(65)
   const forecastMonths = ref(12)
-  const currencySymbol = ref('₱')
+  const currencySymbol = ref('$')
   const currencySymbolPosition = ref('start')
 
   const estimatedHTNPopulation = computed(() => {
