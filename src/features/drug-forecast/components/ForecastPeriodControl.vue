@@ -189,7 +189,7 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
   width: 52px;
   padding: 4px 6px;
   font-size: 15px;
-  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  border: none;
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.03);
   color: #111;
@@ -197,10 +197,14 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
   -moz-appearance: textfield;
   outline: none;
   text-align: center;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.15s ease;
 }
 
 .custom-row input[type='number']:focus {
-  border-color: rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 0 0 2px var(--focus-ring),
+    0 0 0 5px var(--focus-ring-glow);
 }
 
 .custom-row input[type='number']::-webkit-inner-spin-button,

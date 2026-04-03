@@ -27,12 +27,25 @@
     <div class="table-scroll">
     <table>
       <thead>
-        <tr>
+        <tr class="step-header-row">
           <td colspan="3" class="blank-header"></td>
-          <td v-for="(step, idx) in store.stepForecasts" :key="'stt' + idx" class="step-col">Step {{ idx + 1 }}</td>
+          <td v-for="(_, idx) in store.stepForecasts" :key="'stt' + idx" class="step-col">
+            <span class="step-tooltip-wrap" tabindex="0">
+              <span class="step-tooltip-text">Step {{ idx + 1 }}</span>
+              <span class="step-tooltip-bubble hide-on-print" role="tooltip">
+                {{ stepTooltipText(idx) }}
+              </span>
+            </span>
+          </td>
+          <td
+            v-for="(_, idx) in store.activeOtherDrugs"
+            :key="'ostep-' + idx"
+            class="step-header-filler"
+            aria-hidden="true"
+          />
         </tr>
         <tr>
-          <th>Month</th>
+          <th class="row-label">Month</th>
           <th>Cumulative enrolment</th>
           <th>Patients treated</th>
           <th v-for="(step, idx) in store.activeProtocol?.steps ?? []" :key="'s' + idx">{{ step.label }}</th>
@@ -47,18 +60,18 @@
       </thead>
       <tbody>
         <tr v-for="month in store.yearlyBreakdown" :key="month.month">
-          <td>{{ month.month }}</td>
-          <td>{{ formatNumber(month.expectedCumulativeEnrolment) }}</td>
-          <td>{{ formatNumber(month.patientsTreatedFromAdherence) }}</td>
-          <td v-for="(t, idx) in month.stepTablets" :key="'st' + idx">{{ formatNumber(t) }}</td>
-          <td v-for="(t, idx) in month.otherDrugTablets" :key="'ot' + idx" class="other-col">{{ formatNumber(t) }}</td>
+          <th class="row-label" scope="row">{{ month.month }}</th>
+          <td class="number-cell">{{ formatNumber(month.expectedCumulativeEnrolment) }}</td>
+          <td class="number-cell">{{ formatNumber(month.patientsTreatedFromAdherence) }}</td>
+          <td v-for="(t, idx) in month.stepTablets" :key="'st' + idx" class="number-cell">{{ formatNumber(t) }}</td>
+          <td v-for="(t, idx) in month.otherDrugTablets" :key="'ot' + idx" class="number-cell other-col">{{ formatNumber(t) }}</td>
         </tr>
         <tr class="total-row">
-          <td>Total</td>
-          <td></td>
-          <td></td>
-          <td v-for="(step, idx) in store.stepForecasts" :key="'stt' + idx">{{ formatNumber(step.total) }}</td>
-          <td v-for="(step, idx) in store.otherDrugForecasts" :key="'ott' + idx" class="other-col">{{ formatNumber(step.total) }}</td>
+          <th class="row-label" scope="row">Total</th>
+          <td class="number-cell"></td>
+          <td class="number-cell"></td>
+          <td v-for="(step, idx) in store.stepForecasts" :key="'stt' + idx" class="number-cell">{{ formatNumber(step.total) }}</td>
+          <td v-for="(step, idx) in store.otherDrugForecasts" :key="'ott' + idx" class="number-cell other-col">{{ formatNumber(step.total) }}</td>
         </tr>
       </tbody>
     </table>
@@ -75,9 +88,36 @@ const formatNumber = (num) => {
   return num?.toLocaleString() || 0
 }
 
+function stepTooltipText(idx) {
+  const label = store.activeProtocol?.steps?.[idx]?.label
+  return label
+    ? `Monthly tablet counts for ${label}.`
+    : 'Monthly tablets for this treatment step.'
+}
+
 </script>
 
 <style scoped>
+@media print {
+  .table-scroll {
+    overflow: visible;
+  }
+
+  .table-scroll table {
+    min-width: 0;
+  }
+
+  th,
+  td {
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+  }
+
+  .total-row {
+    background: #fff;
+  }
+}
+
 .table-scroll {
   width: 100%;
   overflow-x: auto;
@@ -91,27 +131,141 @@ const formatNumber = (num) => {
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 0.75rem;
 }
 
 th,
 td {
-  border: 1px solid #ddd;
+  border: none;
+  border-bottom: 1px solid #ddd;
   padding: 0.5rem 0.75rem;
-  text-align: right;
   vertical-align: top;
 }
 
 thead th {
   font-weight: 600;
+  text-align: right;
+}
+
+thead th.row-label {
+  text-align: left;
+}
+
+tbody th.row-label {
+  text-align: left;
+  font-weight: 400;
+}
+
+td {
+  text-align: right;
+}
+
+.number-cell {
+  font-family: var(--font-mono-table);
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .other-col {
   background: #faf8fc;
 }
 
+.step-header-row .blank-header {
+  border-bottom: 1px solid #ddd;
+  background: transparent;
+}
+
+.step-header-row .step-col {
+  text-align: right;
+  vertical-align: bottom;
+  padding-top: 0.5rem;
+  padding-bottom: 0.35rem;
+}
+
+.step-tooltip-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  cursor: help;
+  outline: none;
+}
+
+.step-tooltip-wrap:focus-visible {
+  border-radius: 2px;
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+.step-tooltip-text {
+  display: inline-block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #666;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: #888;
+}
+
+.step-tooltip-bubble {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.35rem);
+  top: auto;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  max-width: min(240px, 70vw);
+  width: max-content;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.35;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: normal;
+  color: #f0f0f0;
+  background: #2d2d2d;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  white-space: normal;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.step-tooltip-bubble::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border: 6px solid transparent;
+  border-top-color: #2d2d2d;
+}
+
+.step-tooltip-wrap:hover .step-tooltip-bubble,
+.step-tooltip-wrap:focus .step-tooltip-bubble {
+  opacity: 1;
+  visibility: visible;
+}
+
+.step-header-filler {
+  padding: 0.35rem 0.75rem;
+  background: transparent;
+}
+
 .total-row {
-  font-weight: bold;
-  background-color: #f0f0f0;
+  background-color: #fff9d7;
+}
+
+.total-row .row-label {
+  font-weight: 600;
+}
+
+.total-row .number-cell {
+  font-weight: 600;
 }
 
 .breakdown-toggle-wrap {

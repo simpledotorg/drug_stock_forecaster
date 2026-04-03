@@ -3,20 +3,20 @@
   <div class="wrapper">
     <header class="header-container">
       <h1 class="hide-on-print">Drug stock forecast calculator</h1>
-      <ForecastControls />
     </header>
     <div class="app">
       <aside>
         <div class="aside-content">
           <!-- <div>
-              <p class="small-text">
-                Enter data to get a drug forecast for {{ store.monthsToForecast }} months.
-              </p>
-            </div> -->
+            <p class="small-text">
+              Enter data to get a drug forecast for {{ store.monthsToForecast }} months.
+            </p>
+          </div> -->
           <DrugsCalculatorForm />
         </div>
       </aside>
       <main>
+        <ForecastControls />
         <div class="content">
           <div class="content-header">
             <h2>{{ forecastMonths }}-month drug stock forecast</h2>
@@ -79,7 +79,7 @@ a {
 
 .app {
   display: grid;
-  grid-template-columns: 228px 1fr;
+  grid-template-columns: minmax(220px, 1fr) 4fr;
   gap: var(--space-5);
   flex: 1;
 
@@ -121,11 +121,6 @@ a {
     max-width: 100%;
     margin-left: 0;
     margin-right: 0;
-  }
-
-  .share-button-container {
-    flex-wrap: wrap;
-    justify-content: flex-start;
   }
 }
 
@@ -203,7 +198,7 @@ h3:not(:first-child) {
     background-color: var(--paper);
     /* border: 1px solid #00000015; */
     box-shadow: var(--shadow-1);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-xs);
   }
 }
 
@@ -236,69 +231,6 @@ h3:not(:first-child) {
   text-align: left;
 }
 
-.share-button-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--space-2);
-}
-
-.share-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  gap: 0.35rem;
-  height: 36px;
-  padding: 0 1rem 0 0.65rem;
-  background: white;
-  color: var(--ink);
-  border: 1px solid var(--faint);
-  border-radius: 999px;
-  width: auto;
-  transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease;
-  font-size: 0.8rem;
-  font-weight: 600;
-  box-shadow: var(--shadow-2);
-
-  span {
-    width: auto;
-    text-align: center;
-  }
-}
-
-/* Stable width when label swaps “Copy link” ↔ “Copied” */
-.share-button--copy {
-  min-width: 7.75rem;
-}
-
-.share-button:hover {
-  background: color-mix(in oklab, var(--paper) 86%, var(--bg1));
-  border-color: color-mix(in oklab, var(--accent) 28%, var(--faint));
-}
-
-.share-button:active {
-  transform: translateY(1px);
-}
-
-.copy-icon {
-  flex-shrink: 0;
-  width: 14px;
-  margin-left: 4px;
-}
-
-
-/* .share-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(66, 184, 131, 0.1);
-} */
-
-.share-button.copied {
-  background: color-mix(in oklab, var(--accent2) 18%, var(--paper));
-  color: color-mix(in oklab, var(--accent2) 35%, var(--ink));
-  border-color: color-mix(in oklab, var(--accent2) 50%, var(--faint));
-}
-
 .small-text {
   font-size: 0.8rem;
   color: var(--muted);
@@ -312,16 +244,6 @@ h3:not(:first-child) {
 .disclaimer {
   margin: 1.25rem 1rem;
   /* padding: 0 0.5rem; */
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.1s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 
 .print-hide {

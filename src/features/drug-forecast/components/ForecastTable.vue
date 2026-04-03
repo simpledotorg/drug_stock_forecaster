@@ -145,8 +145,15 @@ td {
 }
 
 .total-row {
-  font-weight: bold;
   background-color: #fff9d7;
+}
+
+.total-row th {
+  font-weight: 600;
+}
+
+.total-row .number-cell {
+  font-weight: 600;
 }
 
 .number-cell {

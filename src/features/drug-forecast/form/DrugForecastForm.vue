@@ -47,6 +47,7 @@ const {
 .form-container {
   width: 100%;
   min-width: 0;
+  max-width: 220px;
 }
 
 @media print {
@@ -98,11 +99,14 @@ label {
 
 .input {
   padding: 0.7rem 0.7rem;
-  border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
+  border: none;
   border-radius: 12px;
   background-color: #fff;
   font-size: 0.9rem;
-  transition: border-color 0.3s;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--ink) 14%, transparent),
+    0 1px 2px rgba(15, 23, 42, 0.06);
+  transition: box-shadow 0.3s ease;
 }
 
 .input-select {
@@ -120,15 +124,15 @@ label {
 .input:disabled {
   background-color: #eee;
   color: #444;
-  border: 1px solid #ccc;
   cursor: not-allowed;
+  box-shadow: 0 0 0 1px #ccc;
 }
 
 .input:focus {
   outline: none;
-  border-color: color-mix(in oklab, var(--accent) 45%, var(--faint));
   box-shadow:
-    0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent),
+    0 0 0 2px var(--focus-ring),
+    0 0 0 5px var(--focus-ring-glow),
     0 10px 18px rgba(15, 23, 42, 0.08);
 }
 
@@ -208,7 +212,7 @@ label {
   border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
   border-radius: 12px;
   background: color-mix(in oklab, var(--paper) 94%, var(--bg1));
-  overflow: hidden;
+  overflow: visible;
 }
 
 .segmented-control__option {
@@ -221,15 +225,29 @@ label {
   -webkit-tap-highlight-color: transparent;
 }
 
+/*
+  Keep radios fully covering the segment (keyboard + screen readers) without opacity:0
+  (which can drop them from the tab order). Span sits under the input; pointer events
+  go to the input so focus and clicks are reliable.
+*/
 .segmented-control__option input[type='radio'] {
   position: absolute;
   inset: 0;
-  opacity: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
   margin: 0;
+  opacity: 0.02;
   cursor: pointer;
 }
 
+.segmented-control__option input[type='radio']:focus {
+  outline: none;
+}
+
 .segmented-control__option span {
+  position: relative;
+  z-index: 0;
   flex: 1 1 0;
   display: flex;
   align-items: center;
@@ -240,25 +258,26 @@ label {
   color: color-mix(in oklab, var(--ink) 88%, var(--muted));
   background: transparent;
   transition: background-color 0.15s ease, color 0.15s ease;
+  pointer-events: none;
 }
 
-/* .segmented-control__option--left span {
-  border-top-left-radius: 999px;
-  border-bottom-left-radius: 999px;
+.segmented-control__option--left span {
+  border-top-left-radius: 11px;
+  border-bottom-left-radius: 11px;
 }
 
 .segmented-control__option--right span {
-  border-top-right-radius: 999px;
-  border-bottom-right-radius: 999px;
-} */
+  border-top-right-radius: 11px;
+  border-bottom-right-radius: 11px;
+}
 
 .segmented-control__option input[type='radio']:checked+span {
   background: color-mix(in oklab, var(--accent2) 32%, var(--paper));
   color: var(--ink);
 }
 
-.segmented-control__option input[type='radio']:focus-visible+span {
-  outline: 2px solid rgba(66, 184, 131, 0.55);
+.segmented-control__option:focus-within span {
+  outline: 2px solid var(--focus-ring);
   outline-offset: -2px;
 }
 

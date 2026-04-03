@@ -10,7 +10,7 @@
         class="input"
         placeholder="$"
       />
-      <div class="segmented-control" role="group" aria-label="Currency symbol position">
+      <div class="segmented-control" role="radiogroup" aria-label="Currency symbol position">
         <label class="segmented-control__option segmented-control__option--left">
           <input
             type="radio"
