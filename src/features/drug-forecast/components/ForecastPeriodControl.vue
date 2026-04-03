@@ -166,7 +166,7 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
 }
 
 .dd-heading {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -208,28 +208,28 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
 }
 
 .preset-row button.active {
-  background: #111;
-  border-color: #111;
+  background: var(--accent2);
+  border-color: var(--accent2);
 }
 
 .pv {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: #111;
   line-height: 1.2;
 }
 
 .pu {
-  font-size: 9px;
+  font-size: 11px;
   color: #aaa;
 }
 
 .preset-row button.active .pv {
-  color: #fff;
+  color: var(--ink);
 }
 
 .preset-row button.active .pu {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--ink);
 }
 
 /* ── Custom input row ── */
@@ -241,7 +241,7 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
 }
 
 .custom-row label {
-  font-size: 12px;
+  font-size: 14px;
   color: #888;
   flex-shrink: 0;
 }
@@ -249,7 +249,7 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
 .custom-row input[type='number'] {
   width: 52px;
   padding: 4px 6px;
-  font-size: 13px;
+  font-size: 15px;
   border: 0.5px solid rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.03);
@@ -270,7 +270,7 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
 }
 
 .unit {
-  font-size: 12px;
+  font-size: 14px;
   color: #888;
 }
 
