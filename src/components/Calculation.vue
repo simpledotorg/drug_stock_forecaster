@@ -13,8 +13,6 @@
   </div> -->
   <div class="content-padding">
     <h3>Monthly breakdown</h3>
-    <p class="small-text">View the monthly breakdown of the drug stock forecast.</p>
-    <p class="small-text">Doses are cumulative. Each column shows what's added at that step, not the full regimen.</p>
     <div class="table-scroll">
       <table>
         <thead>
@@ -62,6 +60,8 @@
         </tbody>
       </table>
     </div>
+    <p class="small-text text-right">Doses are cumulative. Each column shows what's added at that step, not the full regimen.</p>
+
   </div>
 </template>
 
@@ -122,8 +122,7 @@ h3 {
 
 .table-scroll {
   width: 100%;
-  overflow-x: auto;
-  overflow-y: visible;
+  overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
 }
 
