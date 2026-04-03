@@ -2,13 +2,22 @@
  * Treatment protocols — drug catalog and protocol definitions. Edit here to add drugs or protocols.
  */
 
+/** Illustrative default cost per tablet (same currency units as the rest of the app). */
+const DEFAULT_COST_PER_TABLET = {
+    'amlodipine-5mg': 0.05,
+    'losartan-50mg': 0.06,
+    'hctz-25mg': 0.03,
+    'telmisartan-40mg': 0.1,
+    'atorvastatin-20mg': 0.12,
+}
+
 export function createInitialDrugCatalog() {
     return [
-        { id: 'amlodipine-5mg', name: 'Amlodipine 5mg', costPerTablet: undefined },
-        { id: 'losartan-50mg', name: 'Losartan 50mg', costPerTablet: undefined },
-        { id: 'hctz-25mg', name: 'Hydrochlorothiazide 25mg', costPerTablet: undefined },
-        { id: 'telmisartan-40mg', name: 'Telmisartan 40mg', costPerTablet: undefined },
-        { id: 'atorvastatin-20mg', name: 'Atorvastatin 20mg', costPerTablet: undefined },
+        { id: 'amlodipine-5mg', name: 'Amlodipine 5mg', costPerTablet: DEFAULT_COST_PER_TABLET['amlodipine-5mg'] },
+        { id: 'losartan-50mg', name: 'Losartan 50mg', costPerTablet: DEFAULT_COST_PER_TABLET['losartan-50mg'] },
+        { id: 'hctz-25mg', name: 'Hydrochlorothiazide 25mg', costPerTablet: DEFAULT_COST_PER_TABLET['hctz-25mg'] },
+        { id: 'telmisartan-40mg', name: 'Telmisartan 40mg', costPerTablet: DEFAULT_COST_PER_TABLET['telmisartan-40mg'] },
+        { id: 'atorvastatin-20mg', name: 'Atorvastatin 20mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-20mg'] },
     ]
 }
 
