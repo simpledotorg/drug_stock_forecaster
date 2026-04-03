@@ -19,10 +19,15 @@
           <tr class="step-header-row">
             <td colspan="3" class="blank-header"></td>
             <td v-for="(_, idx) in store.stepForecasts" :key="'stt' + idx" class="step-col">
-              <span class="step-tooltip-wrap" tabindex="0">
+              <span
+                class="step-tooltip-wrap"
+                :class="{ 'step-tooltip-wrap--bubble-end': idx === store.stepForecasts.length - 1 }"
+                tabindex="0"
+              >
                 <span class="step-tooltip-text">Step {{ idx + 1 }}</span>
                 <span class="step-tooltip-bubble hide-on-print" role="tooltip">
-                  {{ stepTooltipText(idx) }}
+                  <span class="step-tooltip-bubble__title">Protocol step {{ idx + 1 }}</span>
+                  <span class="step-tooltip-bubble__regimen">{{ stepRegimenText(idx) }}</span>
                 </span>
               </span>
             </td>
@@ -60,7 +65,7 @@
         </tbody>
       </table>
     </div>
-    <p class="small-text text-right">Doses are cumulative. Each column shows what's added at that step, not the full regimen.</p>
+    <p class="small-text text-right">Calculations use a base drug strength. <br/> Drug doses are cumulative, each column shows what's added at that step, not the full regimen.</p>
 
   </div>
 </template>
@@ -74,11 +79,10 @@ const formatNumber = (num) => {
   return num?.toLocaleString() || 0
 }
 
-function stepTooltipText(idx) {
-  const label = store.activeProtocol?.steps?.[idx]?.label
-  return label
-    ? `Monthly tablet counts for ${label}.`
-    : 'Monthly tablets for this treatment step.'
+function stepRegimenText(idx) {
+  const step = store.activeProtocol?.steps?.[idx]
+  if (!step) return '—'
+  return step.fullRegimen ?? step.label ?? '—'
 }
 
 </script>
@@ -185,7 +189,7 @@ td {
 .step-header-row .step-col {
   text-align: right;
   vertical-align: bottom;
-  padding-top: 0.5rem;
+  padding-top: 4rem;
   padding-bottom: 0.35rem;
 }
 
@@ -222,7 +226,7 @@ td {
   top: auto;
   transform: translateX(-50%);
   padding: 0.5rem 0.75rem;
-  max-width: min(240px, 70vw);
+  max-width: min(320px, 85vw);
   width: max-content;
   font-size: 0.8rem;
   font-weight: 400;
@@ -242,6 +246,17 @@ td {
   pointer-events: none;
 }
 
+.step-tooltip-bubble__title {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.step-tooltip-bubble__regimen {
+  display: block;
+  font-weight: 400;
+}
+
 .step-tooltip-bubble::before {
   content: '';
   position: absolute;
@@ -250,6 +265,19 @@ td {
   margin-left: -6px;
   border: 6px solid transparent;
   border-top-color: #2d2d2d;
+}
+
+/* Last step: anchor bubble to the right so it isn’t clipped by horizontal scroll */
+.step-tooltip-wrap--bubble-end .step-tooltip-bubble {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.step-tooltip-wrap--bubble-end .step-tooltip-bubble::before {
+  left: auto;
+  right: 0.65rem;
+  margin-left: 0;
 }
 
 .step-tooltip-wrap:hover .step-tooltip-bubble,

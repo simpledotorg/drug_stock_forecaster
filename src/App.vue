@@ -40,11 +40,11 @@
         </div>
         <p class="small-text disclaimer">
           <strong>Disclaimer:</strong>
-          Outputs are machine-generated
+          Reports are machine-generated
           approximations only—they are not medical advice, prescribing guidance, or guaranteed procurement figures.
           Resolve
           to Save Lives (RTSL) makes no warranty as to accuracy or completeness and is not liable for errors, omissions,
-          or any actions taken based on these results.
+          or any actions taken based on results from this report.
         </p>
       </main>
     </div>
