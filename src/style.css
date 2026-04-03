@@ -55,6 +55,8 @@
   -moz-osx-font-smoothing: grayscale;
 
   --main-content-padding-y: 6rem;
+
+  --breakpoint-md: 900px;
 }
 
 * {
