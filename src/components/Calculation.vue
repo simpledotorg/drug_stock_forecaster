@@ -1,80 +1,65 @@
 <template>
-  <div class="breakdown-toggle-wrap hide-on-print">
-    <button
-      type="button"
-      class="forecast-chip forecast-chip--breakdown"
-      :class="{ 'is-open': store.showCalculation }"
-      :aria-expanded="store.showCalculation"
-      @click="store.showCalculation = !store.showCalculation"
-    >
+  <!-- <div class="breakdown-toggle-wrap hide-on-print">
+    <button type="button" class="forecast-chip forecast-chip--breakdown" :class="{ 'is-open': store.showCalculation }"
+      :aria-expanded="store.showCalculation" @click="store.showCalculation = !store.showCalculation">
       <span class="forecast-chip__chev" aria-hidden="true">
         <svg class="forecast-chip__chev-icon" viewBox="0 0 11 11" fill="none">
-          <path
-            d="M2 4L5.5 7.5L9 4"
-            stroke="currentColor"
-            stroke-width="1.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
+          <path d="M2 4L5.5 7.5L9 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
       </span>
-      <span class="forecast-chip__val">{{ store.showCalculation ? 'Hide' : 'Show' }}</span>
-      <span class="forecast-chip__muted">monthly breakdown</span>
+      <span class="forecast-chip__muted">{{ store.showCalculation ? 'Hide' : 'Show' }} monthly breakdown</span>
     </button>
-  </div>
-  <div v-if="store.showCalculation">
+  </div> -->
+  <div class="content-padding">
     <h3>Monthly breakdown</h3>
+    <p class="small-text">The table below shows the monthly breakdown of the drug stock forecast.</p>
     <div class="table-scroll">
-    <table>
-      <thead>
-        <tr class="step-header-row">
-          <td colspan="3" class="blank-header"></td>
-          <td v-for="(_, idx) in store.stepForecasts" :key="'stt' + idx" class="step-col">
-            <span class="step-tooltip-wrap" tabindex="0">
-              <span class="step-tooltip-text">Step {{ idx + 1 }}</span>
-              <span class="step-tooltip-bubble hide-on-print" role="tooltip">
-                {{ stepTooltipText(idx) }}
+      <table>
+        <thead>
+          <tr class="step-header-row">
+            <td colspan="3" class="blank-header"></td>
+            <td v-for="(_, idx) in store.stepForecasts" :key="'stt' + idx" class="step-col">
+              <span class="step-tooltip-wrap" tabindex="0">
+                <span class="step-tooltip-text">Step {{ idx + 1 }}</span>
+                <span class="step-tooltip-bubble hide-on-print" role="tooltip">
+                  {{ stepTooltipText(idx) }}
+                </span>
               </span>
-            </span>
-          </td>
-          <td
-            v-for="(_, idx) in store.activeOtherDrugs"
-            :key="'ostep-' + idx"
-            class="step-header-filler"
-            aria-hidden="true"
-          />
-        </tr>
-        <tr>
-          <th class="row-label">Month</th>
-          <th>Cumulative enrolment</th>
-          <th>Patients treated</th>
-          <th v-for="(step, idx) in store.activeProtocol?.steps ?? []" :key="'s' + idx">{{ step.label }}</th>
-          <th
-            v-for="(line, idx) in store.activeOtherDrugs"
-            :key="'o' + idx"
-            class="other-col"
-          >
-            {{ line.label }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="month in store.yearlyBreakdown" :key="month.month">
-          <th class="row-label" scope="row">{{ month.month }}</th>
-          <td class="number-cell">{{ formatNumber(month.expectedCumulativeEnrolment) }}</td>
-          <td class="number-cell">{{ formatNumber(month.patientsTreatedFromAdherence) }}</td>
-          <td v-for="(t, idx) in month.stepTablets" :key="'st' + idx" class="number-cell">{{ formatNumber(t) }}</td>
-          <td v-for="(t, idx) in month.otherDrugTablets" :key="'ot' + idx" class="number-cell other-col">{{ formatNumber(t) }}</td>
-        </tr>
-        <tr class="total-row">
-          <th class="row-label" scope="row">Total</th>
-          <td class="number-cell"></td>
-          <td class="number-cell"></td>
-          <td v-for="(step, idx) in store.stepForecasts" :key="'stt' + idx" class="number-cell">{{ formatNumber(step.total) }}</td>
-          <td v-for="(step, idx) in store.otherDrugForecasts" :key="'ott' + idx" class="number-cell other-col">{{ formatNumber(step.total) }}</td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+            <td v-for="(_, idx) in store.activeOtherDrugs" :key="'ostep-' + idx" class="step-header-filler"
+              aria-hidden="true" />
+          </tr>
+          <tr>
+            <th class="row-label">Month</th>
+            <th>Cumulative enrolment</th>
+            <th>Patients treated</th>
+            <th v-for="(step, idx) in store.activeProtocol?.steps ?? []" :key="'s' + idx">{{ step.label }}</th>
+            <th v-for="(line, idx) in store.activeOtherDrugs" :key="'o' + idx" class="other-col">
+              {{ line.label }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="month in store.yearlyBreakdown" :key="month.month">
+            <th class="row-label" scope="row">{{ month.month }}</th>
+            <td class="number-cell">{{ formatNumber(month.expectedCumulativeEnrolment) }}</td>
+            <td class="number-cell">{{ formatNumber(month.patientsTreatedFromAdherence) }}</td>
+            <td v-for="(t, idx) in month.stepTablets" :key="'st' + idx" class="number-cell">{{ formatNumber(t) }}</td>
+            <td v-for="(t, idx) in month.otherDrugTablets" :key="'ot' + idx" class="number-cell other-col">{{
+              formatNumber(t) }}</td>
+          </tr>
+          <tr class="total-row">
+            <th class="row-label" scope="row">Total</th>
+            <td class="number-cell"></td>
+            <td class="number-cell"></td>
+            <td v-for="(step, idx) in store.stepForecasts" :key="'stt' + idx" class="number-cell">{{
+              formatNumber(step.total) }}</td>
+            <td v-for="(step, idx) in store.otherDrugForecasts" :key="'ott' + idx" class="number-cell other-col">{{
+              formatNumber(step.total) }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -98,7 +83,19 @@ function stepTooltipText(idx) {
 </script>
 
 <style scoped>
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 @media print {
+
+  h3 {
+    margin-top: 3rem;
+    margin-bottom: 0;
+  }
+
   .table-scroll {
     overflow: visible;
   }
@@ -115,6 +112,11 @@ function stepTooltipText(idx) {
 
   .total-row {
     background: #fff;
+  }
+
+  .step-header-row th,
+  .step-header-row td {
+    border-bottom: none;
   }
 }
 
@@ -170,8 +172,13 @@ td {
   background: #faf8fc;
 }
 
+/* No border between “Step n” row and column titles — single header band */
+.step-header-row th,
+.step-header-row td {
+  border-bottom: none;
+}
+
 .step-header-row .blank-header {
-  border-bottom: 1px solid #ddd;
   background: transparent;
 }
 

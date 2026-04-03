@@ -22,8 +22,8 @@
       </div>
       <div class="dd-sep" />
       <div class="custom-row">
-        <label>Custom</label>
-        <input type="number" placeholder="?" min="1" max="120" :value="isCustom ? modelValue : ''"
+        <label>Custom:</label>
+        <input type="number" placeholder="#" min="1" max="120" :value="isCustom ? modelValue : ''"
           @input="onCustomInput" @keydown.enter="closeDropdown" />
         <span class="unit">months</span>
       </div>
@@ -92,7 +92,8 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
   top: calc(100% + 8px);
   right: 0;
   background: #fff;
-  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-1);
   border-radius: 12px;
   z-index: 30;
   display: none;
@@ -132,7 +133,7 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
   align-items: center;
   justify-content: center;
   padding: 7px 2px 5px;
-  border: 0.5px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 8px;
   background: transparent;
   cursor: pointer;

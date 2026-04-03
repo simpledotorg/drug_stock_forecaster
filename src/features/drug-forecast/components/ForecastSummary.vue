@@ -22,9 +22,9 @@ const store = useDrugCalcStore()
 
 <style scoped>
 .summary-text {
-  font-size: 1.15em;
+  font-size: 1.1em;
   font-weight: 400;
-  margin: 1.5rem 0 3rem;
+  margin: 3rem 0 1.5rem;
 }
 
 .final-cost {

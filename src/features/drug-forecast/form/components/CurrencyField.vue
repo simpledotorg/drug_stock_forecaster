@@ -10,27 +10,25 @@
         class="input"
         placeholder="$"
       />
-      <div class="segmented-control" role="radiogroup" aria-label="Currency symbol position">
-        <label class="segmented-control__option segmented-control__option--left">
-          <input
-            type="radio"
-            name="currencySymbolPosition"
-            value="start"
-            :checked="currencySymbolPosition === 'start'"
-            @change="$emit('update:currencySymbolPosition', 'start')"
-          />
-          <span>Before</span>
-        </label>
-        <label class="segmented-control__option segmented-control__option--right">
-          <input
-            type="radio"
-            name="currencySymbolPosition"
-            value="end"
-            :checked="currencySymbolPosition === 'end'"
-            @change="$emit('update:currencySymbolPosition', 'end')"
-          />
-          <span>After</span>
-        </label>
+      <div class="segmented-control" role="group" aria-label="Currency symbol position">
+        <button
+          type="button"
+          class="segmented-control__btn segmented-control__btn--left"
+          :class="{ 'is-selected': currencySymbolPosition === 'start' }"
+          :aria-pressed="currencySymbolPosition === 'start'"
+          @click="$emit('update:currencySymbolPosition', 'start')"
+        >
+          Before
+        </button>
+        <button
+          type="button"
+          class="segmented-control__btn segmented-control__btn--right"
+          :class="{ 'is-selected': currencySymbolPosition === 'end' }"
+          :aria-pressed="currencySymbolPosition === 'end'"
+          @click="$emit('update:currencySymbolPosition', 'end')"
+        >
+          After
+        </button>
       </div>
     </div>
   </div>

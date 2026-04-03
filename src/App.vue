@@ -7,30 +7,45 @@
     <div class="app">
       <aside>
         <div class="aside-content">
-          <!-- <div>
-            <p class="small-text">
-              Enter data to get a drug forecast for {{ store.monthsToForecast }} months.
-            </p>
-          </div> -->
           <DrugsCalculatorForm />
         </div>
       </aside>
       <main>
         <ForecastControls />
         <div class="content">
-          <div class="content-header">
-            <h2>{{ forecastMonths }}-month drug stock forecast</h2>
-            <ForecastPeriodControl v-model="forecastMonths" />
+          <div class="content-padding">
+
+            <div class="content-header">
+              <h2>{{ forecastMonths }}-month drug stock forecast</h2>
+              <ForecastPeriodControl v-model="forecastMonths" />
+            </div>
+            <TheForecast />
+            <!-- <Assumptions /> -->
           </div>
-          <TheForecast />
-          <!-- <Assumptions /> -->
-          <Calculation />
+          <div :class="{ 'print-hide': !includeBreakdownInPrint }">
+            <CollapsibleSection title="Calculation breakdown">
+              <template #actions>
+                <label class="print-include-toggle" @click.stop>
+                  <input
+                    v-model="includeBreakdownInPrint"
+                    type="checkbox"
+                    class="print-include-toggle__input"
+                  />
+                  <span class="print-include-toggle__text">Include in printout</span>
+                </label>
+              </template>
+              <Calculation />
+            </CollapsibleSection>
+          </div>
         </div>
-        <p class="small-text disclaimer"><strong>Disclaimer:</Strong> By using this tool you acknowldge the figures
-          calculated are
-          machine generated and represent estimated figures, not accurate recommendations. RTSL cannot be held
-          responsible
-          for any errors or omissions in the figures or for outcomes that occur as a result of the using this tool.</p>
+        <p class="small-text disclaimer">
+          <strong>Disclaimer:</strong>
+          Outputs are machine-generated
+          approximations only—they are not medical advice, prescribing guidance, or guaranteed procurement figures.
+          Resolve
+          to Save Lives (RTSL) makes no warranty as to accuracy or completeness and is not liable for errors, omissions,
+          or any actions taken based on these results.
+        </p>
       </main>
     </div>
     <footer class="hide-on-print">
@@ -47,16 +62,21 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import DrugsCalculatorForm from './components/DrugsCalculatorForm.vue'
 import Calculation from './components/Calculation.vue'
 import TheForecast from './components/TheForecast.vue'
 import ForecastControls from './features/drug-forecast/components/ForecastControls.vue'
 import ForecastPeriodControl from './features/drug-forecast/components/ForecastPeriodControl.vue'
+import CollapsibleSection from './components/CollapsibleSection.vue'
 // import Assumptions from './components/Assumptions.vue'
 import { storeToRefs } from 'pinia'
 import { useDrugCalcStore } from './stores/drugsCalculator'
 
 const { forecastMonths } = storeToRefs(useDrugCalcStore())
+
+/** When false, the drug breakdown block is omitted from printed output. */
+const includeBreakdownInPrint = ref(true)
 </script>
 
 <style>
@@ -142,14 +162,14 @@ header {
 }
 
 h1 {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   line-height: 1.1;
   font-family: var(--font-display);
 }
 
 h2 {
   font-family: var(--font-display);
-  font-size: 1.9rem;
+  font-size: 1.5rem;
   line-height: 1.1;
   /* margin-bottom: 0.5rem; */
   /* letter-spacing: -0.02em; */
@@ -193,12 +213,15 @@ h3:not(:first-child) {
 
 @media not print {
   .content {
-    padding: var(--space-7) var(--space-6);
     width: 100%;
     background-color: var(--paper);
     /* border: 1px solid #00000015; */
     box-shadow: var(--shadow-1);
     border-radius: var(--radius-xs);
+  }
+
+  .content-padding {
+    padding: var(--space-7) var(--space-6);
   }
 }
 
@@ -244,6 +267,35 @@ h3:not(:first-child) {
 .disclaimer {
   margin: 1.25rem 1rem;
   /* padding: 0 0.5rem; */
+}
+
+.print-include-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: color-mix(in oklab, var(--muted) 88%, var(--paper));
+  user-select: none;
+}
+
+.print-include-toggle__input {
+  width: 0.875rem;
+  height: 0.875rem;
+  accent-color: color-mix(in oklab, var(--accent2) 50%, var(--muted));
+  cursor: pointer;
+}
+
+.print-include-toggle:hover .print-include-toggle__text {
+  color: color-mix(in oklab, var(--muted) 35%, var(--ink));
+}
+
+@media print {
+  .print-include-toggle {
+    display: none;
+  }
 }
 
 .print-hide {

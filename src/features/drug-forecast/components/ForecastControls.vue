@@ -1,5 +1,5 @@
 <template>
-  <div class="share-button-container print-hide">
+  <div class="share-button-container hide-on-print">
     <p class="forecast-controls__intro">Share this forecast with others using the webpage link</p>
     <button
       class="share-button share-button--copy"
@@ -99,7 +99,7 @@ function printForecast() {
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-3);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
 .share-button {
@@ -107,9 +107,9 @@ function printForecast() {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  gap: 0.35rem;
+  gap: 0.5rem;
   height: 36px;
-  padding: 0 1rem 0 0.65rem;
+  padding: 0 1rem 0 0.75rem;
   background: white;
   color: var(--ink);
   border: 1px solid transparent;

@@ -215,70 +215,51 @@ label {
   overflow: visible;
 }
 
-.segmented-control__option {
+/* Two real buttons so Tab visits Before and After separately (native radio = one tab stop per group). */
+.segmented-control__btn {
   position: relative;
-  display: flex;
-  align-items: stretch;
-  justify-content: stretch;
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/*
-  Keep radios fully covering the segment (keyboard + screen readers) without opacity:0
-  (which can drop them from the tab order). Span sits under the input; pointer events
-  go to the input so focus and clicks are reliable.
-*/
-.segmented-control__option input[type='radio'] {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  opacity: 0.02;
-  cursor: pointer;
-}
-
-.segmented-control__option input[type='radio']:focus {
-  outline: none;
-}
-
-.segmented-control__option span {
-  position: relative;
-  z-index: 0;
-  flex: 1 1 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
   padding: 0.65rem 0.6rem;
+  border: none;
+  background: transparent;
+  font: inherit;
   font-weight: 600;
   font-size: 0.8rem;
   color: color-mix(in oklab, var(--ink) 88%, var(--muted));
-  background: transparent;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
   transition: background-color 0.15s ease, color 0.15s ease;
-  pointer-events: none;
 }
 
-.segmented-control__option--left span {
+.segmented-control__btn:focus {
+  outline: none;
+}
+
+.segmented-control__btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.segmented-control__btn--left {
   border-top-left-radius: 11px;
   border-bottom-left-radius: 11px;
 }
 
-.segmented-control__option--right span {
+.segmented-control__btn--right {
   border-top-right-radius: 11px;
   border-bottom-right-radius: 11px;
 }
 
-.segmented-control__option input[type='radio']:checked+span {
+.segmented-control__btn.is-selected {
   background: color-mix(in oklab, var(--accent2) 32%, var(--paper));
   color: var(--ink);
-}
-
-.segmented-control__option:focus-within span {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: -2px;
 }
 
 .currency-group {
