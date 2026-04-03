@@ -1,14 +1,14 @@
 <template>
   <div class="chip-wrap" ref="wrapRef">
-    <div class="v1-control" :class="{ open: isOpen }" @click="toggleDropdown">
-      <span class="v1-chev">
-        <svg class="chev-icon" viewBox="0 0 11 11" fill="none">
+    <div class="forecast-chip" :class="{ 'is-open': isOpen }" @click="toggleDropdown">
+      <span class="forecast-chip__chev">
+        <svg class="forecast-chip__chev-icon" viewBox="0 0 11 11" fill="none">
           <path d="M2 4L5.5 7.5L9 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
             stroke-linejoin="round" />
         </svg>
       </span>
-      <span class="v1-val">{{ modelValue }} month</span>
-      <span class="s-muted">forecast</span>
+      <span class="forecast-chip__val">{{ modelValue }} month</span>
+      <span class="forecast-chip__muted">forecast</span>
     </div>
 
     <div class="dropdown" :class="{ open: isOpen }">
@@ -86,68 +86,6 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
   flex-shrink: 0;
 }
 
-/* ── Trigger ── */
-.v1-control {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  padding: 4px 8px 4px 6px;
-  border-radius: 8px;
-  transition: background 0.15s;
-  margin: -4px 0 -4px -6px;
-  user-select: none;
-}
-
-.v1-control:hover,
-.v1-control.open {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-/* ── Chevron ── */
-.v1-chev {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  color: #888;
-  transition: color 0.15s;
-}
-
-.v1-control:hover .v1-chev,
-.v1-control.open .v1-chev {
-  color: #555;
-}
-
-.chev-icon {
-  width: 11px;
-  height: 11px;
-  transition: transform 0.18s;
-}
-
-.v1-control.open .chev-icon {
-  transform: rotate(-90deg);
-}
-
-/* ── Value label ── */
-.v1-val {
-  font-size: 15px;
-  font-weight: 500;
-  color: #111;
-  border-bottom: 1px dashed #bbb;
-  line-height: 1.5;
-  padding: 0 1px;
-  white-space: nowrap;
-  transition: border-color 0.15s;
-}
-
-.v1-control:hover .v1-val,
-.v1-control.open .v1-val {
-  /* border-bottom-style: solid; */
-  border-bottom-color: transparent;
-}
-
-
-
 /* ── Dropdown panel ── */
 .dropdown {
   position: absolute;
@@ -208,8 +146,9 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
 }
 
 .preset-row button.active {
-  background: var(--accent2);
-  border-color: var(--accent2);
+  /* Match sidebar segmented-control selected chip */
+  background: color-mix(in oklab, var(--accent2) 32%, var(--paper));
+  border-color: color-mix(in oklab, var(--accent2) 50%, var(--faint));
 }
 
 .pv {
@@ -276,31 +215,8 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
 
 /* ── Print ── */
 @media print {
-
-  .v1-chev,
   .dropdown {
     display: none !important;
-  }
-
-  .v1-val {
-    border: none !important;
-  }
-
-  .v1-control {
-    background: transparent !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    cursor: default;
-  }
-}
-
-@media not print {
-
-  /* ── Muted suffix ── */
-  .s-muted {
-    font-size: 14px;
-    color: #888;
-    white-space: nowrap;
   }
 }
 </style>

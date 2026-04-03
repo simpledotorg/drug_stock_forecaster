@@ -26,12 +26,15 @@
           <!-- <Assumptions /> -->
           <Calculation />
         </div>
+        <p class="small-text disclaimer"><strong>Disclaimer:</Strong> By using this tool you acknowldge the figures
+          calculated are
+          machine generated and represent estimated figures, not accurate recommendations. RTSL cannot be held
+          responsible
+          for any errors or omissions in the figures or for outcomes that occur as a result of the using this tool.</p>
       </main>
     </div>
     <footer class="hide-on-print">
-      <p class="small-text"><strong>Disclaimer:</Strong> By using this tool you acknowldge the figures calculated are
-        machine generated and represent estimated figures, not accurate recommendations. RTSL cannot be held responsible
-        for any errors or omissions in the figures or for outcomes that occur as a result of the using this tool.</p>
+
       <p class="small-text created-by">
         Created by <a href="https://resolvetosavelives.org" target="_blank">Resolve to Save Lives</a>
       </p>
@@ -154,8 +157,8 @@ h2 {
   font-size: 1.9rem;
   line-height: 1.1;
   /* margin-bottom: 0.5rem; */
-  letter-spacing: -0.02em;
-  margin: 0.4rem 0
+  /* letter-spacing: -0.02em; */
+  margin: 0;
 }
 
 h3 {
@@ -195,13 +198,12 @@ h3:not(:first-child) {
 
 @media not print {
   .content {
-    padding: var(--space-6);
-    padding-top: var(--space-5);
+    padding: var(--space-7) var(--space-6);
     width: 100%;
     background-color: var(--paper);
-    border: 1px solid var(--faint);
+    /* border: 1px solid #00000015; */
     box-shadow: var(--shadow-1);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-sm);
   }
 }
 
@@ -305,6 +307,11 @@ h3:not(:first-child) {
 
 .text-right {
   text-align: right;
+}
+
+.disclaimer {
+  margin: 1.25rem 1rem;
+  /* padding: 0 0.5rem; */
 }
 
 .fade-enter-active,

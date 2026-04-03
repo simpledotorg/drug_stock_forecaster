@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Spline+Sans:wght@300;400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  --font-body: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, sans-serif;
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  /* --font-serif: 'IBM Plex Serif', Georgia, serif;
-  --font-sans:  'IBM Plex Sans',  system-ui, sans-serif;
-  --font-mono:  'IBM Plex Mono',  'Courier New', monospace; */
+  --font-body: "Spline Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* No “Spline Serif” on Google Fonts; use for rare serif-only contexts */
+  --font-serif: ui-serif, Georgia, "Times New Roman", serif;
+  --font-display: var(--font-body);
+  --font-mono: "Spline Sans Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono-table: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
 
   /* Screen background tints (slightly darker for contrast) */
@@ -34,6 +34,7 @@
   --space-4: 1.25rem;
   --space-5: 1.8rem;
   --space-6: 2.5rem;
+  --space-7: 3rem;
 
   font-family: var(--font-body);
   line-height: 1.5;
@@ -76,7 +77,154 @@ a {
   text-underline-offset: 3px;
 }
 
-.roboto-mono-font {
+/*
+  Forecast period chip (default). Monthly breakdown uses .forecast-chip--breakdown for grey + full-width dashed line.
+*/
+.forecast-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px 8px 4px 6px;
+  border-radius: 8px;
+  transition: background 0.15s;
+  margin: -4px 0 -4px -6px;
+  user-select: none;
+}
+
+button.forecast-chip {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: transparent;
+  width: auto;
+  max-width: 100%;
+  text-align: left;
+}
+
+button.forecast-chip:focus-visible {
+  outline: 2px solid rgba(66, 184, 131, 0.55);
+  outline-offset: 2px;
+}
+
+.forecast-chip:hover,
+.forecast-chip.is-open {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.forecast-chip__chev {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: #888;
+  transition: color 0.15s;
+}
+
+.forecast-chip:hover .forecast-chip__chev,
+.forecast-chip.is-open .forecast-chip__chev {
+  color: #555;
+}
+
+.forecast-chip__chev-icon {
+  display: block;
+  width: 11px;
+  height: 11px;
+  transition: transform 0.18s;
+}
+
+.forecast-chip.is-open .forecast-chip__chev-icon {
+  transform: rotate(-90deg);
+}
+
+.forecast-chip__val {
+  font-size: 15px;
+  font-weight: 500;
+  color: #111;
+  border-bottom: 1px dashed #bbb;
+  line-height: 1.5;
+  padding: 0 1px;
+  white-space: nowrap;
+  transition: border-color 0.15s;
+}
+
+.forecast-chip:hover .forecast-chip__val,
+.forecast-chip.is-open .forecast-chip__val {
+  border-bottom-color: transparent;
+}
+
+@media not print {
+  .forecast-chip__muted {
+    font-size: 14px;
+    color: #888;
+    white-space: nowrap;
+  }
+}
+
+/* Monthly breakdown show/hide only: whole row grey + one dashed underline */
+.forecast-chip.forecast-chip--breakdown {
+  color: #888;
+  border-bottom: 1px dashed #bbb;
+  padding: 4px 8px 5px 6px;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.forecast-chip.forecast-chip--breakdown .forecast-chip__val {
+  color: currentColor;
+  border-bottom: none;
+}
+
+.forecast-chip.forecast-chip--breakdown:hover .forecast-chip__val,
+.forecast-chip.forecast-chip--breakdown.is-open .forecast-chip__val {
+  border-bottom: none;
+}
+
+.forecast-chip.forecast-chip--breakdown .forecast-chip__chev {
+  color: currentColor;
+}
+
+.forecast-chip.forecast-chip--breakdown:hover,
+.forecast-chip.forecast-chip--breakdown.is-open {
+  border-bottom-color: transparent;
+  color: #666;
+}
+
+.forecast-chip.forecast-chip--breakdown:hover .forecast-chip__chev,
+.forecast-chip.forecast-chip--breakdown.is-open .forecast-chip__chev {
+  color: currentColor;
+}
+
+@media not print {
+  .forecast-chip.forecast-chip--breakdown .forecast-chip__muted {
+    color: currentColor;
+  }
+}
+
+@media print {
+  .forecast-chip__chev {
+    display: none !important;
+  }
+
+  .forecast-chip__val {
+    border: none !important;
+  }
+
+  .forecast-chip {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: default;
+  }
+
+  .forecast-chip.forecast-chip--breakdown {
+    border-bottom: none !important;
+    color: #000 !important;
+  }
+}
+
+.mono-font {
   font-family: var(--font-mono);
   font-optical-sizing: auto;
   font-weight: 400;
@@ -117,16 +265,3 @@ a {
   }
 }
 
-
-/* Fonts */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;1,300&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@300&display=swap');
- 
-/*  
-h1, h2, h3, h4 {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-style: normal;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
-}
-  */

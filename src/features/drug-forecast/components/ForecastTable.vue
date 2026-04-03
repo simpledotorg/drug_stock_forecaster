@@ -24,11 +24,11 @@
             >
           </td>
         </tr>
-        <tr class="blank-row">
+        <!-- <tr class="blank-row">
           <td></td>
           <td></td>
           <td></td>
-        </tr>
+        </tr> -->
         <tr v-for="row in store.dashboardDrugSections.protocolDrugs" :key="'p-' + row.id">
           <th>{{ row.name }}</th>
           <td class="number-cell">{{ formatNumber(row.totalTablets) }}</td>
@@ -88,7 +88,8 @@ const store = useDrugCalcStore()
 
   th,
   td {
-    border: 1px solid rgba(0, 0, 0, 0.35);
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.35);
   }
 
   .total-row {
@@ -118,7 +119,8 @@ table {
 
 th,
 td {
-  border: 1px solid #ddd;
+  border: none;
+  border-bottom: 1px solid #ddd;
   padding: 0.5rem 0.75rem;
   width: 25%;
   text-align: left;
@@ -133,10 +135,11 @@ td {
 }
 
 .blank-header {
-  border: none;
+  border-bottom: 1px solid #ddd;
 }
 
-.blank-row {
+.blank-row th,
+.blank-row td {
   border: none;
   background-color: #f6f6f6;
 }
@@ -147,7 +150,7 @@ td {
 }
 
 .number-cell {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono-table);
   font-size: 0.95rem;
   font-weight: 500;
 }

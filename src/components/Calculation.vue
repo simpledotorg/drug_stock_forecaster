@@ -1,8 +1,27 @@
 <template>
-  <button class="see-more-button hide-on-print" @click="store.showCalculation = !store.showCalculation">
-    {{ store.showCalculation ? 'Hide' : 'Show' }} montly breakdown
-    <span class="see-more-chevron" :class="{ 'is-open': !store.showCalculation }" aria-hidden="true">{{ store.showCalculation ? '-' : '+' }}</span>
-  </button>
+  <div class="breakdown-toggle-wrap hide-on-print">
+    <button
+      type="button"
+      class="forecast-chip forecast-chip--breakdown"
+      :class="{ 'is-open': store.showCalculation }"
+      :aria-expanded="store.showCalculation"
+      @click="store.showCalculation = !store.showCalculation"
+    >
+      <span class="forecast-chip__chev" aria-hidden="true">
+        <svg class="forecast-chip__chev-icon" viewBox="0 0 11 11" fill="none">
+          <path
+            d="M2 4L5.5 7.5L9 4"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+      <span class="forecast-chip__val">{{ store.showCalculation ? 'Hide' : 'Show' }}</span>
+      <span class="forecast-chip__muted">monthly breakdown</span>
+    </button>
+  </div>
   <div v-if="store.showCalculation">
     <h3>Monthly breakdown</h3>
     <div class="table-scroll">
@@ -95,38 +114,7 @@ thead th {
   background-color: #f0f0f0;
 }
 
-.see-more-button {
-  background-color: transparent;
-  color: #0f56e4;
-  font-size: 0.9re;
-  font-weight: 500;
-  width: 100%;
-  cursor: pointer;
-  padding: 8px 0;
+.breakdown-toggle-wrap {
   margin: 2rem 0 -1.2rem;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.see-more-button:hover {
-  background-color: #f9f9f9;
-  color: #216bff;
-}
-
-.see-more-chevron {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-right: 8px;
-  font-size: 1.2rem;
-  border-radius: 100%;
-  color: #aaa;
-}
-
-.see-more-button:tabindexfocus {
-  outline: 1px solid #216bff;
-  box-shadow: 0 0 0 3px rgba(66, 184, 131, 0.1);
 }
 </style>

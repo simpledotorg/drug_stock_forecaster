@@ -1,30 +1,19 @@
 <template>
   <div class="form-container">
     <form @submit.prevent class="form">
-      <ProgramDataFields
-        :forecast-months="forecastMonths"
-        :patients-under-care="patientsUnderCare"
-        :target-enrolment="targetEnrolment"
-        :treatment-adherence="treatmentAdherence"
-        @update:patientsUnderCare="patientsUnderCare = $event"
-        @update:targetEnrolment="targetEnrolment = $event"
-        @update:treatmentAdherence="treatmentAdherence = $event"
-      />
+      <ProgramDataFields :forecast-months="forecastMonths" :patients-under-care="patientsUnderCare"
+        :target-enrolment="targetEnrolment" :treatment-adherence="treatmentAdherence"
+        @update:patientsUnderCare="patientsUnderCare = $event" @update:targetEnrolment="targetEnrolment = $event"
+        @update:treatmentAdherence="treatmentAdherence = $event" />
 
-      <ProtocolSelect
-        :protocols="protocols"
-        :active-protocol-id="activeProtocolId"
-        @update:activeProtocolId="activeProtocolId = $event"
-      />
+      <ProtocolSelect :protocols="protocols" :active-protocol-id="activeProtocolId"
+        @update:activeProtocolId="activeProtocolId = $event" />
 
       <DrugCostList :drugs="catalogDrugsForActiveProtocol" />
 
-      <CurrencyField
-        :currency-symbol="currencySymbol"
-        :currency-symbol-position="currencySymbolPosition"
+      <CurrencyField :currency-symbol="currencySymbol" :currency-symbol-position="currencySymbolPosition"
         @update:currencySymbol="currencySymbol = $event"
-        @update:currencySymbolPosition="currencySymbolPosition = $event"
-      />
+        @update:currencySymbolPosition="currencySymbolPosition = $event" />
     </form>
   </div>
 </template>
@@ -159,14 +148,16 @@ label {
   width: fit-content;
   cursor: help;
   align-self: flex-start;
+  margin: 0 !important;
 }
 
 .tooltip-trigger-text {
   display: inline-block;
   text-decoration: underline;
+  text-decoration-style: dashed;
   text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: #ccc;
+  text-underline-offset: 5px;
+  text-decoration-color: #888;
 }
 
 .tooltip-bubble {
@@ -261,12 +252,12 @@ label {
   border-bottom-right-radius: 999px;
 } */
 
-.segmented-control__option input[type='radio']:checked + span {
+.segmented-control__option input[type='radio']:checked+span {
   background: color-mix(in oklab, var(--accent2) 32%, var(--paper));
   color: var(--ink);
 }
 
-.segmented-control__option input[type='radio']:focus-visible + span {
+.segmented-control__option input[type='radio']:focus-visible+span {
   outline: 2px solid rgba(66, 184, 131, 0.55);
   outline-offset: -2px;
 }
@@ -277,9 +268,8 @@ label {
   gap: 0.5rem;
 }
 
-.currency-group > .input {
+.currency-group>.input {
   min-width: 0;
   width: 100%;
 }
 </style>
-
