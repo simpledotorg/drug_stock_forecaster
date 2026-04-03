@@ -274,3 +274,8 @@ button.forecast-chip:focus-visible {
   }
 }
 
+.hide-on-mobile {
+  @media (max-width: 900px) {
+    display: none !important;
+  }
+}
