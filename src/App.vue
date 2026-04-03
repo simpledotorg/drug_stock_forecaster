@@ -76,7 +76,7 @@ import { useDrugCalcStore } from './stores/drugsCalculator'
 const { forecastMonths } = storeToRefs(useDrugCalcStore())
 
 /** When false, the drug breakdown block is omitted from printed output. */
-const includeBreakdownInPrint = ref(true)
+const includeBreakdownInPrint = ref(false)
 </script>
 
 <style>
@@ -227,7 +227,8 @@ h3:not(:first-child) {
 
 .content {
   position: relative;
-  overflow: clip;
+  /* visible so in-page tooltips (e.g. step headers) are not clipped by the card */
+  overflow: visible;
 }
 
 .content::before {

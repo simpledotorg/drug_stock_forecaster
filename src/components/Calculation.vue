@@ -123,6 +123,7 @@ h3 {
 .table-scroll {
   width: 100%;
   overflow-x: auto;
+  overflow-y: visible;
   -webkit-overflow-scrolling: touch;
 }
 

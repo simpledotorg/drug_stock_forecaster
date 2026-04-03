@@ -14,7 +14,12 @@
       <slot name="actions" />
     </div>
 
-    <div class="content-wrap" ref="contentRef" :style="contentStyle">
+    <div
+      class="content-wrap"
+      :class="{ 'content-wrap--open': isOpen }"
+      ref="contentRef"
+      :style="contentStyle"
+    >
       <div class="content-inner" ref="innerRef">
         <slot />
       </div>
@@ -166,6 +171,11 @@ onBeforeUnmount(() => {
   transition:
     max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
     opacity 0.22s ease;
+}
+
+/* When open, allow overflow (e.g. table header tooltips) — hidden while collapsed still clips. */
+.content-wrap--open {
+  overflow: visible;
 }
 
 
