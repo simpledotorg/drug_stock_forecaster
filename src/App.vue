@@ -2,7 +2,7 @@
 
   <div class="wrapper">
     <header class="header-container">
-      <h1>Drug stock forecast calculator</h1>
+      <h1 class="hide-on-print">Drug stock forecast calculator</h1>
       <ForecastControls />
     </header>
     <div class="app">
@@ -19,7 +19,7 @@
       <main>
         <div class="content">
           <div class="content-header">
-            <h2>Drug stock forecast</h2>
+            <h2>{{ store.forecastMonths }}-month drug stock forecast</h2>
             <ForecastPeriodControl />
           </div>
           <TheForecast />
@@ -75,7 +75,7 @@ a {
 
 .app {
   display: grid;
-  grid-template-columns: 272px 1fr;
+  grid-template-columns: 228px 1fr;
   gap: var(--space-5);
   flex: 1;
 
@@ -99,7 +99,7 @@ a {
   }
 
   .app aside .aside-content {
-    padding: var(--space-3);
+    padding: 0;
   }
 
   .content {
@@ -206,11 +206,8 @@ h3:not(:first-child) {
 }
 
 .app aside .aside-content {
-  background: color-mix(in oklab, var(--paper) 92%, var(--bg1));
-  border: 1px solid var(--faint);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-2);
-  padding: var(--space-4);
+  padding: 0;
+  min-width: 0;
 }
 
 .app main .content {
