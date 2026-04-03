@@ -1,426 +1,306 @@
 <template>
-  <div class="period-input-container">
-    <div class="period-field hide-on-print">
-      <!-- <div class="period-field__icon" aria-hidden="true">
-        <svg
-          class="period-calendar-icon"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path
-            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5"
-          />
+  <div class="chip-wrap" ref="wrapRef">
+    <div class="v1-control" :class="{ open: isOpen }" @click="toggleDropdown">
+      <span class="v1-chev">
+        <svg class="chev-icon" viewBox="0 0 11 11" fill="none">
+          <path d="M2 4L5.5 7.5L9 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
-      </div> -->
-      <span id="period-field-label" class="period-field__label">
-        <span class="period-field__label-line">Months to</span>
-        <span class="period-field__label-line">forecast</span>
       </span>
-      <div
-        class="period-stepper"
-        role="group"
-        aria-labelledby="period-field-label"
-      >
-        <div class="period-stepper__value">
-          <input
-            id="forecast-months-input"
-            :value="localInput"
-            type="text"
-            class="period-input"
-            placeholder="12"
-            inputmode="numeric"
-            autocomplete="off"
-            aria-labelledby="period-field-label"
-            @focus="onFocus"
-            @input="onInput"
-            @blur="onBlur"
-            @keydown.enter.prevent="blurForecastInput"
-          />
-        </div>
-        <div class="period-stepper__stack">
-          <button
-            type="button"
-            class="period-stepper__btn period-stepper__btn--dec"
-            aria-label="Decrease months"
-            :disabled="atMin"
-            @click="decrement"
-          >
-            <svg class="period-stepper__glyph" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                d="M3 8h10"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.75"
-                stroke-linecap="round"
-              />
-            </svg>
-          </button>
-          <button
-            type="button"
-            class="period-stepper__btn period-stepper__btn--inc"
-            aria-label="Increase months"
-            :disabled="atMax"
-            @click="increment"
-          >
-            <svg class="period-stepper__glyph" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                d="M8 3v10M3 8h10"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.75"
-                stroke-linecap="round"
-              />
-            </svg>
-          </button>
-        </div>
+      <span class="v1-val">{{ modelValue }} month</span>
+      <span class="s-muted">forecast</span>
+    </div>
+
+    <div class="dropdown" :class="{ open: isOpen }">
+      <div class="dd-heading">Forecast period</div>
+      <div class="preset-row">
+        <button v-for="preset in PRESETS" :key="preset" :class="{ active: modelValue === preset }"
+          @click="selectPreset(preset)">
+          <span class="pv">{{ preset }}</span>
+          <span class="pu">mo</span>
+        </button>
+      </div>
+      <div class="dd-sep" />
+      <div class="custom-row">
+        <label>Custom</label>
+        <input type="number" placeholder="?" min="1" max="120" :value="isCustom ? modelValue : ''"
+          @input="onCustomInput" @keydown.enter="closeDropdown" />
+        <span class="unit">months</span>
       </div>
     </div>
-    <p class="period-print-line show-on-print">{{ store.forecastMonths }} month forecast</p>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
-import { useDrugCalcStore } from '../../../stores/drugsCalculator'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-/** Forecast length in months; bounds applied for URL/query safety. */
-const MIN = 1
-const MAX = 60
-
-const store = useDrugCalcStore()
-
-/** String shown in the input; decoupled from the store while editing so the field can be cleared mid-typing. */
-const localInput = ref('')
-const isEditing = ref(false)
-
-const atMin = computed(() => displayMonths.value <= MIN)
-const atMax = computed(() => displayMonths.value >= MAX)
-
-const displayMonths = computed(() => {
-  const n = Math.floor(Number(store.forecastMonths))
-  if (!Number.isFinite(n)) return MIN
-  return Math.min(MAX, Math.max(MIN, n))
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    default: 12,
+  },
 })
 
-function clampMonths() {
-  const n = Math.floor(Number(store.forecastMonths))
-  if (!Number.isFinite(n)) {
-    store.forecastMonths = MIN
-    return
+const emit = defineEmits(['update:modelValue'])
+
+const PRESETS = [3, 6, 12, 18, 24]
+
+const isOpen = ref(false)
+const wrapRef = ref(null)
+
+const isCustom = computed(() => !PRESETS.includes(props.modelValue))
+
+function toggleDropdown() {
+  isOpen.value = !isOpen.value
+}
+
+function closeDropdown() {
+  isOpen.value = false
+}
+
+function selectPreset(val) {
+  emit('update:modelValue', val)
+  setTimeout(closeDropdown, 140)
+}
+
+function onCustomInput(e) {
+  const val = parseInt(e.target.value)
+  if (val > 0 && val <= 120) {
+    emit('update:modelValue', val)
   }
-  const c = Math.min(MAX, Math.max(MIN, n))
-  if (c !== store.forecastMonths) store.forecastMonths = c
 }
 
-function syncLocalFromStore() {
-  localInput.value = String(store.forecastMonths)
-}
-
-function onFocus() {
-  isEditing.value = true
-  localInput.value = String(displayMonths.value)
-}
-
-function blurForecastInput(e) {
-  e.target?.blur?.()
-}
-
-function onInput(e) {
-  const raw = e.target?.value ?? ''
-  localInput.value = raw
-  const trimmed = raw.trim()
-  if (trimmed === '') {
-    return
+function onOutsideClick(e) {
+  if (wrapRef.value && !wrapRef.value.contains(e.target)) {
+    closeDropdown()
   }
-  const n = parseInt(trimmed, 10)
-  if (!Number.isFinite(n)) {
-    return
-  }
-  store.forecastMonths = Math.min(MAX, Math.max(MIN, n))
 }
 
-function onBlur() {
-  isEditing.value = false
-  const trimmed = localInput.value.trim()
-  if (trimmed === '') {
-    store.forecastMonths = MIN
-  } else {
-    const n = parseInt(trimmed, 10)
-    if (!Number.isFinite(n)) {
-      store.forecastMonths = MIN
-    } else {
-      store.forecastMonths = Math.min(MAX, Math.max(MIN, n))
-    }
-  }
-  clampMonths()
-  syncLocalFromStore()
-}
-
-function decrement() {
-  store.forecastMonths = Math.max(MIN, displayMonths.value - 1)
-  clampMonths()
-  syncLocalFromStore()
-}
-
-function increment() {
-  store.forecastMonths = Math.min(MAX, displayMonths.value + 1)
-  clampMonths()
-  syncLocalFromStore()
-}
-
-watch(
-  () => store.forecastMonths,
-  () => {
-    clampMonths()
-    if (!isEditing.value) {
-      syncLocalFromStore()
-    }
-  },
-  { immediate: true },
-)
+onMounted(() => document.addEventListener('click', onOutsideClick))
+onUnmounted(() => document.removeEventListener('click', onOutsideClick))
 </script>
 
 <style scoped>
-/* Matches `.input` / form controls in DrugForecastForm: radius, border, focus, compact height. */
-.period-input-container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.35rem;
-  min-width: 0;
-}
-
-.period-print-line {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--muted);
-}
-
-.period-field {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.85rem;
-  min-width: 0;
-}
-
-.period-field__icon {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+.chip-wrap {
+  position: relative;
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  padding-top: 0.1rem;
-  color: var(--muted);
 }
 
-.period-calendar-icon {
-  display: block;
-  width: 24px;
-  height: 24px;
-}
-
-.period-field__label {
+/* ── Trigger ── */
+.v1-control {
   display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-width: 4.6rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.22;
-  letter-spacing: 0.01em;
-  color: var(--muted);
-}
-
-.period-field__label-line {
-  display: block;
-}
-
-.period-stepper {
-  --period-divider: color-mix(in oklab, var(--ink) 10%, transparent);
-
-  display: inline-flex;
-  flex-direction: row;
-  align-items: stretch;
-  flex-shrink: 0;
-  min-height: 2.65rem;
-  margin-left: auto;
-  border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
-  border-radius: var(--radius-md);
-  background: var(--paper);
-  overflow: hidden;
-  transition:
-    border-color 0.3s,
-    box-shadow 0.3s;
-}
-
-.period-field:focus-within .period-stepper {
-  outline: none;
-  border-color: color-mix(in oklab, var(--accent) 45%, var(--faint));
-  box-shadow:
-    0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent),
-    0 10px 18px rgba(15, 23, 42, 0.08);
-}
-
-.period-stepper__stack {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  flex: 0 0 auto;
-  border-left: 1px solid var(--period-divider);
-}
-
-.period-stepper__btn {
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  flex: 0 0 2rem;
-  width: 2.4rem;
-  min-width: 2.4rem;
-  min-height: 2.65rem;
-  padding: 0;
-  color: color-mix(in oklab, var(--ink) 88%, var(--muted));
-  background: color-mix(in oklab, var(--paper) 96%, var(--bg1));
-  border: none;
-  border-radius: 0;
+  gap: 4px;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+  padding: 4px 8px 4px 6px;
+  border-radius: 8px;
+  transition: background 0.15s;
+  margin: -4px 0 -4px -6px;
+  user-select: none;
 }
 
-.period-stepper__btn--dec {
-  border-right: 1px solid var(--period-divider);
+.v1-control:hover,
+.v1-control.open {
+  background: rgba(0, 0, 0, 0.05);
 }
 
-.period-stepper__btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.38;
+/* ── Chevron ── */
+.v1-chev {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: #888;
+  transition: color 0.15s;
 }
 
-.period-stepper__btn:not(:disabled):hover {
-  background: color-mix(in oklab, var(--paper) 88%, var(--bg1));
+.v1-control:hover .v1-chev,
+.v1-control.open .v1-chev {
+  color: #555;
 }
 
-.period-stepper__btn:not(:disabled):active {
-  background: color-mix(in oklab, var(--paper) 82%, var(--bg1));
+.chev-icon {
+  width: 11px;
+  height: 11px;
+  transition: transform 0.18s;
 }
 
-.period-stepper__glyph {
+.v1-control.open .chev-icon {
+  transform: rotate(-90deg);
+}
+
+/* ── Value label ── */
+.v1-val {
+  font-size: 15px;
+  font-weight: 500;
+  color: #111;
+  border-bottom: 1px dashed #bbb;
+  line-height: 1.5;
+  padding: 0 1px;
+  white-space: nowrap;
+  transition: border-color 0.15s;
+}
+
+.v1-control:hover .v1-val,
+.v1-control.open .v1-val {
+  /* border-bottom-style: solid; */
+  border-bottom-color: transparent;
+}
+
+
+
+/* ── Dropdown panel ── */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  z-index: 30;
+  display: none;
+  width: 224px;
+}
+
+.dropdown.open {
   display: block;
+}
+
+.dd-heading {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #aaa;
+  padding: 12px 14px 8px;
+}
+
+.dd-sep {
+  height: 0.5px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 6px 14px 8px;
+}
+
+/* ── Preset grid ── */
+.preset-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  padding: 0 14px;
+}
+
+.preset-row button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 2px 5px;
+  border: 0.5px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.1s;
+  gap: 1px;
+}
+
+.preset-row button:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.preset-row button.active {
+  background: #111;
+  border-color: #111;
+}
+
+.pv {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111;
+  line-height: 1.2;
+}
+
+.pu {
+  font-size: 9px;
+  color: #aaa;
+}
+
+.preset-row button.active .pv {
+  color: #fff;
+}
+
+.preset-row button.active .pu {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Custom input row ── */
+.custom-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px 12px;
+}
+
+.custom-row label {
+  font-size: 12px;
+  color: #888;
   flex-shrink: 0;
 }
 
-.period-stepper__value {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 1 auto;
-  min-width: 7ch;
-  width: 4.75ch;
-  padding: 0.45rem 0.4rem;
-}
-
-.period-input {
-  width: 100%;
-  min-width: 0;
-  border: none;
-  background: transparent;
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.01em;
-  line-height: 1.25;
-  text-align: center;
-  color: var(--ink);
+.custom-row input[type='number'] {
+  width: 52px;
+  padding: 4px 6px;
+  font-size: 13px;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+  color: #111;
+  font-family: inherit;
   -moz-appearance: textfield;
-  appearance: textfield;
-}
-
-.period-input:focus {
   outline: none;
+  text-align: center;
 }
 
-.period-input::placeholder {
-  color: color-mix(in oklab, var(--muted) 72%, var(--paper));
-  font-size: 0.875rem;
+.custom-row input[type='number']:focus {
+  border-color: rgba(0, 0, 0, 0.3);
 }
 
-.period-input::-webkit-outer-spin-button,
-.period-input::-webkit-inner-spin-button {
+.custom-row input[type='number']::-webkit-inner-spin-button,
+.custom-row input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
-  margin: 0;
 }
 
-@media (max-width: 640px) {
-  .period-field__label {
-    min-width: 0;
-    flex: 1 1 calc(100% - 2rem);
-  }
-
-  .period-stepper {
-    margin-left: 0;
-    width: 100%;
-    max-width: 100%;
-    justify-content: space-between;
-  }
-
-  .period-stepper__value {
-    flex: 1 1 auto;
-    width: auto;
-    min-width: 4ch;
-  }
+.unit {
+  font-size: 12px;
+  color: #888;
 }
 
+/* ── Print ── */
 @media print {
-  .period-input-container {
-    gap: 0.35rem;
-  }
 
-  .period-field__icon {
-    display: none;
-  }
-
-  .period-field__label {
-    display: none;
-  }
-
-  .period-stepper {
-    border: none;
-    box-shadow: none;
-    background: transparent;
-    overflow: visible;
-    min-height: 0;
-    height: auto;
-    width: auto;
-  }
-
-  .period-stepper__stack {
+  .v1-chev,
+  .dropdown {
     display: none !important;
   }
 
-  .period-stepper__btn {
-    display: none;
+  .v1-val {
+    border: none !important;
   }
 
-  .period-stepper__value {
-    border-left: none !important;
-    padding: 0;
-    min-width: 0;
-    width: auto;
-    justify-content: flex-start;
+  .v1-control {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: default;
   }
+}
 
-  .period-input {
-    display: none;
+@media not print {
+
+  /* ── Muted suffix ── */
+  .s-muted {
+    font-size: 14px;
+    color: #888;
+    white-space: nowrap;
   }
 }
 </style>

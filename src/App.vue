@@ -19,8 +19,8 @@
       <main>
         <div class="content">
           <div class="content-header">
-            <h2>{{ store.forecastMonths }}-month drug stock forecast</h2>
-            <ForecastPeriodControl />
+            <h2>{{ forecastMonths }}-month drug stock forecast</h2>
+            <ForecastPeriodControl v-model="forecastMonths" />
           </div>
           <TheForecast />
           <!-- <Assumptions /> -->
@@ -50,9 +50,10 @@ import TheForecast from './components/TheForecast.vue'
 import ForecastControls from './features/drug-forecast/components/ForecastControls.vue'
 import ForecastPeriodControl from './features/drug-forecast/components/ForecastPeriodControl.vue'
 // import Assumptions from './components/Assumptions.vue'
+import { storeToRefs } from 'pinia'
 import { useDrugCalcStore } from './stores/drugsCalculator'
 
-const store = useDrugCalcStore()
+const { forecastMonths } = storeToRefs(useDrugCalcStore())
 </script>
 
 <style>
@@ -108,8 +109,15 @@ a {
 
   .content-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0.75rem;
+  }
+
+  .content-header h2 {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .share-button-container {
@@ -188,6 +196,7 @@ h3:not(:first-child) {
 @media not print {
   .content {
     padding: var(--space-6);
+    padding-top: var(--space-5);
     width: 100%;
     background-color: var(--paper);
     border: 1px solid var(--faint);
@@ -219,6 +228,10 @@ h3:not(:first-child) {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.content-header h2 {
+  text-align: left;
 }
 
 .share-button-container {
