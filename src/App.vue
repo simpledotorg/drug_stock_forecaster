@@ -23,7 +23,7 @@
             <!-- <Assumptions /> -->
           </div>
           <div :class="{ 'print-hide': !includeBreakdownInPrint }">
-            <CollapsibleSection title="Calculation breakdown">
+            <CollapsibleSection title="Calculation breakdown" :defaultOpen="false">
               <template #actions>
                 <label class="print-include-toggle" @click.stop>
                   <input

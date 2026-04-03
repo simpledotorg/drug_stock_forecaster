@@ -13,7 +13,8 @@
   </div> -->
   <div class="content-padding">
     <h3>Monthly breakdown</h3>
-    <p class="small-text">The table below shows the monthly breakdown of the drug stock forecast.</p>
+    <p class="small-text">View the monthly breakdown of the drug stock forecast.</p>
+    <p class="small-text">Doses are cumulative. Each column shows what's added at that step, not the full regimen.</p>
     <div class="table-scroll">
       <table>
         <thead>
@@ -83,7 +84,6 @@ function stepTooltipText(idx) {
 </script>
 
 <style scoped>
-
 h3 {
   margin-top: 0;
   margin-bottom: 0;
@@ -205,7 +205,7 @@ td {
 .step-tooltip-text {
   display: inline-block;
   font-size: 0.75rem;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   letter-spacing: 0.06em;
   color: #666;
   text-decoration: underline;

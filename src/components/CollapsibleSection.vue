@@ -1,20 +1,11 @@
 <template>
   <div class="collapsible-section">
-    <div
-      class="toggle-row hide-on-print"
-      :class="{ open: isOpen }"
-      @click="toggle"
-    >
+    <div class="toggle-row hide-on-print" :class="{ open: isOpen }" @click="toggle">
       <div class="toggle-left">
         <span class="chev-wrap">
           <svg class="chev-icon" viewBox="0 0 11 11" fill="none">
-            <path
-              d="M2 4L5.5 7.5L9 4"
-              stroke="currentColor"
-              stroke-width="1.4"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+            <path d="M2 4L5.5 7.5L9 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </span>
         <span class="toggle-title">{{ title }}</span>
@@ -22,12 +13,8 @@
       </div>
       <slot name="actions" />
     </div>
- 
-    <div
-      class="content-wrap"
-      ref="contentRef"
-      :style="contentStyle"
-    >
+
+    <div class="content-wrap" ref="contentRef" :style="contentStyle">
       <div class="content-inner" ref="innerRef">
         <slot />
       </div>
@@ -153,9 +140,16 @@ onBeforeUnmount(() => {
 /* ── Title + meta ── */
 .toggle-title {
   font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
-  color: var(--color-text-primary, #111);
+  /* color: var(--color-text-primary, #111); */
+  color: #666;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: #888;
+  white-space: nowrap;
 }
 
 .toggle-meta {
@@ -174,9 +168,6 @@ onBeforeUnmount(() => {
     opacity 0.22s ease;
 }
 
-.content-inner {
-  /* no fixed padding — let slotted content control its own spacing */
-}
 
 /* ── Print ── */
 @media print {
