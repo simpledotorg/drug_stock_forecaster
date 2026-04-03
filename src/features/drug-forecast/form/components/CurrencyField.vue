@@ -1,6 +1,6 @@
 <template>
   <div class="form-group hide-on-print">
-    <label for="currencySymbol">Currency symbol</label>
+    <label for="currencySymbol">Currency symbol <span class="optional">OPTIONAL</span></label>
     <div class="currency-group">
       <input
         id="currencySymbol"

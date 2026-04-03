@@ -272,4 +272,13 @@ label {
   min-width: 0;
   width: 100%;
 }
+
+.optional {
+  font-size: 0.7rem;
+  color: #666;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin-left: 0.3rem;
+}
 </style>
