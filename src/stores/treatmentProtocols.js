@@ -54,7 +54,7 @@ export function createInitialProtocols() {
             steps: [
                 { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
                 { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40, fullRegimen: 'Amlodipine 10mg'   },
-                { label: 'Telmisartan 40mg', drugIds: ['losartan-50mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg' },
+                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg' },
                 { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg + Hydrochlorothiazide 25mg' },
             ],
             otherDrugs: [
