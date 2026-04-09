@@ -2,7 +2,8 @@
   <CollapsibleSection v-if="activeProtocol" title="Treatment protocol & control assumptions" :meta="activeProtocol.name"
     :default-open="false" show-print-include v-model:include-in-print="includeInPrint">
     <template #meta>
-      <span v-if="isActiveProtocolAssumptionsDirty" class="meta-warning">Adjusted from defaults</span>
+      <span v-if="isActiveProtocolAssumptionsDirty" class="meta-warning">
+        Adjusted from defaults</span>
     </template>
     <div class="content-padding">
 
@@ -28,8 +29,7 @@
                 <div class="assumption-cell">
                   <span
                     v-if="defaultPercentageForStep(idx) !== null && Number(step.percentage) !== Number(defaultPercentageForStep(idx))"
-                    class="assumption-default-label hide-on-print"
-                  >
+                    class="assumption-default-label hide-on-print">
                     Default {{ defaultPercentageForStep(idx) }}%
                   </span>
                   <input v-model.number="step.percentage" class="input input--pct hide-on-print" type="number" min="0"
@@ -42,6 +42,36 @@
           </tbody>
         </table>
       </div>
+
+      <div v-if="activeProtocol.otherDrugs?.length" class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="left-align">Other drugs</th>
+              <th class="number-header">Patients on treatment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(drug, idx) in activeProtocol.otherDrugs" :key="activeProtocol.id + '-other-' + idx">
+              <td class="regimen-cell left-align">{{ drug.fullRegimen ?? drug.label }}</td>
+              <td>
+                <div class="assumption-cell">
+                  <span
+                    v-if="defaultPercentageForOtherDrug(idx) !== null && Number(drug.percentage) !== Number(defaultPercentageForOtherDrug(idx))"
+                    class="assumption-default-label hide-on-print">
+                    Default {{ defaultPercentageForOtherDrug(idx) }}%
+                  </span>
+                  <input v-model.number="drug.percentage" class="input input--pct hide-on-print" type="number" min="0"
+                    max="100" step="1" inputmode="numeric" required />
+                  <span class="show-on-print">{{ drug.percentage }}</span>
+                  <span class="margin-left">%</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <div class="actions-row">
         <button v-if="isActiveProtocolAssumptionsDirty" class="reset-btn" type="button"
           @click="() => store.resetActiveProtocolAssumptions()">
@@ -82,6 +112,12 @@ const canonicalActiveProtocol = computed(() => {
 
 function defaultPercentageForStep(idx) {
   const pct = canonicalActiveProtocol.value?.steps?.[idx]?.percentage
+  if (pct === undefined || pct === null || Number.isNaN(Number(pct))) return null
+  return Number(pct)
+}
+
+function defaultPercentageForOtherDrug(idx) {
+  const pct = canonicalActiveProtocol.value?.otherDrugs?.[idx]?.percentage
   if (pct === undefined || pct === null || Number.isNaN(Number(pct))) return null
   return Number(pct)
 }
