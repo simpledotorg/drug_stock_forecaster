@@ -12,22 +12,27 @@ function toNumber(v: unknown): number | undefined {
 }
 
 const OD_PREFIX = 'od_'
+const ST_PREFIX = 'st_'
 
-/** Query key: od_<protocolId>_<lineIndex> — lineIndex is the row in that protocol's otherDrugs array. */
-function otherDrugsPctQueryKey(protocolId: string, lineIndex: number): string {
-  return `${OD_PREFIX}${protocolId}_${lineIndex}`
+/**
+ * URL format is intentionally scoped to the active protocol only.
+ * Query key: st_<stepIndex> and od_<lineIndex>
+ */
+function stepPctQueryKey(stepIndex: number): string {
+  return `${ST_PREFIX}${stepIndex}`
 }
 
-function parseOtherDrugsPctKey(key: string): { protocolId: string; index: number } | null {
-  if (!key.startsWith(OD_PREFIX)) return null
-  const rest = key.slice(OD_PREFIX.length)
-  const lastUs = rest.lastIndexOf('_')
-  if (lastUs <= 0) return null
-  const protocolId = rest.slice(0, lastUs)
-  const idxStr = rest.slice(lastUs + 1)
-  const index = Number.parseInt(idxStr, 10)
+function otherDrugsPctQueryKey(lineIndex: number): string {
+  return `${OD_PREFIX}${lineIndex}`
+}
+
+function parseIndexOnlyKey(key: string, prefix: string): number | null {
+  if (!key.startsWith(prefix)) return null
+  const rest = key.slice(prefix.length)
+  if (rest.includes('_')) return null
+  const index = Number.parseInt(rest, 10)
   if (!Number.isFinite(index) || index < 0) return null
-  return { protocolId, index }
+  return index
 }
 
 function getProtocolsList(store: any): any[] {
@@ -35,41 +40,81 @@ function getProtocolsList(store: any): any[] {
   return Array.isArray(p) ? p : []
 }
 
-function applyOtherDrugsFromQuery(q: Record<string, any>, store: any) {
+function getActiveProtocol(store: any): any | null {
+  if (store?.activeProtocol) return store.activeProtocol
+  const id = store?.activeProtocolId
   const list = getProtocolsList(store)
-  if (!list.length) return
+  return list.find((p: { id: string }) => p.id === id) ?? null
+}
+
+function applyStepsFromQuery(q: Record<string, any>, store: any) {
+  const active = getActiveProtocol(store)
+  const steps = active?.steps
+  if (!Array.isArray(steps) || !steps.length) return
+
   for (const key of Object.keys(q)) {
-    const parsed = parseOtherDrugsPctKey(key)
-    if (!parsed) continue
     const val = toNumber(q[key])
     if (val === undefined) continue
-    const proto = list.find((p: { id: string }) => p.id === parsed.protocolId)
-    const lines = proto?.otherDrugs
-    if (!Array.isArray(lines) || lines[parsed.index] == null) continue
-    lines[parsed.index].percentage = val
+
+    const idxOnly = parseIndexOnlyKey(key, ST_PREFIX)
+    if (idxOnly !== null) {
+      if (steps[idxOnly] != null) steps[idxOnly].percentage = val
+      continue
+    }
   }
+}
+
+function applyOtherDrugsFromQuery(q: Record<string, any>, store: any) {
+  const active = getActiveProtocol(store)
+  const lines = active?.otherDrugs
+  if (!Array.isArray(lines) || !lines.length) return
+
+  for (const key of Object.keys(q)) {
+    const val = toNumber(q[key])
+    if (val === undefined) continue
+
+    const idxOnly = parseIndexOnlyKey(key, OD_PREFIX)
+    if (idxOnly !== null) {
+      if (lines[idxOnly] != null) lines[idxOnly].percentage = val
+      continue
+    }
+  }
+}
+
+function appendStepsToQuery(query: Record<string, string>, store: any) {
+  const active = getActiveProtocol(store)
+  const steps = active?.steps
+  if (!Array.isArray(steps) || !steps.length) return
+  steps.forEach((step: { percentage?: number }, idx: number) => {
+    const p = step.percentage
+    if (p === null || p === undefined) return
+    if (typeof p === 'number' && Number.isFinite(p)) {
+      query[stepPctQueryKey(idx)] = String(p)
+    }
+  })
 }
 
 function appendOtherDrugsToQuery(query: Record<string, string>, store: any) {
-  const list = getProtocolsList(store)
-  for (const proto of list) {
-    const lines = proto?.otherDrugs
-    if (!Array.isArray(lines) || !lines.length) continue
-    lines.forEach((line: { percentage?: number }, idx: number) => {
-      const p = line.percentage
-      if (p === null || p === undefined) return
-      if (typeof p === 'number' && Number.isFinite(p)) {
-        query[otherDrugsPctQueryKey(proto.id, idx)] = String(p)
-      }
-    })
-  }
+  const active = getActiveProtocol(store)
+  const lines = active?.otherDrugs
+  if (!Array.isArray(lines) || !lines.length) return
+  lines.forEach((line: { percentage?: number }, idx: number) => {
+    const p = line.percentage
+    if (p === null || p === undefined) return
+    if (typeof p === 'number' && Number.isFinite(p)) {
+      query[otherDrugsPctQueryKey(idx)] = String(p)
+    }
+  })
+}
+
+function stepPercentagesSignature(store: any): string {
+  const active = getActiveProtocol(store)
+  return (active?.steps ?? []).map((s: { percentage?: number }) => s.percentage ?? '').join(',')
 }
 
 function otherDrugsPercentagesSignature(store: any): string {
-  const list = getProtocolsList(store)
-  return list
-    .map((proto) => (proto.otherDrugs ?? []).map((l: { percentage?: number }) => l.percentage ?? '').join(','))
-    .join('|')
+  const active = getActiveProtocol(store)
+  return (active?.otherDrugs ?? []).map((l: { percentage?: number }) => l.percentage ?? '').join(',')
 }
 
 function drugCostQueryKey(drugId: string): string {
@@ -158,6 +203,7 @@ export function useDrugCalcQuerySync(store: any) {
         if (typeof raw === 'string') storeRef.value = raw
       }
     }
+    applyStepsFromQuery(q as Record<string, any>, store)
     applyOtherDrugsFromQuery(q as Record<string, any>, store)
     applyDrugCostsFromQuery(q as Record<string, any>, store)
   }
@@ -172,6 +218,7 @@ export function useDrugCalcQuerySync(store: any) {
       if (typeof v === 'number' && !Number.isFinite(v)) continue
       query[key] = String(v)
     }
+    appendStepsToQuery(query, store)
     appendOtherDrugsToQuery(query, store)
 
     const catalog = store.drugCatalog
@@ -191,6 +238,7 @@ export function useDrugCalcQuerySync(store: any) {
   watch(
     () => ({
       static: ALL_KEYS.map((key) => refs[key]?.value),
+      steps: stepPercentagesSignature(store),
       otherDrugs: otherDrugsPercentagesSignature(store),
       drugCosts: Array.isArray(store.drugCatalog)
         ? store.drugCatalog.map((d: { costPerTablet?: number }) => d.costPerTablet)
