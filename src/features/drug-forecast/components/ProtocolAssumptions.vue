@@ -1,16 +1,16 @@
 <template>
-  <CollapsibleSection
-    v-if="activeProtocol"
-    title="Protocol assumptions"
-    :meta="activeProtocol.name"
-    :default-open="false"
-    show-print-include
-    v-model:include-in-print="includeInPrint"
-  >
+  <CollapsibleSection v-if="activeProtocol" title="Treatment protocol & control assumptions" :meta="activeProtocol.name"
+    :default-open="false" show-print-include v-model:include-in-print="includeInPrint">
+    <template #meta>
+      <span v-if="isActiveProtocolAssumptionsDirty" class="meta-warning">Adjusted from defaults</span>
+    </template>
     <div class="content-padding">
 
       <h3>Treatment protocol control assumptions</h3>
-      <p class="small-text">Important: The tool is customized based on real-world experience with treatment protocols. Control rates at each step reflect experience from 1M+ patients and can be updated with local data. Any future protocol changes will require formula adjustments — ideally updated and redistributed at the national/provincial level.</p>
+      <p class="small-text">Important: The tool is customized based on real-world experience with treatment protocols.
+        Control rates at each step reflect experience from 1M+ patients and can be updated with local data. Any future
+        protocol changes will require formula adjustments — ideally updated and redistributed at the national/provincial
+        level.</p>
       <div class="table-scroll">
         <table>
           <thead>
@@ -25,18 +25,18 @@
               <td class="step-cell left-align">{{ idx + 1 }}</td>
               <td class="regimen-cell left-align">{{ step.fullRegimen ?? step.label }}</td>
               <td>
-                <input
-                  v-model.number="step.percentage"
-                  class="input input--pct hide-on-print"
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="1"
-                  inputmode="numeric"
-                  required
-                />
-                <span class="show-on-print">{{ step.percentage }}</span>
-                <span class="margin-left">%</span>
+                <div class="assumption-cell">
+                  <span
+                    v-if="defaultPercentageForStep(idx) !== null && Number(step.percentage) !== Number(defaultPercentageForStep(idx))"
+                    class="assumption-default-label hide-on-print"
+                  >
+                    Default {{ defaultPercentageForStep(idx) }}%
+                  </span>
+                  <input v-model.number="step.percentage" class="input input--pct hide-on-print" type="number" min="0"
+                    max="100" step="1" inputmode="numeric" required />
+                  <span class="show-on-print">{{ step.percentage }}</span>
+                  <span class="margin-left">%</span>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -48,6 +48,9 @@
           Reset assumptions
         </button>
       </div>
+      <slot name="actions">
+
+      </slot>
     </div>
   </CollapsibleSection>
 </template>
@@ -70,11 +73,24 @@ const activeProtocol = computed(() => {
   return protocols.value?.find((p) => p.id === id) ?? null
 })
 
+const canonicalProtocols = computed(() => createInitialProtocols())
+
+const canonicalActiveProtocol = computed(() => {
+  const id = activeProtocolId.value
+  return canonicalProtocols.value?.find((p) => p.id === id) ?? null
+})
+
+function defaultPercentageForStep(idx) {
+  const pct = canonicalActiveProtocol.value?.steps?.[idx]?.percentage
+  if (pct === undefined || pct === null || Number.isNaN(Number(pct))) return null
+  return Number(pct)
+}
+
 /** Compare live `protocols` to fresh defaults from `createInitialProtocols()` (same source as reset). */
 const isActiveProtocolAssumptionsDirty = computed(() => {
   const id = activeProtocolId.value
   const current = protocols.value?.find((p) => p.id === id)
-  const initial = createInitialProtocols().find((p) => p.id === id)
+  const initial = canonicalProtocols.value.find((p) => p.id === id)
   if (!current?.steps?.length || !initial?.steps?.length) return false
   const a = current.steps
   const b = initial.steps
@@ -96,6 +112,27 @@ const isActiveProtocolAssumptionsDirty = computed(() => {
 h3 {
   margin-top: 0;
   margin-bottom: 0;
+}
+
+.meta-warning {
+  font-size: 12px;
+  font-weight: 400;
+  color: #a16207;
+  margin-left: 0.25rem;
+}
+
+.assumption-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.assumption-default-label {
+  font-size: 0.75rem;
+  color: color-mix(in oklab, var(--muted, #64748b) 70%, var(--ink, #0f172a));
+  white-space: nowrap;
 }
 
 @media print {
@@ -189,7 +226,7 @@ td {
 .step-cell {
   width: 6rem;
   font-family: var(--font-mono-table);
-  color: #666;
+  color: var(--warm-gray-700, #666);
 }
 
 .regimen-cell {
@@ -232,8 +269,8 @@ td {
 .reset-btn {
   /* border: 1px solid color-mix(in oklab, var(--faint) 70%, #0000);
    */
-   border: none;
-   background: #ededed;
+  border: none;
+  background: #ededed;
   padding: 0.4rem 1rem;
   border-radius: 10px;
   font-weight: 600;
@@ -283,12 +320,12 @@ td {
   font-size: 0.75rem;
   /* text-transform: uppercase; */
   letter-spacing: 0.06em;
-  color: #666;
+  color: var(--warm-gray-700, #666);
   text-decoration: underline;
   text-decoration-style: dashed;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  text-decoration-color: #888;
+  text-decoration-color: var(--warm-gray-600, #888);
 }
 
 .step-tooltip-bubble {

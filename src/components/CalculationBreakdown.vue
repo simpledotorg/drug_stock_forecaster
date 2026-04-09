@@ -1,16 +1,4 @@
 <template>
-  <!-- <div class="breakdown-toggle-wrap hide-on-print">
-    <button type="button" class="forecast-chip forecast-chip--breakdown" :class="{ 'is-open': store.showCalculation }"
-      :aria-expanded="store.showCalculation" @click="store.showCalculation = !store.showCalculation">
-      <span class="forecast-chip__chev" aria-hidden="true">
-        <svg class="forecast-chip__chev-icon" viewBox="0 0 11 11" fill="none">
-          <path d="M2 4L5.5 7.5L9 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
-      </span>
-      <span class="forecast-chip__muted">{{ store.showCalculation ? 'Hide' : 'Show' }} monthly breakdown</span>
-    </button>
-  </div> -->
   <div class="content-padding">
     <h3>Monthly breakdown</h3>
     <div class="table-scroll">

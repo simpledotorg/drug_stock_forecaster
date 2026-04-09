@@ -9,7 +9,8 @@
           </svg>
         </span>
         <span class="toggle-title">{{ title }}</span>
-        <span v-if="meta" class="toggle-meta">{{ meta }}</span>
+        <!-- <span v-if="meta" class="toggle-meta">{{ meta }}</span> -->
+        <slot name="meta" />
       </div>
       <div class="toggle-actions hide-on-print">
         <label v-if="showPrintInclude" class="print-include-toggle" @click.stop>
