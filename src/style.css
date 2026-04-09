@@ -1,13 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Spline+Sans:wght@300;400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Spline+Sans:wght@300;400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600;700&display=swap");
 
 :root {
   --font-body: "Spline Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   /* No “Spline Serif” on Google Fonts; use for rare serif-only contexts */
   --font-serif: ui-serif, Georgia, "Times New Roman", serif;
   --font-display: var(--font-body);
-  --font-mono: "Spline Sans Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-mono-table: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-
+  --font-mono:
+    "Spline Sans Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono-table:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Screen background tints (slightly darker for contrast) */
   --bg0: #f3ede6;
@@ -32,8 +33,7 @@
 
   /* Main content card — light paper lift, not a deep float */
   --shadow-1:
-    0 1px 2px rgba(15, 23, 42, 0.04),
-    0 2px 6px rgba(15, 23, 42, 0.05),
+    0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.05),
     0 6px 16px rgba(15, 23, 42, 0.04);
   --shadow-2: 0 2px 10px rgba(15, 23, 42, 0.08);
 
@@ -103,12 +103,6 @@ a {
   transition: background 0.15s;
   margin: 0.75rem 0 -4px -6px;
   user-select: none;
-}
-
-@media print {
-  .forecast-chip {
-    margin-top: 0;
-  }
 }
 
 button.forecast-chip {
@@ -241,6 +235,10 @@ button.forecast-chip:focus-visible {
     border-bottom: none !important;
     color: #000 !important;
   }
+
+  .forecast-chip__val {
+    font-size: 13px;
+  }
 }
 
 .mono-font {
@@ -264,6 +262,11 @@ button.forecast-chip:focus-visible {
 }
 
 @media print {
+  /* Slightly smaller base type for print (screen stays at browser default). */
+  html {
+    font-size: 87.5%;
+  }
+
   :root {
     --paper: #fff;
     --ink: #000;

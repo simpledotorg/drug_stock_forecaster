@@ -26,3 +26,15 @@ function costFieldValue(v) {
 }
 </script>
 
+<style scoped>
+h4 {
+  padding-top: 1.3rem;
+  margin-top: 0.7rem;
+  border-top: 1px solid #ddd;
+  color: #888;
+  font-weight: 500;
+  font-size: 0.90rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.2rem;
+}
+</style>

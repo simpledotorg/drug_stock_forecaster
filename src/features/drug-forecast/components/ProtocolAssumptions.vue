@@ -44,7 +44,7 @@
       </div>
       <div class="actions-row">
         <button v-if="isActiveProtocolAssumptionsDirty" class="reset-btn" type="button"
-          @click="resetActiveProtocolAssumptions">
+          @click="() => store.resetActiveProtocolAssumptions()">
           Reset assumptions
         </button>
       </div>
@@ -57,15 +57,39 @@ import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import CollapsibleSection from '../../../components/CollapsibleSection.vue'
 import { useDrugCalcStore } from '../../../stores/drugsCalculator'
+import { createInitialProtocols } from '../../../stores/treatmentProtocols'
 
 /** Synced with parent `App.vue` for `@media print` visibility via `.print-hide`. */
 const includeInPrint = defineModel('includeInPrint', { type: Boolean, default: false })
 
 const store = useDrugCalcStore()
-const { activeProtocol } = storeToRefs(store)
-/** Not from storeToRefs: Vue 3.5 computed refs may omit `.effect`, so Pinia skips them in storeToRefs. */
-const isActiveProtocolAssumptionsDirty = computed(() => store.isActiveProtocolAssumptionsDirty)
-const { resetActiveProtocolAssumptions } = store
+const { protocols, activeProtocolId } = storeToRefs(store)
+
+const activeProtocol = computed(() => {
+  const id = activeProtocolId.value
+  return protocols.value?.find((p) => p.id === id) ?? null
+})
+
+/** Compare live `protocols` to fresh defaults from `createInitialProtocols()` (same source as reset). */
+const isActiveProtocolAssumptionsDirty = computed(() => {
+  const id = activeProtocolId.value
+  const current = protocols.value?.find((p) => p.id === id)
+  const initial = createInitialProtocols().find((p) => p.id === id)
+  if (!current?.steps?.length || !initial?.steps?.length) return false
+  const a = current.steps
+  const b = initial.steps
+  if (a.length !== b.length) return true
+  for (let i = 0; i < a.length; i++) {
+    if (Number(a[i]?.percentage) !== Number(b[i]?.percentage)) return true
+  }
+  const co = current.otherDrugs ?? []
+  const io = initial.otherDrugs ?? []
+  if (co.length !== io.length) return co.length > 0 || io.length > 0
+  for (let i = 0; i < co.length; i++) {
+    if (Number(co[i]?.percentage) !== Number(io[i]?.percentage)) return true
+  }
+  return false
+})
 </script>
 
 <style scoped>

@@ -50,11 +50,22 @@ const store = useDrugCalcStore()
 .summary-cost {
   margin: 0;
   text-align: center;
-  font-size: 3.75em;
+  font-size: 3.5em;
   font-weight: 600;
   /* font-family: var(--font-mono-table); */
   font-variant-numeric: tabular-nums;
   line-height: 1.05;
   letter-spacing: 0.02em;
+}
+
+@media print {
+  .summary-container {
+    padding: 1.25rem 1rem;
+    margin-top: 1.25rem;
+  }
+
+  .summary-cost {
+    font-size: 2.65em;
+  }
 }
 </style>

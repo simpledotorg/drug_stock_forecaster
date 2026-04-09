@@ -24,21 +24,18 @@
             <!-- <Assumptions /> -->
           </div>
           <div :class="{ 'print-hide': !includeBreakdownInPrint }">
-            <CollapsibleSection title="Calculation breakdown" :defaultOpen="false">
-              <template #actions>
-                <label class="print-include-toggle" @click.stop>
-                  <input
-                  v-model="includeBreakdownInPrint"
-                  type="checkbox"
-                  class="print-include-toggle__input"
-                  />
-                  <span class="print-include-toggle__text">Include in printout</span>
-                </label>
-              </template>
+            <CollapsibleSection
+              title="Calculation breakdown"
+              :default-open="false"
+              show-print-include
+              v-model:include-in-print="includeBreakdownInPrint"
+            >
               <CalculationBreakdown />
             </CollapsibleSection>
           </div>
-          <ProtocolAssumptions />
+          <div :class="{ 'print-hide': !includeProtocolAssumptionsInPrint }">
+            <ProtocolAssumptions v-model:include-in-print="includeProtocolAssumptionsInPrint" />
+          </div>
         </div>
         <p class="small-text disclaimer">
           <strong>Disclaimer:</strong>
@@ -81,6 +78,9 @@ const { forecastMonths } = storeToRefs(useDrugCalcStore())
 
 /** When false, the drug breakdown block is omitted from printed output. */
 const includeBreakdownInPrint = ref(false)
+
+/** When false, protocol assumptions are omitted from printed output. */
+const includeProtocolAssumptionsInPrint = ref(false)
 </script>
 
 <style>
@@ -273,35 +273,6 @@ h3:not(:first-child) {
   /* padding: 0 0.5rem; */
 }
 
-.print-include-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  cursor: pointer;
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  color: color-mix(in oklab, var(--muted) 88%, var(--paper));
-  user-select: none;
-}
-
-.print-include-toggle__input {
-  width: 0.875rem;
-  height: 0.875rem;
-  accent-color: color-mix(in oklab, var(--accent2) 50%, var(--muted));
-  cursor: pointer;
-}
-
-.print-include-toggle:hover .print-include-toggle__text {
-  color: color-mix(in oklab, var(--muted) 35%, var(--ink));
-}
-
-@media print {
-  .print-include-toggle {
-    display: none;
-  }
-}
-
 .print-hide {
   @media print {
     display: none;
@@ -324,6 +295,11 @@ footer {
 }
 
 @media print {
+  h1 {
+    font-size: 1.9rem;
+    line-height: 1.12;
+  }
+
   .wrapper {
     max-width: none;
     padding: 0;

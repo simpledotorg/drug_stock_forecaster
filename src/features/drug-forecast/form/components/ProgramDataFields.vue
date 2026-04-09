@@ -81,5 +81,11 @@ defineEmits([
 <style scoped>
 h4 {
   margin-top: 4rem;
+  color: #888;
+  font-weight: 500;
+  font-size: 0.90rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.2rem;
 }
+
 </style>

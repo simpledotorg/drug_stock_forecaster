@@ -1,10 +1,10 @@
 <template>
-  <h3>Cost by drug</h3>
+  <h3>By drug</h3>
   <div class="table-scroll">
     <table>
       <thead>
         <tr>
-          <th class="blank-header"></th>
+          <th class="text-left">Drug</th>
           <th>Tablets</th>
           <th>Cost <span v-if="store.currencySymbol !== ''">({{ store.currencySymbol }})</span></th>
         </tr>
@@ -17,7 +17,7 @@
           <td></td>
         </tr> -->
         <tr v-for="row in store.dashboardDrugSections.protocolDrugs" :key="'p-' + row.id">
-          <th>{{ row.name }}</th>
+          <td class="text-left">{{ row.name }}</td>
           <td class="number-cell">{{ formatNumber(row.totalTablets) }}</td>
           <td class="number-cell">
             <span
@@ -36,7 +36,7 @@
             <th colspan="3">Other drugs</th>
           </tr>
           <tr v-for="row in store.dashboardDrugSections.otherOnlyDrugs" :key="'o-' + row.id">
-            <th>{{ row.name }}</th>
+            <td class="text-left">{{ row.name }}</td>
             <td class="number-cell">{{ formatNumber(row.totalTablets) }}</td>
             <td class="number-cell">
               <span
@@ -99,6 +99,15 @@ const store = useDrugCalcStore()
     background: #fff;
   }
 
+
+  .total-row th,
+  .total-row td,
+  .total-row .number-cell,
+  .total-row span 
+  {
+    font-weight: 700;
+  }
+
   .blank-row {
     background: transparent;
   }
@@ -151,18 +160,17 @@ td {
   background-color: #fff9d7;
 }
 
-.total-row th {
-  font-weight: 600;
-}
-
-.total-row .number-cell {
-  font-weight: 600;
-}
-
 .number-cell {
   font-family: var(--font-mono-table);
   font-size: 0.95rem;
   font-weight: 500;
+}
+
+.total-row th,
+.total-row td,
+.total-row .number-cell,
+.total-row span {
+  font-weight: 700;
 }
 
 .currency-symbol-before {
@@ -188,6 +196,10 @@ td {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   vertical-align: middle;
+}
+
+.text-left {
+  text-align: left;
 }
 </style>
 
