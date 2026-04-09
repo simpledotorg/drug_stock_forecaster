@@ -24,7 +24,7 @@
             <tr v-for="(step, idx) in activeProtocol.steps" :key="activeProtocol.id + '-' + idx">
               <td class="step-cell left-align">{{ idx + 1 }}</td>
               <td class="regimen-cell left-align">{{ step.fullRegimen ?? step.label }}</td>
-              <td class="pct-cell">
+              <td>
                 <input
                   v-model.number="step.percentage"
                   class="input input--pct hide-on-print"
@@ -36,7 +36,7 @@
                   required
                 />
                 <span class="show-on-print">{{ step.percentage }}</span>
-                <span>%</span>
+                <span class="margin-left">%</span>
               </td>
             </tr>
           </tbody>
@@ -215,22 +215,11 @@ td {
 }
 
 /* Same visual system as sidebar form fields (`.input` in DrugForecastForm.vue); width tuned for the table. */
-.pct-cell {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
 .input--pct {
-  width: 64px;
+  width: 100%;
   max-width: 5.5rem;
   text-align: right;
   font-variant-numeric: tabular-nums;
-  height: 32px;
-  padding: 0.4rem 0.3rem 0.4rem 0.7rem;
-  margin: -3px 0;
-  border-width: 1px;
 }
 
 .actions-row {
@@ -384,6 +373,20 @@ td {
 
 .left-align {
   text-align: left;
+}
+
+.input--pct {
+  width: 64px;
+  text-align: right;
+  height: 32px;
+  padding: 0.4rem 0.3rem 0.4rem 0.7rem;
+
+  margin: -3px 0;
+  border-width: 1px;
+}
+
+.margin-left {
+  margin-left: 0.4rem;
 }
 
 .input--pct {
