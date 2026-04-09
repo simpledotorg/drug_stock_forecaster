@@ -1,12 +1,12 @@
 <template>
-  <CollapsibleSection v-if="activeProtocol" title="Protocol assumptions" :meta="activeProtocol.name"
-    :defaultOpen="false">
-    <template #actions>
-      <label class="print-include-toggle" @click.stop>
-        <input v-model="includeInPrint" type="checkbox" class="print-include-toggle__input" />
-        <span class="print-include-toggle__text">Include in printout</span>
-      </label>
-    </template>
+  <CollapsibleSection
+    v-if="activeProtocol"
+    title="Protocol assumptions"
+    :meta="activeProtocol.name"
+    :default-open="false"
+    show-print-include
+    v-model:include-in-print="includeInPrint"
+  >
     <div class="content-padding">
 
       <h3>Treatment protocol control assumptions</h3>
@@ -53,6 +53,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import CollapsibleSection from '../../../components/CollapsibleSection.vue'
 import { useDrugCalcStore } from '../../../stores/drugsCalculator'
@@ -61,7 +62,9 @@ import { useDrugCalcStore } from '../../../stores/drugsCalculator'
 const includeInPrint = defineModel('includeInPrint', { type: Boolean, default: false })
 
 const store = useDrugCalcStore()
-const { activeProtocol, isActiveProtocolAssumptionsDirty } = storeToRefs(store)
+const { activeProtocol } = storeToRefs(store)
+/** Not from storeToRefs: Vue 3.5 computed refs may omit `.effect`, so Pinia skips them in storeToRefs. */
+const isActiveProtocolAssumptionsDirty = computed(() => store.isActiveProtocolAssumptionsDirty)
 const { resetActiveProtocolAssumptions } = store
 </script>
 
@@ -94,6 +97,13 @@ h3 {
 
   .total-row {
     background: #fff;
+  }
+
+  .total-row th,
+  .total-row td,
+  .total-row .number-cell,
+  .total-row span {
+    font-weight: 700;
   }
 
   .step-header-row th,
@@ -171,6 +181,13 @@ td {
   justify-content: flex-end;
   gap: 0.25rem;
   flex-wrap: wrap;
+}
+
+.total-row th,
+.total-row td,
+.total-row .number-cell,
+.total-row span {
+  font-weight: 700;
 }
 
 /* Same visual system as sidebar form fields (`.input` in DrugForecastForm.vue); width tuned for the table. */
@@ -324,11 +341,6 @@ td {
 
 .total-row {
   background-color: #fff9d7;
-}
-
-.total-row th,
-.total-row td {
-  font-weight: 700;
 }
 
 .breakdown-toggle-wrap {

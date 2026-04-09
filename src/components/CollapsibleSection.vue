@@ -11,11 +11,17 @@
         <span class="toggle-title">{{ title }}</span>
         <span v-if="meta" class="toggle-meta">{{ meta }}</span>
       </div>
-      <slot name="actions" />
+      <div class="toggle-actions hide-on-print">
+        <label v-if="showPrintInclude" class="print-include-toggle" @click.stop>
+          <input v-model="includeInPrint" type="checkbox" class="print-include-toggle__input" />
+          <span class="print-include-toggle__text">Include in printout</span>
+        </label>
+        <slot name="actions" />
+      </div>
     </div>
 
     <div class="content-wrap" ref="contentRef" :style="contentStyle">
-      <div class="content-inner" ref="innerRef">
+      <div class="content-inner" ref="innerRef" >
         <slot />
       </div>
     </div>
@@ -38,7 +44,14 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  /** When true, shows “Include in printout” bound to v-model:includeInPrint */
+  showPrintInclude: {
+    type: Boolean,
+    default: false,
+  },
 })
+
+const includeInPrint = defineModel('includeInPrint', { type: Boolean, default: false })
 
 const emit = defineEmits(['open', 'close'])
 
@@ -87,7 +100,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .collapsible-section {
-  border-top: 1px solid var(--color-border-tertiary, rgba(0, 0, 0, 0.08));
+  border-top: 1px solid var(--color-border-tertiary, rgba(0, 0, 0, 0.12));
 }
 
 /* ── Toggle row ── */
@@ -98,7 +111,7 @@ onBeforeUnmount(() => {
   padding: 12px var(--space-6);
   cursor: pointer;
   user-select: none;
-  border-bottom: 0.5px solid var(--color-border-tertiary, rgba(0, 0, 0, 0.08));
+  /* border-bottom: 0.5px solid var(--color-border-tertiary, rgba(0, 0, 0, 0.08)); */
   transition: background 0.15s;
 }
 
@@ -134,14 +147,14 @@ onBeforeUnmount(() => {
 }
 
 .toggle-row.open .chev-icon {
-  transform: rotate(-90deg);
+  transform: rotate(-180deg);
 }
 
 /* ── Title + meta ── */
 .toggle-title {
-  font-family: 'IBM Plex Sans', sans-serif;
+
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   /* color: var(--color-text-primary, #111); */
   color: #666;
   text-decoration: underline;
@@ -153,11 +166,43 @@ onBeforeUnmount(() => {
 }
 
 .toggle-meta {
-  font-family: 'IBM Plex Mono', monospace;
+  /* font-family: 'IBM Plex Mono', monospace; */
   font-size: 12px;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-tertiary, #aaa);
-  letter-spacing: -0.01em;
+  margin-left:0.25rem
+  /* letter-spacing: -0.01em; */
+}
+
+.toggle-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.print-include-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: color-mix(in oklab, var(--muted, #64748b) 88%, var(--paper, #fff));
+  user-select: none;
+}
+
+.print-include-toggle__input {
+  width: 0.875rem;
+  height: 0.875rem;
+  accent-color: color-mix(in oklab, var(--accent2, #22c55e) 50%, var(--muted, #64748b));
+  cursor: pointer;
+}
+
+.print-include-toggle:hover .print-include-toggle__text {
+  color: color-mix(in oklab, var(--muted, #64748b) 35%, var(--ink, #0f172a));
 }
 
 /* ── Collapsible content ── */
@@ -178,6 +223,10 @@ onBeforeUnmount(() => {
   .toggle-row {
     background: transparent !important;
     cursor: default;
+  }
+
+  .toggle-actions {
+    display: none;
   }
 
   .content-wrap {
