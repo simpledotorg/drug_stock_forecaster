@@ -86,6 +86,12 @@ onUnmounted(() => document.removeEventListener('click', onOutsideClick))
   flex-shrink: 0;
 }
 
+@media print {
+  .chip-wrap {
+    margin-top: -1.5rem;
+  }
+}
+
 /* ── Dropdown panel ── */
 .dropdown {
   position: absolute;
