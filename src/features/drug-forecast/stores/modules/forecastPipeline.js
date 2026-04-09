@@ -1,7 +1,13 @@
 import { computed } from 'vue'
 import { forecastLinesForPatients, aggregateDrugsFromForecastLines, dashboardDrugSections, buildYearlyBreakdown } from '../../utils/forecastMath'
 
-export function createForecastPipelineModule({ forecastMonths, patientsTreatedFromAdherence, activeProtocol, drugCatalog, expectedCumulativeEnrolment }) {
+export function createForecastPipelineModule({
+  forecastMonths,
+  patientsTreatedFromAdherence,
+  activeProtocol,
+  drugCatalog,
+  expectedCumulativeEnrolment,
+}) {
   const stepForecasts = computed(() => {
     const protocol = activeProtocol.value
     if (!protocol?.steps?.length) return []

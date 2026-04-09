@@ -28,11 +28,16 @@ export function createInputsModule() {
   })
 
   const expectedCumulativeEnrolment = computed(() => {
-    if (!estimatedMonthlyEnrolment.value) return []
+    const months = forecastMonths.value
+    const monthly = estimatedMonthlyEnrolment.value
+    const base = patientsUnderCare.value
+    if (typeof months !== 'number' || !Number.isFinite(months) || months < 1) return []
+    if (typeof monthly !== 'number' || !Number.isFinite(monthly) || monthly < 0) return []
+    if (typeof base !== 'number' || !Number.isFinite(base)) return []
     const out = []
-    let cumulative = patientsUnderCare.value
-    for (let i = 0; i < forecastMonths.value; i++) {
-      cumulative += estimatedMonthlyEnrolment.value
+    let cumulative = base
+    for (let i = 0; i < months; i++) {
+      cumulative += monthly
       out.push(cumulative)
     }
     return out

@@ -1,16 +1,18 @@
 <template>
-  <p class="summary-text">
-    Estimated total cost for for {{ store.forecastMonths }} months of treatment:
+  <div class="summary-container">
+    <p class="summary-text">{{ store.forecastMonths }}-month estimated cost</p>
+    <p class="summary-cost"><span v-if="store.currencySymbolPosition === 'start'">{{ store.currencySymbol }}</span>{{ store.finalCost != null ? formatNumber(store.finalCost) : 'Missing tablet costs' }}<span v-if="store.currencySymbolPosition === 'end'" class="sym-end">{{ store.currencySymbol }}</span></p>
+  </div>
+  <!-- <p class="summary-text">
+    Estimated total cost for {{ store.forecastMonths }} months of treatment:
     <span class="final-cost">
       <strong>
         <span v-if="store.currencySymbolPosition === 'start'">{{ store.currencySymbol }}</span>
         {{ store.finalCost != null ? formatNumber(store.finalCost) : 'Missing tablet costs' }}
-        <span v-if="store.currencySymbolPosition === 'end'" style="margin-right: 0.25rem;">
-          {{ store.currencySymbol }}
-        </span>
+        <span v-if="store.currencySymbolPosition === 'end'" class="sym-end">{{ store.currencySymbol }}</span>
       </strong>
     </span>
-  </p>
+  </p> -->
 </template>
 
 <script setup>
@@ -21,19 +23,38 @@ const store = useDrugCalcStore()
 </script>
 
 <style scoped>
+.sym-end {
+  margin-right: 0.25rem;
+}
+
+.summary-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #f1f1f1;
+  border-radius: 12px;
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+}
+
 .summary-text {
-  font-size: 1.1em;
-  font-weight: 400;
-  margin: 3rem 0 1.5rem;
+  margin: 0;
+  text-align: center;
+  font-size: 0.9em;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.final-cost {
-  font-size: 1.2em;
-  font-weight: 400;
-  padding-left: 0.5rem;
-}
-
-.currency-symbol-color {
-  color: #666;
+.summary-cost {
+  margin: 0;
+  text-align: center;
+  font-size: 3.75em;
+  font-weight: 600;
+  /* font-family: var(--font-mono-table); */
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
 }
 </style>

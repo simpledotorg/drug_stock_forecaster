@@ -1,14 +1,16 @@
 <template>
-  <h4 class="form-group-title new-page">Your program data</h4>
+  <h4 class="form-group-title new-page">Program data</h4>
 
   <div class="form-group">
     <label for="patientsUnderCare">Patients under care</label>
     <input
       id="patientsUnderCare"
-      :value="patientsUnderCare"
+      :value="numericOrEmpty(patientsUnderCare)"
+      required
       @input="$emit('update:patientsUnderCare', $event.target.valueAsNumber)"
       type="number"
       step="any"
+      min="0"
       class="input"
       placeholder="200000"
     />
@@ -21,10 +23,12 @@
     <label for="targetEnrolment">Target enrolment over {{ forecastMonths }} months</label>
     <input
       id="targetEnrolment"
-      :value="targetEnrolment"
+      :value="numericOrEmpty(targetEnrolment)"
+      required
       @input="$emit('update:targetEnrolment', $event.target.valueAsNumber)"
       type="number"
       step="any"
+      min="0"
       class="input"
       placeholder="10000"
     />
@@ -34,7 +38,8 @@
     <label for="treatmentAdherence">% Treatment adherence</label>
     <input
       id="treatmentAdherence"
-      :value="treatmentAdherence"
+      :value="numericOrEmpty(treatmentAdherence)"
+      required
       @input="$emit('update:treatmentAdherence', $event.target.valueAsNumber)"
       type="number"
       step="any"
@@ -55,6 +60,10 @@
 <script setup>
 import TooltipHelp from './TooltipHelp.vue'
 
+function numericOrEmpty(v) {
+  return typeof v === 'number' && Number.isFinite(v) ? v : ''
+}
+
 defineProps({
   forecastMonths: { type: Number, required: true },
   patientsUnderCare: { type: Number, required: true },
@@ -69,3 +78,8 @@ defineEmits([
 ])
 </script>
 
+<style scoped>
+h4 {
+  margin-top: 4rem;
+}
+</style>

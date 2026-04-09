@@ -1,4 +1,5 @@
 <template>
+  <h3>Cost by drug</h3>
   <div class="table-scroll">
     <table>
       <thead>
@@ -9,21 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="total-row">
-          <th>Total</th>
-          <td class="number-cell">{{ formatNumber(store.totalTabletsAllForecastDrugs) }}</td>
-          <td class="number-cell">
-            <span
-              v-if="store.currencySymbolPosition === 'start'"
-              class="currency-symbol-before currency-symbol-color"
-              >{{ store.currencySymbol }}</span
-            >{{ store.finalCost != null ? formatNumber(store.finalCost) : 'Missing tablet costs' }}<span
-              v-if="store.currencySymbolPosition === 'end'"
-              class="currency-symbol-after currency-symbol-color"
-              >{{ store.currencySymbol }}</span
-            >
-          </td>
-        </tr>
+        
         <!-- <tr class="blank-row">
           <td></td>
           <td></td>
@@ -46,7 +33,7 @@
         </tr>
         <template v-if="store.dashboardDrugSections.otherOnlyDrugs.length">
           <tr class="drug-section-label">
-            <th colspan="3">Other medications</th>
+            <th colspan="3">Other drugs</th>
           </tr>
           <tr v-for="row in store.dashboardDrugSections.otherOnlyDrugs" :key="'o-' + row.id">
             <th>{{ row.name }}</th>
@@ -64,6 +51,22 @@
             </td>
           </tr>
         </template>
+        <tr class="total-row">
+          <th>Total</th>
+          <!-- <td class="number-cell">{{ formatNumber(store.totalTabletsAllForecastDrugs) }}</td> -->
+          <td class="number-cell"></td>
+          <td class="number-cell">
+            <span
+              v-if="store.currencySymbolPosition === 'start'"
+              class="currency-symbol-before currency-symbol-color"
+              >{{ store.currencySymbol }}</span
+            >{{ store.finalCost != null ? formatNumber(store.finalCost) : 'Missing tablet costs' }}<span
+              v-if="store.currencySymbolPosition === 'end'"
+              class="currency-symbol-after currency-symbol-color"
+              >{{ store.currencySymbol }}</span
+            >
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -176,14 +179,15 @@ td {
 
 .drug-section-label th {
   text-align: left;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #666;
   background: #f6f6f6;
   border-top: 1px solid #ddd;
-  padding-top: 0.65rem;
-  padding-bottom: 0.35rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  vertical-align: middle;
 }
 </style>
 

@@ -33,6 +33,50 @@ export function forecastLinesForPatients(lines, months, patientsTreated) {
     })
 }
 
+/**
+ * Cost per protocol step and running cumulative, using the same tablet basis as the monthly breakdown:
+ * each line’s `total` is attributed in full to every drug on that line when costing (matches
+ * aggregateDrugsFromForecastLines).
+ */
+export function protocolStepCostRows(stepForecasts, drugCatalog, protocolSteps) {
+    if (!stepForecasts?.length) return []
+    let cumulative = 0
+    let blocked = false
+    return stepForecasts.map((line, idx) => {
+        const step = protocolSteps?.[idx]
+        const regimen = step?.fullRegimen ?? step?.label ?? line.label ?? '—'
+        const T = line.total
+        let stepCost = 0
+        if (line.drugIds?.length) {
+            for (const drugId of line.drugIds) {
+                const drug = drugCatalog.find((d) => d.id === drugId)
+                const cpt = drug?.costPerTablet
+                if (typeof cpt !== 'number' || Number.isNaN(cpt)) {
+                    stepCost = null
+                    break
+                }
+                stepCost += Math.ceil(cpt * T)
+            }
+        }
+        let cumulativeCost
+        if (stepCost === null) {
+            blocked = true
+            cumulativeCost = null
+        } else if (blocked) {
+            cumulativeCost = null
+        } else {
+            cumulative += stepCost
+            cumulativeCost = cumulative
+        }
+        return {
+            index: idx + 1,
+            regimen,
+            stepCost,
+            cumulativeCost,
+        }
+    })
+}
+
 export function aggregateDrugsFromForecastLines(stepForecasts, otherForecasts, drugCatalog, months) {
     const byId = new Map()
     const addLines = (lines) => {

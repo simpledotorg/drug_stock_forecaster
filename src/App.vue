@@ -1,9 +1,9 @@
 <template>
 
   <div class="wrapper">
-    <header class="header-container">
-      <h1 class="hide-on-print">Drug stock forecast calculator</h1>
-    </header>
+    <!-- <header class="header-container">
+      <h1 class="hide-on-print">Drug requirement forecast calculator</h1>
+    </header> -->
     <div class="app">
       <aside>
         <div class="aside-content">
@@ -16,10 +16,11 @@
           <div class="content-padding">
 
             <div class="content-header">
-              <h2>{{ forecastMonths }}-month drug stock forecast</h2>
+              <h1>Drug requirement forecast</h1>
               <ForecastPeriodControl v-model="forecastMonths" />
             </div>
             <TheForecast />
+            <ProtocolStepCostTable />
             <!-- <Assumptions /> -->
           </div>
           <div :class="{ 'print-hide': !includeBreakdownInPrint }">
@@ -27,16 +28,17 @@
               <template #actions>
                 <label class="print-include-toggle" @click.stop>
                   <input
-                    v-model="includeBreakdownInPrint"
-                    type="checkbox"
-                    class="print-include-toggle__input"
+                  v-model="includeBreakdownInPrint"
+                  type="checkbox"
+                  class="print-include-toggle__input"
                   />
                   <span class="print-include-toggle__text">Include in printout</span>
                 </label>
               </template>
-              <Calculation />
+              <CalculationBreakdown />
             </CollapsibleSection>
           </div>
+          <ProtocolAssumptions />
         </div>
         <p class="small-text disclaimer">
           <strong>Disclaimer:</strong>
@@ -64,11 +66,13 @@
 <script setup>
 import { ref } from 'vue'
 import DrugsCalculatorForm from './components/DrugsCalculatorForm.vue'
-import Calculation from './components/Calculation.vue'
+import CalculationBreakdown from './components/CalculationBreakdown.vue'
 import TheForecast from './components/TheForecast.vue'
 import ForecastControls from './features/drug-forecast/components/ForecastControls.vue'
 import ForecastPeriodControl from './features/drug-forecast/components/ForecastPeriodControl.vue'
 import CollapsibleSection from './components/CollapsibleSection.vue'
+import ProtocolAssumptions from './features/drug-forecast/components/ProtocolAssumptions.vue'
+import ProtocolStepCostTable from './features/drug-forecast/components/ProtocolStepCostTable.vue'
 // import Assumptions from './components/Assumptions.vue'
 import { storeToRefs } from 'pinia'
 import { useDrugCalcStore } from './stores/drugsCalculator'
@@ -92,7 +96,7 @@ a {
   flex-direction: column;
   width: 100%;
   max-width: 1320px;
-  margin: 0 auto;
+  margin: 40px auto 0;
   padding: var(--space-4);
   gap: var(--space-3);
 }
@@ -162,7 +166,7 @@ header {
 }
 
 h1 {
-  font-size: 1.2rem;
+  font-size: 2.25rem;
   line-height: 1.1;
   font-family: var(--font-display);
 }
@@ -221,7 +225,7 @@ h3:not(:first-child) {
   }
 
   .content-padding {
-    padding: var(--space-7) var(--space-6);
+    padding: var(--space-7) var(--space-7);
   }
 }
 
@@ -247,7 +251,7 @@ h3:not(:first-child) {
 .content-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
 }
 
 .content-header h2 {

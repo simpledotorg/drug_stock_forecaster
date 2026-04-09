@@ -2,6 +2,7 @@ export {
   otherDrugsForProtocol,
   collectDrugIdsFromLines,
   forecastLinesForPatients,
+  protocolStepCostRows,
   aggregateDrugsFromForecastLines,
   dashboardDrugSections,
   buildYearlyBreakdown,

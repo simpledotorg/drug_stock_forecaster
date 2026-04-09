@@ -7,7 +7,7 @@
         :value="currencySymbol"
         @input="$emit('update:currencySymbol', $event.target.value)"
         type="text"
-        class="input"
+        class="input input--optional"
         placeholder="$"
       />
       <div class="segmented-control" role="group" aria-label="Currency symbol position">

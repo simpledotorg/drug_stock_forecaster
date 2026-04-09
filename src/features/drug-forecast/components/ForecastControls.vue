@@ -35,7 +35,7 @@
         <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
         <rect x="6" y="14" width="12" height="8" />
       </svg>
-      <span>Print forecast</span>
+      <span>Print report</span>
     </button>
   </div>
 </template>
@@ -46,7 +46,7 @@ import { ref, computed } from 'vue'
 const isCopied = ref(false)
 const copyResetTimer = ref(null)
 
-const shareButtonText = computed(() => (isCopied.value ? 'Link copied' : 'Share forecast'))
+const shareButtonText = computed(() => (isCopied.value ? 'Link copied' : 'Share report'))
 
 const canNativeShare = computed(() => {
   return typeof navigator !== 'undefined' && typeof navigator.share === 'function'
@@ -67,19 +67,19 @@ function copyLink() {
   setIsCopiedTimeout()
 }
 
-async function shareForecastNative() {
-  const url = window.location.href
-  try {
-    await navigator.share({
-      title: 'Drug stock forecast',
-      text: 'Drug stock forecast',
-      url,
-    })
-  } catch {
-    navigator.clipboard.writeText(url)
-    setIsCopiedTimeout()
-  }
-}
+// async function shareForecastNative() {
+//   const url = window.location.href
+//   try {
+//     await navigator.share({
+//       title: 'Drug stock forecast',
+//       text: 'Drug stock forecast',
+//       url,
+//     })
+//   } catch {
+//     navigator.clipboard.writeText(url)
+//     setIsCopiedTimeout()
+//   }
+// }
 
 function printForecast() {
   window.print()
@@ -127,7 +127,7 @@ function printForecast() {
 }
 
 .share-button--copy {
-  min-width: 9.1rem;
+  min-width: 8.3rem;
 }
 
 .share-button:hover {

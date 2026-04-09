@@ -107,6 +107,7 @@ label {
     0 0 0 1px color-mix(in oklab, var(--ink) 14%, transparent),
     0 1px 2px rgba(15, 23, 42, 0.06);
   transition: box-shadow 0.3s ease;
+  font-family: var(--font-sans-spline);
 }
 
 .input-select {
@@ -139,6 +140,26 @@ label {
 .input::placeholder {
   color: #999;
   font-size: 0.9rem;
+}
+
+/* Empty or invalid (required) — red border / light tint; optional fields use .input--optional */
+.input:not(:disabled):not(.input--optional):placeholder-shown,
+.input:not(:disabled):not(.input--optional):invalid {
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, #e11d48 65%, transparent),
+    0 0 0 1px color-mix(in oklab, #e11d48 45%, transparent),
+    0 2px 8px rgba(225, 29, 72, 0.14);
+  background-color: color-mix(in oklab, var(--paper, #fff) 86%, #fecdd3 14%);
+}
+
+.input:not(:disabled):not(.input--optional):placeholder-shown:focus,
+.input:not(:disabled):not(.input--optional):invalid:focus {
+  box-shadow:
+    0 0 0 2px var(--focus-ring),
+    0 0 0 5px var(--focus-ring-glow),
+    0 0 0 1px color-mix(in oklab, #e11d48 40%, transparent),
+    0 10px 18px rgba(15, 23, 42, 0.08);
+  background-color: var(--paper, #fff);
 }
 
 .small-text {
