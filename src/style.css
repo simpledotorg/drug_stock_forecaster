@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Spline+Sans:wght@300;400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Spline+Sans:wght@300;400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600;700&display=swap');
 
 :root {
   --font-body: "Spline Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -103,6 +103,12 @@ a {
   transition: background 0.15s;
   margin: 0.75rem 0 -4px -6px;
   user-select: none;
+}
+
+@media print {
+  .forecast-chip {
+    margin-top: 0;
+  }
 }
 
 button.forecast-chip {
