@@ -1,5 +1,5 @@
 <template>
-  <h4 class="form-group-title new-page">Program data</h4>
+  <h4 class="form-group-title">Program data</h4>
 
   <div class="form-group">
     <label for="patientsUnderCare">Patients under care</label>
@@ -86,6 +86,15 @@ h4 {
   font-size: 0.90rem;
   letter-spacing: 0.06em;
   margin-bottom: 0.2rem;
+}
+
+@media print {
+  h4 {
+    color: #000;
+    font-weight: 650;
+    margin-top: 0.9rem;
+    margin-bottom: 0.05rem;
+  }
 }
 
 </style>

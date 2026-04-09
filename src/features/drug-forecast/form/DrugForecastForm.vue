@@ -1,5 +1,6 @@
 <template>
   <div class="form-container">
+    <h2 class="print-form-title show-on-print new-page">Data entered to generate forecast</h2> <!-- Title on printout only -->
     <form @submit.prevent class="form">
       <ProgramDataFields :forecast-months="forecastMonths" :patients-under-care="patientsUnderCare"
         :target-enrolment="targetEnrolment" :treatment-adherence="treatmentAdherence"
@@ -9,12 +10,15 @@
       <ProtocolSelect :protocols="protocols" :active-protocol-id="activeProtocolId"
         @update:activeProtocolId="activeProtocolId = $event" />
 
+      
+
       <DrugCostList :drugs="catalogDrugsForActiveProtocol" />
 
       <CurrencyField :currency-symbol="currencySymbol" :currency-symbol-position="currencySymbolPosition"
         @update:currencySymbol="currencySymbol = $event"
         @update:currencySymbolPosition="currencySymbolPosition = $event" />
     </form>
+    <ProtocolAssumptionOverrides />
   </div>
 </template>
 
@@ -24,6 +28,7 @@ import { useDrugCalcStore } from '../../../stores/drugsCalculator'
 import { useDrugCalcQuerySync } from '../../../composables/useDrugCalcQuerySync'
 import ProgramDataFields from './components/ProgramDataFields.vue'
 import ProtocolSelect from './components/ProtocolSelect.vue'
+import ProtocolAssumptionOverrides from './components/ProtocolAssumptionOverrides.vue'
 import DrugCostList from './components/DrugCostList.vue'
 import CurrencyField from './components/CurrencyField.vue'
 
@@ -51,17 +56,97 @@ const {
 }
 
 @media print {
+  .form-container {
+    max-width: none;
+    width: 100%;
+    padding-top: 0;
+  }
+
+  .print-form-title {
+    margin: 1.5rem 0 0.75rem;
+    font-size: 1.25rem;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: #000;
+    font-family: var(--font-display);
+  }
+
   h4 {
     grid-column: span 3;
   }
 
   .new-page {
     break-before: page;
-    padding-top: 2rem;
+    padding-top: 0;
   }
 
-  .form-container {
-    padding-top: 0.5rem;
+  .form {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.9rem 1.25rem;
+    align-items: start;
+  }
+
+  .form-group {
+    gap: 0.2rem;
+    break-inside: avoid;
+  }
+
+  .form-group-title {
+    margin: 0.25rem 0 0.05rem;
+    color: #000;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+  }
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #000;
+  }
+
+  .input {
+    padding: 0.38rem 0.5rem;
+    border-radius: 6px;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.55) !important;
+    font-size: 0.92rem;
+    color: #000;
+    height: auto;
+  }
+
+  .input::placeholder {
+    color: transparent !important;
+  }
+
+  .input-select {
+    background-image: none !important;
+    padding-right: 0.25rem;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .segmented-control {
+    max-width: none;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    background: transparent;
+  }
+
+  .segmented-control__btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.78rem;
+    color: #000;
+  }
+
+  .segmented-control__btn.is-selected {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  .tooltip-trigger,
+  .tooltip-bubble {
+    display: none !important;
   }
 }
 

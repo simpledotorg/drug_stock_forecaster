@@ -37,4 +37,15 @@ h4 {
   letter-spacing: 0.06em;
   margin-bottom: 0.2rem;
 }
+
+@media print {
+  h4 {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0.9rem;
+    color: #000;
+    font-weight: 650;
+    margin-bottom: 0.05rem;
+  }
+}
 </style>

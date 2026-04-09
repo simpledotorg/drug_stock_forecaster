@@ -116,6 +116,11 @@ a {
     grid-template-columns: 1fr;
 
     aside {
+      order: 2;
+      break-before: page;
+    }
+
+    main {
       order: 1;
     }
   }
