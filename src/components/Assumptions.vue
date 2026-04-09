@@ -80,8 +80,13 @@ thead th {
     font-weight: 600;
 }
 
+.total-row th,
+.total-row td,
+.total-row span {
+    font-weight: 700 !important;
+}
+
 .total-row {
-    font-weight: bold;
     background-color: #f0f0f0;
 }
 </style>

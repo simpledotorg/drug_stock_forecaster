@@ -116,6 +116,14 @@ h3 {
     background: #fff;
   }
 
+  .total-row th,
+  .total-row td,
+  .total-row .number-cell,
+  .total-row .row-label,
+  .total-row span {
+    font-weight: 700;
+  }
+
   .step-header-row th,
   .step-header-row td {
     border-bottom: none;
@@ -293,12 +301,12 @@ td {
   background-color: #fff9d7;
 }
 
-.total-row .row-label {
-  font-weight: 600;
-}
-
-.total-row .number-cell {
-  font-weight: 600;
+.total-row th,
+.total-row td,
+.total-row .number-cell,
+.total-row .row-label,
+.total-row span {
+  font-weight: 700;
 }
 
 .breakdown-toggle-wrap {
