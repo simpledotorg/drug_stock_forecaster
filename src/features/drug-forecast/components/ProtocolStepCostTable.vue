@@ -9,7 +9,8 @@
         <thead>
           <tr>
             <th class="row-label">Step</th>
-            <th class="row-label treatment-col">Treatment</th>
+            <th class="row-label treatment-col">Treatment added</th>
+            <th>Patients treated (%)</th>
             <th>
               Step cost
               <span v-if="store.currencySymbol !== ''"> ({{ store.currencySymbol }})</span>
@@ -23,34 +24,28 @@
         <tbody>
           <tr v-for="row in rows" :key="'step-cost-' + row.index">
             <th class="row-label" scope="row">{{ row.index }}</th>
-            <th class="row-label treatment-col" scope="row">{{ row.regimen }}</th>
+            <td class="align-left" scope="row"><span v-if="row.index > 1">+ </span>{{ row.stepLabel }}</td>
+            <td class="number-cell">
+              <template v-if="row.controlAssumptions != null">{{ formatNumber(row.controlAssumptions) }}%</template>
+              <template v-else>—</template>
+            </td>
             <td class="number-cell">
               <template v-if="row.stepCost != null">
-                <span
-                  v-if="store.currencySymbolPosition === 'start'"
-                  class="currency-symbol-before currency-symbol-color"
-                  >{{ store.currencySymbol }}</span
-                >{{ formatNumber(row.stepCost)
-                }}<span
-                  v-if="store.currencySymbolPosition === 'end'"
-                  class="currency-symbol-after currency-symbol-color"
-                  >{{ store.currencySymbol }}</span
-                >
+                <span v-if="store.currencySymbolPosition === 'start'"
+                  class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
+                    formatNumber(row.stepCost)
+                }}<span v-if="store.currencySymbolPosition === 'end'"
+                  class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span>
               </template>
               <template v-else>—</template>
             </td>
             <td class="number-cell">
               <template v-if="row.cumulativeCost != null">
-                <span
-                  v-if="store.currencySymbolPosition === 'start'"
-                  class="currency-symbol-before currency-symbol-color"
-                  >{{ store.currencySymbol }}</span
-                >{{ formatNumber(row.cumulativeCost)
-                }}<span
-                  v-if="store.currencySymbolPosition === 'end'"
-                  class="currency-symbol-after currency-symbol-color"
-                  >{{ store.currencySymbol }}</span
-                >
+                <span v-if="store.currencySymbolPosition === 'start'"
+                  class="currency-symbol-before currency-symbol-color">{{ store.currencySymbol }}</span>{{
+                    formatNumber(row.cumulativeCost)
+                }}<span v-if="store.currencySymbolPosition === 'end'"
+                  class="currency-symbol-after currency-symbol-color">{{ store.currencySymbol }}</span>
               </template>
               <template v-else>—</template>
             </td>
@@ -59,7 +54,10 @@
       </table>
     </div>
     <p class="small-text align-right">
-      <span v-if="store.dashboardDrugSections.otherOnlyDrugs.length">Excludes "Other drugs" from the total cost calculation.<br /></span>Calculations use a base drug strength.
+      <span>Step cost reflects the drug added at each step, applied to the proportion of patients who reach it.<br /></span>
+      <span v-if="store.dashboardDrugSections.otherOnlyDrugs.length">Excludes "Other drugs" from the total cost
+        calculation.<br /></span>
+        <span>Calculations use a base drug strength.</span>
     </p>
   </div>
 </template>
@@ -85,7 +83,7 @@ const rows = computed(() =>
 
 h3 {
   margin-top: 4rem;
-  margin-bottom: 0;
+  margin-bottom: 0.5rem;
 }
 
 .footnote {
@@ -183,5 +181,9 @@ td {
 
 .align-right {
   text-align: right;
+}
+
+.align-left {
+  text-align: left;
 }
 </style>

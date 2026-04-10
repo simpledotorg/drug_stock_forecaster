@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test:calc": "node scripts/verify-calculations.mjs",
+    "test:calc:watch": "node --watch scripts/verify-calculations.mjs",
+    "predeploy": "npm run test:calc",
     "deploy": "vite build && gh-pages -d dist",
     "preview": "vite preview"
   },

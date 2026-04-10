@@ -10,8 +10,6 @@
       <ProtocolSelect :protocols="protocols" :active-protocol-id="activeProtocolId"
         @update:activeProtocolId="activeProtocolId = $event" />
 
-      
-
       <DrugCostList :drugs="catalogDrugsForActiveProtocol" />
 
       <CurrencyField :currency-symbol="currencySymbol" :currency-symbol-position="currencySymbolPosition"

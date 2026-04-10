@@ -201,5 +201,10 @@ td {
 .text-left {
   text-align: left;
 }
+
+h3 {
+  margin-top: 4rem;
+  margin-bottom: 0.5rem;
+}
 </style>
 
