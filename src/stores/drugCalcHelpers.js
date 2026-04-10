@@ -44,7 +44,11 @@ export function protocolStepCostRows(stepForecasts, drugCatalog, protocolSteps) 
     let blocked = false
     return stepForecasts.map((line, idx) => {
         const step = protocolSteps?.[idx]
-        const regimen = step?.fullRegimen ?? step?.label ?? line.label ?? '—'
+        // Display label should be the step label (not the full regimen string).
+        const stepLabel = step?.label ?? line.label ?? '—'
+        // Keep full regimen available for any downstream consumers, but don't force it into the label.
+        const regimen = step?.fullRegimen ?? stepLabel
+        const controlAssumptions = step?.percentage ?? line.percentage ?? null
         const T = line.total
         let stepCost = 0
         if (line.drugIds?.length) {
@@ -70,7 +74,9 @@ export function protocolStepCostRows(stepForecasts, drugCatalog, protocolSteps) 
         }
         return {
             index: idx + 1,
+            stepLabel,
             regimen,
+            controlAssumptions,
             stepCost,
             cumulativeCost,
         }
