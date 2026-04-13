@@ -139,7 +139,7 @@ const {
   }
 
   .segmented-control__btn.is-selected {
-    background: rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
   }
 
   .tooltip-trigger,
@@ -328,7 +328,7 @@ label {
   flex: 1 1 0;
   min-width: 0;
   margin: 0;
-  padding: 0.65rem 0.6rem;
+  padding: 0.25rem 0.6rem;
   border: none;
   background: transparent;
   font: inherit;
@@ -362,8 +362,9 @@ label {
 }
 
 .segmented-control__btn.is-selected {
-  background: color-mix(in oklab, var(--accent2) 32%, var(--paper));
+  border: 2px solid color-mix(in oklab, var(--accent2) 60%, var(--paper));
   color: var(--ink);
+  margin: -1px;
 }
 
 .currency-group {

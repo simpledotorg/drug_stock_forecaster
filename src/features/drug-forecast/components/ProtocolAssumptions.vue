@@ -7,7 +7,7 @@
     </template>
     <div class="content-padding">
 
-      <h3>Treatment protocol control assumptions</h3>
+      <h3>Treatment protocol & control assumptions</h3>
       <p class="small-text">Important: The tool is customized based on real-world experience with treatment protocols.
         Control rates at each step reflect experience from 1M+ patients and can be updated with local data. Any future
         protocol changes will require formula adjustments — ideally updated and redistributed at the national/provincial
