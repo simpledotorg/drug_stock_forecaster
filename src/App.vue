@@ -20,7 +20,7 @@
               <ForecastPeriodControl v-model="forecastMonths" />
             </div>
             <TheForecast />
-            <ProtocolStepCostTable />
+            <!--<ProtocolStepCostTable />-->
             <!-- <Assumptions /> -->
           </div>
           <div :class="{ 'print-hide': !includeBreakdownInPrint }">
