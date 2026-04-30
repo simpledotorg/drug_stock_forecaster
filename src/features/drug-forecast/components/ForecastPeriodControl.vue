@@ -23,7 +23,7 @@
       <div class="dd-sep" />
       <div class="custom-row">
         <label>Custom:</label>
-        <input type="number" placeholder="#" min="1" max="120" :value="isCustom ? modelValue : ''"
+        <input type="number" placeholder="#" min="1" max="120" :value="customInputDisplay"
           @input="onCustomInput" @keydown.enter="closeDropdown" />
         <span class="unit">months</span>
       </div>
@@ -48,7 +48,12 @@ const PRESETS = [3, 6, 12, 18, 24]
 const isOpen = ref(false)
 const wrapRef = ref(null)
 
-const isCustom = computed(() => !PRESETS.includes(props.modelValue))
+/** When false, custom field stays empty (value came from a preset chip). When true, show modelValue (typed or non-preset). */
+const valueFromCustomInput = ref(!PRESETS.includes(props.modelValue))
+
+const customInputDisplay = computed(() =>
+  valueFromCustomInput.value ? String(props.modelValue) : '',
+)
 
 function toggleDropdown() {
   isOpen.value = !isOpen.value
@@ -59,12 +64,14 @@ function closeDropdown() {
 }
 
 function selectPreset(val) {
+  valueFromCustomInput.value = false
   emit('update:modelValue', val)
   setTimeout(closeDropdown, 140)
 }
 
 function onCustomInput(e) {
-  const val = parseInt(e.target.value)
+  valueFromCustomInput.value = true
+  const val = parseInt(e.target.value, 10)
   if (val > 0 && val <= 120) {
     emit('update:modelValue', val)
   }
