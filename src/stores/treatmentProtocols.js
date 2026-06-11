@@ -114,7 +114,7 @@ export function createInitialProtocols() {
         // New protocols
         {
             id: 'egypt-2026',
-            name: 'Egypt',
+            name: 'Egypt (VA-VA-HH)',
             steps: [
                 { label: 'Valsartan 80mg + Amlodipine 5mg SPC', drugIds: ['valsartan-80mg-amlodipine-5mg-spc'], percentage: 60, fullRegimen: 'Valsartan 80mg & Amlodipine 5mg SPC' },
                 { label: 'Valsartan 80mg + Amlodipine 5mg SPC', drugIds: ['valsartan-160mg-amlodipine-10mg-spc'], percentage: 40, fullRegimen: 'Valsartan 160mg & Amlodipine 10mg SPC' },
