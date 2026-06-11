@@ -15,6 +15,7 @@ export function createInitialDrugCatalog() {
     return [
         { id: 'amlodipine-5mg', name: 'Amlodipine 5mg', costPerTablet: DEFAULT_COST_PER_TABLET['amlodipine-5mg'] },
         { id: 'amlodipine-10mg', name: 'Amlodipine 10mg', costPerTablet: DEFAULT_COST_PER_TABLET['amlodipine-10mg'] },
+        { id: 'lisinopril-10mg', name: 'Lisinopril 10mg', costPerTablet: DEFAULT_COST_PER_TABLET['lisinopril-10mg'] },
         { id: 'losartan-50mg', name: 'Losartan 50mg', costPerTablet: DEFAULT_COST_PER_TABLET['losartan-50mg'] },
         { id: 'hctz-25mg', name: 'Hydrochlorothiazide 25mg', costPerTablet: DEFAULT_COST_PER_TABLET['hctz-25mg'] },
         { id: 'telmisartan-40mg', name: 'Telmisartan 40mg', costPerTablet: DEFAULT_COST_PER_TABLET['telmisartan-40mg'] },
@@ -136,6 +137,21 @@ export function createInitialProtocols() {
             otherDrugs: [
                 { label: 'Atorvastatin 20mg', drugIds: ['atorvastatin-20mg'], percentage: 30 },
             ],
+        },
+        {
+            id: 'indonesia-aallhh',
+            name: 'Indonesia (AALLHH)',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40, fullRegimen: 'Amlodipine 5mg'   },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-10mg'], percentage: 60, fullRegimen: 'Amlodipine 10mg'   },
+                { label: 'Lisinopril 10mg', drugIds: ['lisinopril-10mg'], percentage: 30, fullRegimen: 'Amlodipine 10mg + Lisinopril 10mg' },
+                { label: 'Lisinopril 10mg', drugIds: ['lisinopril-10mg'], percentage: 10, fullRegimen: 'Amlodipine 10mg + Lisinopril 20mg' },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Lisinopril 20mg + Hydrochlorothiazide 25mg' },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 1, fullRegimen: 'Amlodipine 10mg + Lisinopril 20mg + Hydrochlorothiazide 50mg' },
+            ],
+            // otherDrugs: [
+            //     { label: 'Atorvastatin 10mg', drugIds: ['atorvastatin-10mg'], percentage: 30 },
+            // ],
         },
     ]
 }
