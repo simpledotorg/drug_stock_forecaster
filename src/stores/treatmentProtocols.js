@@ -17,6 +17,8 @@ export function createInitialDrugCatalog() {
         { id: 'losartan-50mg', name: 'Losartan 50mg', costPerTablet: DEFAULT_COST_PER_TABLET['losartan-50mg'] },
         { id: 'hctz-25mg', name: 'Hydrochlorothiazide 25mg', costPerTablet: DEFAULT_COST_PER_TABLET['hctz-25mg'] },
         { id: 'telmisartan-40mg', name: 'Telmisartan 40mg', costPerTablet: DEFAULT_COST_PER_TABLET['telmisartan-40mg'] },
+        { id: 'valsartan-80mg-amlodipine-5mg-spc', name: 'Valsartan 80mg & Amlodipine 5mg SPC', costPerTablet: DEFAULT_COST_PER_TABLET['valsartan-80mg-amlodipine-5mg-spc'] },
+        { id: 'valsartan-160mg-amlodipine-10mg-spc', name: 'Valsartan 160mg & Amlodipine 10mg SPC', costPerTablet: DEFAULT_COST_PER_TABLET['valsartan-160mg-amlodipine-10mg-spc'] },
         { id: 'atorvastatin-20mg', name: 'Atorvastatin 20mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-20mg'] },
     ]
 }
@@ -105,6 +107,19 @@ export function createInitialProtocols() {
                 { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 30, fullRegimen: 'Amlodipine 10mg + Losartan 50mg' },
                 { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 15, fullRegimen: 'Amlodipine 10mg + Losartan 100mg' },
                 { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
+            ],
+        },
+        {
+            id: 'egypt-2026',
+            name: 'Egypt June 2026',
+            steps: [
+                { label: 'Valsartan 80mg + Amlodipine 5mg SPC', drugIds: ['valsartan-80mg-amlodipine-5mg-spc'], percentage: 60, fullRegimen: 'Valsartan 80mg & Amlodipine 5mg SPC' },
+                { label: 'Valsartan 80mg + Amlodipine 5mg SPC', drugIds: ['valsartan-160mg-amlodipine-10mg-spc'], percentage: 40, fullRegimen: 'Valsartan 160mg & Amlodipine 10mg SPC' },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Valsartan 160mg & Amlodipine 10mg SPC + Hydrochlorothiazide 25mg' },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 1, fullRegimen: 'Valsartan 160mg & Amlodipine 10mg SPC + Hydrochlorothiazide 50mg' },
+            ],
+            otherDrugs: [
+                { label: 'Atorvastatin 20mg', drugIds: ['atorvastatin-20mg'], percentage: 30 },
             ],
         },
     ]
