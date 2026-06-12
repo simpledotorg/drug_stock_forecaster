@@ -53,39 +53,39 @@ export function createInitialProtocols() {
         //         { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Losartan 50mg + Hydrochlorothiazide 25mg' },
         //     ],
         // },
-        {
-            id: 'aath',
-            name: 'AATH with Statin',
-            steps: [
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40, fullRegimen: 'Amlodipine 10mg'   },
-                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg' },
-                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg + Hydrochlorothiazide 25mg' },
-            ],
-            otherDrugs: [
-                { label: 'Atorvastatin 20mg', drugIds: ['atorvastatin-20mg'], percentage: 30 },
-            ],
-        },
-        {
-            id: 'alh',
-            name: 'ALH',
-            steps: [
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
-                { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 40, fullRegimen: 'Amlodipine 5mg + Losartan 50mg' },
-                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 25, fullRegimen: 'Amlodipine 5mg + Losartan 50mg + Hydrochlorothiazide 25mg' },
-            ],
-        },
-        {
-            id: 'attah',
-            name: 'ATTAH',
-            steps: [
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg'   },
-                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 40, fullRegimen: 'Amlodipine 5mg + Telmisartan 40mg' },
-                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25, fullRegimen: 'Amlodipine 5mg + Telmisartan 80mg' },
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 12, fullRegimen: 'Amlodipine 10mg + Telmisartan 80mg' },
-                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 80mg + Hydrochlorothiazide 25mg' },
-            ],
-        },
+        // {
+        //     id: 'aath',
+        //     name: 'AATH with Statin',
+        //     steps: [
+        //         { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
+        //         { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40, fullRegimen: 'Amlodipine 10mg'   },
+        //         { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg' },
+        //         { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg + Hydrochlorothiazide 25mg' },
+        //     ],
+        //     otherDrugs: [
+        //         { label: 'Atorvastatin 20mg', drugIds: ['atorvastatin-20mg'], percentage: 30 },
+        //     ],
+        // },
+        // {
+        //     id: 'alh',
+        //     name: 'ALH',
+        //     steps: [
+        //         { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
+        //         { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 40, fullRegimen: 'Amlodipine 5mg + Losartan 50mg' },
+        //         { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 25, fullRegimen: 'Amlodipine 5mg + Losartan 50mg + Hydrochlorothiazide 25mg' },
+        //     ],
+        // },
+        // {
+        //     id: 'attah',
+        //     name: 'ATTAH',
+        //     steps: [
+        //         { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg'   },
+        //         { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 40, fullRegimen: 'Amlodipine 5mg + Telmisartan 40mg' },
+        //         { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25, fullRegimen: 'Amlodipine 5mg + Telmisartan 80mg' },
+        //         { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 12, fullRegimen: 'Amlodipine 10mg + Telmisartan 80mg' },
+        //         { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 80mg + Hydrochlorothiazide 25mg' },
+        //     ],
+        // },
         // {
         //     id: 'alalh',
         //     name: 'AL(AL)H',
@@ -151,6 +151,17 @@ export function createInitialProtocols() {
             ],
             otherDrugs: [
                 { label: 'Atorvastatin 20mg', drugIds: ['atorvastatin-20mg'], percentage: 30 },
+            ],
+        },
+        {
+            id: 'india-aatth',
+            name: 'India • ATTAH',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40, fullRegimen: 'Amlodipine 10mg' },
+                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg' },
+                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 12, fullRegimen: 'Amlodipine 10mg + Telmisartan 80mg' },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 80mg + Hydrochlorothiazide 25mg' },
             ],
         },
         {
