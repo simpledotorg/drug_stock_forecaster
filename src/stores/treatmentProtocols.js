@@ -156,7 +156,7 @@ export function createInitialProtocols() {
         },
         {
             id: 'indonesia-aallhh',
-            name: 'Indonesia • AALLHH',
+            name: 'Indonesia • AALiLiHH',
             steps: [
                 { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40, fullRegimen: 'Amlodipine 5mg'   },
                 { label: 'Amlodipine 5mg', drugIds: ['amlodipine-10mg'], percentage: 60, fullRegimen: 'Amlodipine 10mg'   },
