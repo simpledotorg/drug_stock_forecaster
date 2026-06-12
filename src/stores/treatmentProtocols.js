@@ -101,31 +101,30 @@ export function createInitialProtocols() {
         //             fullRegimen: 'Amlodipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
         //     ],
         // },
+        // {
+        //     id: 'aallh',
+        //     name: 'AALLH',
+        //     steps: [
+        //         { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
+        //         { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 50, fullRegimen: 'Amlodipine 10mg' },
+        //         { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 30, fullRegimen: 'Amlodipine 10mg + Losartan 50mg' },
+        //         { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 15, fullRegimen: 'Amlodipine 10mg + Losartan 100mg' },
+        //         { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
+        //     ],
+        // },
+        // New protocols
         {
-            id: 'aallh',
-            name: 'AALLH',
+            id: 'bangladesh-aallh',
+            name: 'Bangladesh • AALLH',
             steps: [
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 50, fullRegimen: 'Amlodipine 10mg' },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 50, fullRegimen: 'Amlodipine 5mg' },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-10mg'], percentage: 50, fullRegimen: 'Amlodipine 10mg' },
                 { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 30, fullRegimen: 'Amlodipine 10mg + Losartan 50mg' },
                 { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 15, fullRegimen: 'Amlodipine 10mg + Losartan 100mg' },
                 { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
             ],
-        },
-        // New protocols
-        {
-            id: 'bangladesh-alalh',
-            name: 'Bangladesh • AL(AL)H',
-            steps: [
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
-                { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 40, fullRegimen: 'Amlodipine 5mg + Losartan 50mg' },
-                {
-                    label: 'Amlodipine 5mg + Losartan 50mg',
-                    drugIds: ['amlodipine-5mg', 'losartan-50mg'],
-                    percentage: 25,
-                    fullRegimen: 'Amlodipine 10mg + Losartan 100mg' },
-                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5,
-                    fullRegimen: 'Amlodipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
+            otherDrugs: [
+                { label: 'Atorvastatin 20mg', drugIds: ['atorvastatin-20mg'], percentage: 30 },
             ],
         },
         {
