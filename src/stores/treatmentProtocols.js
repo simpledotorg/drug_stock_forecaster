@@ -169,5 +169,19 @@ export function createInitialProtocols() {
                     fullRegimen: 'Amlodipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
             ],
         },
+        {
+            id: 'rwanda-aallhh',
+            name: 'Rwanda • AALiLiH',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg'   },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 60, fullRegimen: 'Amlodipine 10mg'   },
+                { label: 'Lisinopril 10mg', drugIds: ['lisinopril-10mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Lisinopril 10mg' },
+                { label: 'Lisinopril 10mg', drugIds: ['lisinopril-10mg'], percentage: 12, fullRegimen: 'Amlodipine 10mg + Lisinopril 20mg' },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Lisinopril 20mg + Hydrochlorothiazide 25mg' },
+            ],
+            // otherDrugs: [
+            //     { label: 'Atorvastatin 10mg', drugIds: ['atorvastatin-10mg'], percentage: 30 },
+            // ],
+        },
     ]
 }
