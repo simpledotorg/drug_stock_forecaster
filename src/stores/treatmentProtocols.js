@@ -23,6 +23,7 @@ export function createInitialDrugCatalog() {
         { id: 'valsartan-160mg-amlodipine-10mg-spc', name: 'Valsartan 160mg & Amlodipine 10mg SPC', costPerTablet: DEFAULT_COST_PER_TABLET['valsartan-160mg-amlodipine-10mg-spc'] },
         { id: 'atorvastatin-10mg', name: 'Atorvastatin 10mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-10mg'] },
         { id: 'atorvastatin-20mg', name: 'Atorvastatin 20mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-20mg'] },
+        { id: 'chlorthalidone-12.5mg', name: 'Chlorthalidone 12.5mg', costPerTablet: DEFAULT_COST_PER_TABLET['chlorthalidone-12.5mg'] },
     ]
 }
 
@@ -208,5 +209,18 @@ export function createInitialProtocols() {
             //     { label: 'Atorvastatin 10mg', drugIds: ['atorvastatin-10mg'], percentage: 30 },
             // ],
         },
+        {
+            id: 'india-mp-atac',
+            name: 'India MP • ATAC',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg'   },
+                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 40, fullRegimen: 'Amlodipine 5mg + Telmisartan 40mg' },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg'   },
+                { label: 'Chlorthalidone 12.5mg', drugIds: ['chlorthalidone-12.5mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg + Chlorthalidone 12.5mg' },
+            ],
+            otherDrugs: [
+                { label: 'Atorvastatin 10mg', drugIds: ['atorvastatin-10mg'], percentage: 30 },
+            ],
+        }
     ]
 }
