@@ -156,13 +156,25 @@ export function createInitialProtocols() {
         },
         {
             id: 'india-aatth',
-            name: 'India • ATTAH',
+            name: 'India • AATTH',
             group: 'India',
             steps: [
                 { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
                 { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40, fullRegimen: 'Amlodipine 10mg' },
                 { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg' },
                 { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 12, fullRegimen: 'Amlodipine 10mg + Telmisartan 80mg' },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 80mg + Hydrochlorothiazide 25mg' },
+            ],
+        },
+        {
+            id: 'india-attah',
+            name: 'India • ATTAH',
+            group: 'India',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
+                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 40, fullRegimen: 'Amlodipine 5mg + Telmisartan 40mg' },
+                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25, fullRegimen: 'Amlodipine 5mg + Telmisartan 80mg' },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 12, fullRegimen: 'Amlodipine 10mg + Telmisartan 80mg' },
                 { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 80mg + Hydrochlorothiazide 25mg' },
             ],
         },
@@ -237,18 +249,5 @@ export function createInitialProtocols() {
             //     { label: 'Atorvastatin 10mg', drugIds: ['atorvastatin-10mg'], percentage: 30 },
             // ],
         },
-        {
-            id: 'india-mp-atac',
-            name: 'India MP • ATAC',
-            steps: [
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg'   },
-                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 40, fullRegimen: 'Amlodipine 5mg + Telmisartan 40mg' },
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg'   },
-                { label: 'Chlorthalidone 12.5mg', drugIds: ['chlorthalidone-12.5mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg + Chlorthalidone 12.5mg' },
-            ],
-            otherDrugs: [
-                { label: 'Atorvastatin 10mg', drugIds: ['atorvastatin-10mg'], percentage: 30 },
-            ],
-        }
     ]
 }
