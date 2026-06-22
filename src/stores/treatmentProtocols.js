@@ -4,15 +4,24 @@
 
 /** Illustrative default cost per tablet (same currency units as the rest of the app). */
 const DEFAULT_COST_PER_TABLET = {
-    'amlodipine-5mg': 0.05,
-    'losartan-50mg': 0.06,
-    'hctz-25mg': 0.03,
-    'telmisartan-40mg': 0.1,
-    'atorvastatin-20mg': 0.12,
+    'amlodipine-5mg': 0.5,
+    'amlodipine-10mg': 0.6,
+    'lisinopril-10mg': 0.3,
+    'losartan-50mg': 0.2,
+    'telmisartan-40mg': 0.5,    
+    'valsartan-80mg-amlodipine-5mg-spc': 0.4,
+    'valsartan-160mg-amlodipine-10mg-spc': 0.6,
+    'chlorthalidone-12.5mg': 0.4,
+    'atorvastatin-10mg': 0.8,
+    'atorvastatin-20mg': 0.5,
+    'hctz-25mg': 0.3,
+    'atorvastatin-10mg': 0.8,
+    'atorvastatin-20mg': 0.9,
 }
 
 export function createInitialDrugCatalog() {
     return [
+        // Hypertension
         { id: 'amlodipine-5mg', name: 'Amlodipine 5mg', costPerTablet: DEFAULT_COST_PER_TABLET['amlodipine-5mg'] },
         { id: 'amlodipine-10mg', name: 'Amlodipine 10mg', costPerTablet: DEFAULT_COST_PER_TABLET['amlodipine-10mg'] },
         { id: 'lisinopril-10mg', name: 'Lisinopril 10mg', costPerTablet: DEFAULT_COST_PER_TABLET['lisinopril-10mg'] },
@@ -21,17 +30,18 @@ export function createInitialDrugCatalog() {
         { id: 'telmisartan-40mg', name: 'Telmisartan 40mg', costPerTablet: DEFAULT_COST_PER_TABLET['telmisartan-40mg'] },
         { id: 'valsartan-80mg-amlodipine-5mg-spc', name: 'Valsartan 80mg & Amlodipine 5mg SPC', costPerTablet: DEFAULT_COST_PER_TABLET['valsartan-80mg-amlodipine-5mg-spc'] },
         { id: 'valsartan-160mg-amlodipine-10mg-spc', name: 'Valsartan 160mg & Amlodipine 10mg SPC', costPerTablet: DEFAULT_COST_PER_TABLET['valsartan-160mg-amlodipine-10mg-spc'] },
+        { id: 'chlorthalidone-12.5mg', name: 'Chlorthalidone 12.5mg', costPerTablet: DEFAULT_COST_PER_TABLET['chlorthalidone-12.5mg'] },
+        // Statins
         { id: 'atorvastatin-10mg', name: 'Atorvastatin 10mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-10mg'] },
         { id: 'atorvastatin-20mg', name: 'Atorvastatin 20mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-20mg'] },
-        { id: 'chlorthalidone-12.5mg', name: 'Chlorthalidone 12.5mg', costPerTablet: DEFAULT_COST_PER_TABLET['chlorthalidone-12.5mg'] },
     ]
 }
 
 export function createInitialProtocols() {
     return [
         {
-            id: 'philippines-htn',
-            name: 'Philippines (HTN)',
+            id: 'philippines-ALALH',
+            name: 'Philippines • AL(AL)H',
             steps: [
                 { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
                 { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 40, fullRegimen: 'Amoldipine 5mg + Losartan 50mg' },
@@ -52,19 +62,6 @@ export function createInitialProtocols() {
         //         { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40, fullRegimen: 'Amlodipine 10mg'   },
         //         { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Losartan 50mg' },
         //         { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Losartan 50mg + Hydrochlorothiazide 25mg' },
-        //     ],
-        // },
-        // {
-        //     id: 'aath',
-        //     name: 'AATH with Statin',
-        //     steps: [
-        //         { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
-        //         { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40, fullRegimen: 'Amlodipine 10mg'   },
-        //         { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg' },
-        //         { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg + Hydrochlorothiazide 25mg' },
-        //     ],
-        //     otherDrugs: [
-        //         { label: 'Atorvastatin 20mg', drugIds: ['atorvastatin-20mg'], percentage: 30 },
         //     ],
         // },
         // {
@@ -236,7 +233,7 @@ export function createInitialProtocols() {
             ],
         },
         {
-            id: 'rwanda-aallhh',
+            id: 'rwanda-aalilihh',
             name: 'Rwanda • AALiLiH',
             steps: [
                 { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg'   },
@@ -248,6 +245,30 @@ export function createInitialProtocols() {
             // otherDrugs: [
             //     { label: 'Atorvastatin 10mg', drugIds: ['atorvastatin-10mg'], percentage: 30 },
             // ],
+        },
+        {
+            id: 'uganda-aallh',
+            name: 'Uganda • AALLH',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg'   },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 50, fullRegimen: 'Amlodipine 10mg'   },
+                { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 30, fullRegimen: 'Amlodipine 10mg + Losartan 50mg' },
+                { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 15, fullRegimen: 'Amlodipine 10mg + Losartan 100mg' },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
+            ],
+        },
+        {
+            id: 'test-aath',
+            name: 'Test • AATH with Statin',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 40, fullRegimen: 'Amlodipine 10mg'   },
+                { label: 'Telmisartan 40mg', drugIds: ['telmisartan-40mg'], percentage: 25, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg' },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Telmisartan 40mg + Hydrochlorothiazide 25mg' },
+            ],
+            otherDrugs: [
+                { label: 'Atorvastatin 20mg', drugIds: ['atorvastatin-20mg'], percentage: 30 },
+            ],
         },
     ]
 }
