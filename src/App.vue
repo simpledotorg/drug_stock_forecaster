@@ -49,9 +49,10 @@
     </div>
     <footer class="hide-on-print">
 
-      <p class="small-text created-by">
+      <p class="small-text">
         Created by <a href="https://resolvetosavelives.org" target="_blank">Resolve to Save Lives</a>
       </p>
+      <p class="small-text">Version 0.2.0</p>
       <!-- <p class="small-text">
           Source: <a href="https://www.who.int/news-room/fact-sheets/detail/hypertension" target="_blank">WHO Fact
             Sheet on Hypertension</a>
@@ -291,6 +292,9 @@ footer {
   margin-top: 40px;
   padding: var(--space-1) 0 var(--space-4);
   border-top: 1px solid var(--faint);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .created-by {
