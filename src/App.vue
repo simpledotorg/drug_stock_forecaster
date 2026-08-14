@@ -57,6 +57,7 @@
             Sheet on Hypertension</a>
         </p> -->
     </footer>
+    <RecalculatingToast />
   </div>
 </template>
 
@@ -69,6 +70,7 @@ import ForecastControls from './features/drug-forecast/components/ForecastContro
 import ForecastPeriodControl from './features/drug-forecast/components/ForecastPeriodControl.vue'
 import CollapsibleSection from './components/CollapsibleSection.vue'
 import ProtocolAssumptions from './features/drug-forecast/components/ProtocolAssumptions.vue'
+import RecalculatingToast from './features/drug-forecast/components/RecalculatingToast.vue'
 import ProtocolStepCostTable from './features/drug-forecast/components/ProtocolStepCostTable.vue'
 // import Assumptions from './components/Assumptions.vue'
 import { storeToRefs } from 'pinia'
