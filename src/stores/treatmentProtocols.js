@@ -39,21 +39,6 @@ export function createInitialDrugCatalog() {
 
 export function createInitialProtocols() {
     return [
-        {
-            id: 'philippines-ALALH',
-            name: 'Philippines • AL(AL)H',
-            steps: [
-                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
-                { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 40, fullRegimen: 'Amoldipine 5mg + Losartan 50mg' },
-                {
-                    label: 'Amlodipine 5mg + Losartan 50mg',
-                    drugIds: ['amlodipine-5mg', 'losartan-50mg'],
-                    percentage: 25,
-                    fullRegimen: 'Amoldipine 10mg + Losartan 100mg',
-                },
-                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amoldipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
-            ],
-        },
         // {
         //     id: 'aalh',
         //     name: 'AALH',
@@ -230,6 +215,21 @@ export function createInitialProtocols() {
                     fullRegimen: 'Amlodipine 10mg + Losartan 100mg' },
                 { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5,
                     fullRegimen: 'Amlodipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
+            ],
+        },
+        {
+            id: 'philippines-ALALH',
+            name: 'Philippines • AL(AL)H',
+            steps: [
+                { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },
+                { label: 'Losartan 50mg', drugIds: ['losartan-50mg'], percentage: 40, fullRegimen: 'Amoldipine 5mg + Losartan 50mg' },
+                {
+                    label: 'Amlodipine 5mg + Losartan 50mg',
+                    drugIds: ['amlodipine-5mg', 'losartan-50mg'],
+                    percentage: 25,
+                    fullRegimen: 'Amoldipine 10mg + Losartan 100mg',
+                },
+                { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amoldipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
             ],
         },
         {
