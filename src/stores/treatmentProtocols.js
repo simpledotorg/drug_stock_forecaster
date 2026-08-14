@@ -1,5 +1,14 @@
 /**
  * Treatment protocols — drug catalog and protocol definitions. Edit here to add drugs or protocols.
+ *
+ * Optional per-protocol tablet prices: add `defaultCosts` on a protocol (keys = drug catalog ids).
+ * Those values seed the cost fields when the protocol is selected. Omit the map, or omit a drug,
+ * to keep using DEFAULT_COST_PER_TABLET. Example:
+ *
+ *   defaultCosts: {
+ *     'amlodipine-5mg': 0.12,
+ *     'losartan-50mg': 0.08,
+ *   },
  */
 
 /** Illustrative default cost per tablet (same currency units as the rest of the app). */
@@ -35,6 +44,28 @@ export function createInitialDrugCatalog() {
         { id: 'atorvastatin-10mg', name: 'Atorvastatin 10mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-10mg'] },
         { id: 'atorvastatin-20mg', name: 'Atorvastatin 20mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-20mg'] },
     ]
+}
+
+/** Catalog fallback, or protocol `defaultCosts[drugId]` when that protocol defines one. */
+export function resolveDefaultCostPerTablet(drugId, protocol) {
+    const fromProtocol = protocol?.defaultCosts?.[drugId]
+    if (typeof fromProtocol === 'number' && Number.isFinite(fromProtocol)) return fromProtocol
+    const fromGlobal = DEFAULT_COST_PER_TABLET[drugId]
+    return typeof fromGlobal === 'number' && Number.isFinite(fromGlobal) ? fromGlobal : undefined
+}
+
+/** Seed catalog `costPerTablet` for drugs used by this protocol. */
+export function applyProtocolDefaultCosts(protocol, drugCatalog) {
+    if (!protocol || !Array.isArray(drugCatalog)) return
+    const ids = new Set()
+    for (const line of [...(protocol.steps ?? []), ...(protocol.otherDrugs ?? [])]) {
+        for (const id of line?.drugIds ?? []) ids.add(id)
+    }
+    for (const id of ids) {
+        const drug = drugCatalog.find((d) => d.id === id)
+        if (!drug) continue
+        drug.costPerTablet = resolveDefaultCostPerTablet(id, protocol)
+    }
 }
 
 export function createInitialProtocols() {
@@ -201,6 +232,12 @@ export function createInitialProtocols() {
             // otherDrugs: [
             //     { label: 'Atorvastatin 10mg', drugIds: ['atorvastatin-10mg'], percentage: 30 },
             // ],
+            defaultCosts: {
+                'amlodipine-5mg': 120,
+                'amlodipine-10mg': 180,
+                'lisinopril-10mg': 350,
+                'hctz-25mg': 370,
+            },
         },
         {
             id: 'nigeria-alalh',
@@ -218,7 +255,7 @@ export function createInitialProtocols() {
             ],
         },
         {
-            id: 'philippines-ALALH',
+            id: 'philippines-alalh',
             name: 'Philippines • AL(AL)H',
             steps: [
                 { label: 'Amlodipine 5mg', drugIds: ['amlodipine-5mg'], percentage: 100, fullRegimen: 'Amlodipine 5mg' },

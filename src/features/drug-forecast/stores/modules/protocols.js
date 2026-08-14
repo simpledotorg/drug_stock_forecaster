@@ -1,5 +1,9 @@
 import { ref, computed, triggerRef } from 'vue'
-import { createInitialDrugCatalog, createInitialProtocols } from '../../../../stores/treatmentProtocols'
+import {
+  applyProtocolDefaultCosts,
+  createInitialDrugCatalog,
+  createInitialProtocols,
+} from '../../../../stores/treatmentProtocols'
 import { otherDrugsForProtocol, uniqueDrugIdsFromProtocol } from '../../utils/forecastMath'
 
 export function createProtocolsModule() {
@@ -9,6 +13,14 @@ export function createProtocolsModule() {
 
   const activeProtocol = computed(() => protocols.value.find((p) => p.id === activeProtocolId.value))
   const activeOtherDrugs = computed(() => otherDrugsForProtocol(activeProtocol.value))
+
+  function setActiveProtocolId(id) {
+    if (activeProtocolId.value === id) return
+    activeProtocolId.value = id
+    applyProtocolDefaultCosts(activeProtocol.value, drugCatalog.value)
+  }
+
+  applyProtocolDefaultCosts(activeProtocol.value, drugCatalog.value)
 
   /** Restore step and other-drug control % from canonical protocol definitions (`createInitialProtocols`). */
   function resetActiveProtocolAssumptions() {
@@ -44,6 +56,7 @@ export function createProtocolsModule() {
     drugCatalog,
     protocols,
     activeProtocolId,
+    setActiveProtocolId,
     activeProtocol,
     activeOtherDrugs,
     catalogDrugsForActiveProtocol,

@@ -8,7 +8,7 @@
         @update:treatmentAdherence="treatmentAdherence = $event" />
 
       <ProtocolSelect :protocols="protocols" :active-protocol-id="activeProtocolId"
-        @update:activeProtocolId="activeProtocolId = $event" />
+        @update:activeProtocolId="store.setActiveProtocolId($event)" />
 
       <DrugCostList :drugs="catalogDrugsForActiveProtocol" />
 

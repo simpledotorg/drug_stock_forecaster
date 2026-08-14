@@ -200,7 +200,12 @@ export function useDrugCalcQuerySync(store: any) {
       if (!storeRef) continue
       if (q[key] != null && q[key] !== '') {
         const raw = Array.isArray(q[key]) ? q[key][0] : q[key]
-        if (typeof raw === 'string') storeRef.value = raw
+        if (typeof raw !== 'string') continue
+        if (key === 'activeProtocolId' && typeof store.setActiveProtocolId === 'function') {
+          store.setActiveProtocolId(raw)
+        } else {
+          storeRef.value = raw
+        }
       }
     }
     applyStepsFromQuery(q as Record<string, any>, store)
