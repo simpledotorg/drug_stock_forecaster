@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ForecastSummary />
     <ForecastTable />
+    <ForecastSummary />
   </div>
 </template>
 

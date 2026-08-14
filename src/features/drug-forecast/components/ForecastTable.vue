@@ -1,5 +1,5 @@
 <template>
-  <h3>By drug</h3>
+  <h3>DRUG BREAKDOWN</h3>
   <div class="table-scroll">
     <table>
       <thead>
@@ -203,7 +203,7 @@ td {
 }
 
 h3 {
-  margin-top: 4rem;
+  margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
 </style>

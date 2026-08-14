@@ -171,7 +171,7 @@ header {
 }
 
 h1 {
-  font-size: 2.25rem;
+  font-size: 2rem;
   line-height: 1.1;
   font-family: var(--font-display);
 }
@@ -203,6 +203,7 @@ h3:not(:first-child) {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  anchor-name: --aside-content;
   /* padding: 0.5rem 1rem 1rem; */
   /* background-color: #eee; */
   /* border: 1px solid #ddd; */

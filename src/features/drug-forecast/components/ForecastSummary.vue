@@ -1,6 +1,6 @@
 <template>
   <div class="summary-container">
-    <p class="summary-text">{{ store.forecastMonths }}-month estimated cost</p>
+    <p class="summary-text">{{ store.forecastMonths }}-month cost forecast</p>
     <p class="summary-cost"><span v-if="store.currencySymbolPosition === 'start'">{{ store.currencySymbol }}</span>{{ store.finalCost != null ? formatNumber(store.finalCost) : 'Missing tablet costs' }}<span v-if="store.currencySymbolPosition === 'end'" class="sym-end">{{ store.currencySymbol }}</span></p>
   </div>
   <!-- <p class="summary-text">
@@ -31,16 +31,16 @@ const store = useDrugCalcStore()
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background: #f1f1f1;
-  border-radius: 12px;
-  padding: 2rem 1rem;
-  margin-top: 2rem;
+  background: #f3f3f3;
+  border-radius: 10px;
+  padding: 1.25rem 1.4rem;
+  margin-top: 3.25rem;
 }
 
 .summary-text {
   margin: 0;
-  text-align: center;
-  font-size: 0.9em;
+  /* text-align: center; */
+  font-size: 0.85em;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: 0.05em;
@@ -49,8 +49,8 @@ const store = useDrugCalcStore()
 
 .summary-cost {
   margin: 0;
-  text-align: center;
-  font-size: 3.5em;
+  /* text-align: center; */
+  font-size: 2.25em;
   font-weight: 600;
   /* font-family: var(--font-mono-table); */
   font-variant-numeric: tabular-nums;
@@ -61,7 +61,7 @@ const store = useDrugCalcStore()
 @media print {
   .summary-container {
     padding: 1.25rem 1rem;
-    margin-top: 1.25rem;
+    margin-top: 2rem;
   }
 
   .summary-cost {
