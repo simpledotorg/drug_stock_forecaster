@@ -10,6 +10,9 @@
       <ProtocolSelect :protocols="protocols" :active-protocol-id="activeProtocolId"
         @update:activeProtocolId="store.setActiveProtocolId($event)" />
 
+      <IncludeStatinsToggle :include-statins="includeStatins" :protocol-has-statin="protocolHasStatin"
+        @update:includeStatins="includeStatins = $event" />
+
       <DrugCostList :drugs="catalogDrugsForActiveProtocol" />
 
       <CurrencyField :currency-symbol="currencySymbol" :currency-symbol-position="currencySymbolPosition"
@@ -28,6 +31,7 @@ import ProgramDataFields from './components/ProgramDataFields.vue'
 import ProtocolSelect from './components/ProtocolSelect.vue'
 import ProtocolAssumptionOverrides from './components/ProtocolAssumptionOverrides.vue'
 import DrugCostList from './components/DrugCostList.vue'
+import IncludeStatinsToggle from './components/IncludeStatinsToggle.vue'
 import CurrencyField from './components/CurrencyField.vue'
 
 const store = useDrugCalcStore()
@@ -41,6 +45,8 @@ const {
   catalogDrugsForActiveProtocol,
   protocols,
   activeProtocolId,
+  includeStatins,
+  protocolHasStatin,
   currencySymbol,
   currencySymbolPosition,
 } = storeToRefs(store)

@@ -51,12 +51,14 @@ import { useDrugCalcStore } from '../../../../stores/drugsCalculator'
 import { createInitialProtocols } from '../../../../stores/treatmentProtocols'
 
 const store = useDrugCalcStore()
-const { protocols, activeProtocolId } = storeToRefs(store)
+const { protocols, activeProtocolId, includeStatins, protocolHasStatin, optionalStatinPercentage } = storeToRefs(store)
 
 const activeProtocol = computed(() => {
   const id = activeProtocolId.value
   return protocols.value?.find((p) => p.id === id) ?? null
 })
+
+const showOptionalStatin = computed(() => includeStatins.value && !protocolHasStatin.value)
 
 const canonicalActiveProtocol = computed(() => {
   const defaults = createInitialProtocols()
@@ -105,6 +107,19 @@ const changedOtherDrugs = computed(() => {
       current,
       defaultPct,
     })
+  }
+  if (showOptionalStatin.value) {
+    const current = normPct(optionalStatinPercentage.value)
+    const defaultPct = 30
+    if (current !== null && Number(current) !== Number(defaultPct)) {
+      rows.push({
+        key: 'other-optional-statin',
+        index: cur.length,
+        label: 'Atorvastatin 20mg',
+        current,
+        defaultPct,
+      })
+    }
   }
   return rows
 })
