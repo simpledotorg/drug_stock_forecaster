@@ -23,6 +23,7 @@ function captureFromLive({
   activeProtocol,
   drugCatalog,
   expectedCumulativeEnrolment,
+  effectiveOtherDrugs,
 }) {
   const protocol = activeProtocol.value
   const months = forecastMonths.value
@@ -30,7 +31,7 @@ function captureFromLive({
   const stepForecasts = protocol?.steps?.length
     ? forecastLinesForPatients(protocol.steps, months, treated)
     : []
-  const otherLines = protocol?.otherDrugs ?? []
+  const otherLines = effectiveOtherDrugs.value ?? []
   const otherDrugForecasts = otherLines.length
     ? forecastLinesForPatients(otherLines, months, treated)
     : []
@@ -40,7 +41,10 @@ function captureFromLive({
     drugCatalog.value,
     months,
   )
-  const sections = dashboardDrugSections(drugForecastList, protocol)
+  const sections = dashboardDrugSections(drugForecastList, {
+    steps: protocol?.steps,
+    otherDrugs: otherLines,
+  })
   const totalTabletsAllForecastDrugs = drugForecastList.reduce((s, d) => s + d.totalTablets, 0)
   const finalCost =
     drugForecastList.length && !drugForecastList.some((d) => d.lineCost === null)
@@ -78,6 +82,7 @@ export function createForecastPipelineModule({
   activeProtocol,
   drugCatalog,
   expectedCumulativeEnrolment,
+  effectiveOtherDrugs,
 }) {
   const snapshot = ref(emptySnapshot())
   const isRecalculating = ref(false)
@@ -92,12 +97,15 @@ export function createForecastPipelineModule({
       activeProtocol,
       drugCatalog,
       expectedCumulativeEnrolment,
+      effectiveOtherDrugs,
     })
   }
 
   watch(
     () => ({
       protocolId: activeProtocol.value?.id,
+      otherDrugIds: (effectiveOtherDrugs.value ?? []).flatMap((l) => l.drugIds ?? []).join(','),
+      otherDrugPcts: (effectiveOtherDrugs.value ?? []).map((l) => l.percentage ?? '').join(','),
       forecastMonths: forecastMonths.value,
       treated: patientsTreatedFromAdherence.value,
       enrolment: expectedCumulativeEnrolment.value,
@@ -114,7 +122,7 @@ export function createForecastPipelineModule({
       }
       clearTimeout(timer)
       timer = null
-      if (next.protocolId !== prev?.protocolId) {
+      if (next.protocolId !== prev?.protocolId || next.otherDrugIds !== prev?.otherDrugIds) {
         capture()
         return
       }

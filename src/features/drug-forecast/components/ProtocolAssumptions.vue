@@ -43,7 +43,7 @@
         </table>
       </div>
 
-      <div v-if="activeProtocol.otherDrugs?.length" class="table-scroll">
+      <div v-if="otherDrugs.length" class="table-scroll">
         <table>
           <thead>
             <tr>
@@ -52,7 +52,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(drug, idx) in activeProtocol.otherDrugs" :key="activeProtocol.id + '-other-' + idx">
+            <tr v-for="(drug, idx) in protocolOtherDrugs" :key="activeProtocol.id + '-other-' + idx">
               <td class="regimen-cell left-align">{{ drug.fullRegimen ?? drug.label }}</td>
               <td>
                 <div class="assumption-cell">
@@ -64,6 +64,22 @@
                   <input v-model.number="drug.percentage" class="input input--pct hide-on-print" type="number" min="0"
                     max="100" step="1" inputmode="numeric" required />
                   <span class="show-on-print">{{ drug.percentage }}</span>
+                  <span class="margin-left">%</span>
+                </div>
+              </td>
+            </tr>
+            <tr v-if="showOptionalStatin" :key="activeProtocol.id + '-optional-statin'">
+              <td class="regimen-cell left-align">Atorvastatin 20mg</td>
+              <td>
+                <div class="assumption-cell">
+                  <span
+                    v-if="Number(optionalStatinPercentage) !== Number(optionalStatinDefaultPct)"
+                    class="assumption-default-label hide-on-print">
+                    Default {{ optionalStatinDefaultPct }}%
+                  </span>
+                  <input v-model.number="optionalStatinPercentage" class="input input--pct hide-on-print" type="number"
+                    min="0" max="100" step="1" inputmode="numeric" required />
+                  <span class="show-on-print">{{ optionalStatinPercentage }}</span>
                   <span class="margin-left">%</span>
                 </div>
               </td>
@@ -96,11 +112,26 @@ import { createInitialProtocols } from '../../../stores/treatmentProtocols'
 const includeInPrint = defineModel('includeInPrint', { type: Boolean, default: false })
 
 const store = useDrugCalcStore()
-const { protocols, activeProtocolId } = storeToRefs(store)
+const {
+  protocols,
+  activeProtocolId,
+  includeStatins,
+  protocolHasStatin,
+  optionalStatinPercentage,
+} = storeToRefs(store)
+
+const optionalStatinDefaultPct = 30
 
 const activeProtocol = computed(() => {
   const id = activeProtocolId.value
   return protocols.value?.find((p) => p.id === id) ?? null
+})
+
+const protocolOtherDrugs = computed(() => activeProtocol.value?.otherDrugs ?? [])
+const showOptionalStatin = computed(() => includeStatins.value && !protocolHasStatin.value)
+const otherDrugs = computed(() => {
+  if (showOptionalStatin.value) return [...protocolOtherDrugs.value, { label: 'Atorvastatin 20mg' }]
+  return protocolOtherDrugs.value
 })
 
 const canonicalProtocols = computed(() => createInitialProtocols())
@@ -139,6 +170,9 @@ const isActiveProtocolAssumptionsDirty = computed(() => {
   if (co.length !== io.length) return co.length > 0 || io.length > 0
   for (let i = 0; i < co.length; i++) {
     if (Number(co[i]?.percentage) !== Number(io[i]?.percentage)) return true
+  }
+  if (showOptionalStatin.value && Number(optionalStatinPercentage.value) !== Number(optionalStatinDefaultPct)) {
+    return true
   }
   return false
 })

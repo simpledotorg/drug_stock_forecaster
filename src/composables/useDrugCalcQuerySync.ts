@@ -2,6 +2,15 @@ import { watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
+function toBoolean(v: unknown): boolean | undefined {
+  if (v === null || v === undefined || v === '') return undefined
+  const value = Array.isArray(v) ? v[0] : v
+  const str = String(value).trim().toLowerCase()
+  if (str === 'true' || str === '1') return true
+  if (str === 'false' || str === '0') return false
+  return undefined
+}
+
 function toNumber(v: unknown): number | undefined {
   if (v === null || v === undefined || v === '') return undefined
   const value = Array.isArray(v) ? v[0] : v
@@ -169,6 +178,7 @@ const NUMERIC_KEYS = [
   'patientsUnderCare',
   'targetEnrolment',
   'treatmentAdherence',
+  'optionalStatinPercentage',
 ] as const
 
 const STRING_KEYS = [
@@ -177,7 +187,9 @@ const STRING_KEYS = [
   'activeProtocolId',
 ] as const
 
-const ALL_KEYS = [...NUMERIC_KEYS, ...STRING_KEYS] as const
+const BOOLEAN_KEYS = ['includeStatins'] as const
+
+const ALL_KEYS = [...NUMERIC_KEYS, ...STRING_KEYS, ...BOOLEAN_KEYS] as const
 
 export function useDrugCalcQuerySync(store: any) {
   const route = useRoute()
@@ -208,6 +220,14 @@ export function useDrugCalcQuerySync(store: any) {
         }
       }
     }
+    for (const key of BOOLEAN_KEYS) {
+      const storeRef = refs[key]
+      if (!storeRef) continue
+      if (q[key] != null && q[key] !== '') {
+        const val = toBoolean(q[key])
+        if (val !== undefined) storeRef.value = val
+      }
+    }
     applyStepsFromQuery(q as Record<string, any>, store)
     applyOtherDrugsFromQuery(q as Record<string, any>, store)
     applyDrugCostsFromQuery(q as Record<string, any>, store)
@@ -221,6 +241,10 @@ export function useDrugCalcQuerySync(store: any) {
       const v = refs[key]?.value
       if (v === null || v === undefined || v === '') continue
       if (typeof v === 'number' && !Number.isFinite(v)) continue
+      if (typeof v === 'boolean') {
+        query[key] = v ? 'true' : 'false'
+        continue
+      }
       query[key] = String(v)
     }
     appendStepsToQuery(query, store)

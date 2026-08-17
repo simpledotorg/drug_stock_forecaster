@@ -16,6 +16,7 @@ export const useDrugForecastStore = defineStore('drugCalc', () => {
     expectedCumulativeEnrolment: inputs.expectedCumulativeEnrolment,
     activeProtocol: protocols.activeProtocol,
     drugCatalog: protocols.drugCatalog,
+    effectiveOtherDrugs: protocols.effectiveOtherDrugs,
   })
   const costs = createCostsModule({ drugCatalog: protocols.drugCatalog })
 
