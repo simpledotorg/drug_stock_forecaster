@@ -77,7 +77,6 @@ export function createProtocolsModule() {
     const protocolDrugs = ids
       .map((id) => drugCatalog.value.find((d) => d.id === id))
       .filter(Boolean)
-      .sort((a, b) => a.name.localeCompare(b.name))
 
     if (protocolHasStatin.value || !includeStatins.value) return protocolDrugs
     const statin = drugCatalog.value.find((d) => d.id === OPTIONAL_STATIN_ID)
