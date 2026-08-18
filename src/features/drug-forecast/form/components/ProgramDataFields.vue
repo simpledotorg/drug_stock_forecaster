@@ -1,54 +1,55 @@
 <template>
-  <h4 class="form-group-title">Program data</h4>
+  <h4 class="form-group-title title-margin-alt">Program data</h4>
 
-  <div class="form-group">
-    <label for="patientsUnderCare">Patients under care</label>
-    <input
-      id="patientsUnderCare"
-      :value="numericOrEmpty(patientsUnderCare)"
-      required
-      @input="$emit('update:patientsUnderCare', $event.target.valueAsNumber)"
-      type="number"
-      step="any"
-      min="0"
-      class="input"
-      placeholder="200000"
-    />
+  <div>
+    <FormField input-id="patientsUnderCare" label="Patients under care">
+      <input
+        id="patientsUnderCare"
+        :value="numericOrEmpty(patientsUnderCare)"
+        required
+        type="number"
+        step="any"
+        min="0"
+        class="input"
+        placeholder="200000"
+        @input="$emit('update:patientsUnderCare', $event.target.valueAsNumber)"
+      />
+    </FormField>
     <TooltipHelp trigger-text="What does this mean?">
       The total number of patients enrolled in the hypertension program that visited in the past 12 months.
     </TooltipHelp>
   </div>
 
-  <div class="form-group">
-    <label for="targetEnrolment">Target enrolment over {{ forecastMonths }} months</label>
+  <FormField input-id="targetEnrolment" :label="`Target enrolment over ${forecastMonths} months`">
     <input
       id="targetEnrolment"
       :value="numericOrEmpty(targetEnrolment)"
       required
-      @input="$emit('update:targetEnrolment', $event.target.valueAsNumber)"
       type="number"
       step="any"
       min="0"
       class="input"
       placeholder="10000"
+      @input="$emit('update:targetEnrolment', $event.target.valueAsNumber)"
     />
-  </div>
+  </FormField>
 
-  <div class="form-group">
-    <label for="treatmentAdherence">% Treatment adherence</label>
-    <input
-      id="treatmentAdherence"
-      :value="numericOrEmpty(treatmentAdherence)"
-      required
-      @input="$emit('update:treatmentAdherence', $event.target.valueAsNumber)"
-      type="number"
-      step="any"
-      class="input"
-      placeholder="65"
-      maxlength="3"
-      min="0"
-      max="100"
-    />
+  <div>
+    <FormField input-id="treatmentAdherence" label="% Treatment adherence">
+      <input
+        id="treatmentAdherence"
+        :value="numericOrEmpty(treatmentAdherence)"
+        required
+        type="number"
+        step="any"
+        class="input"
+        placeholder="65"
+        maxlength="3"
+        min="0"
+        max="100"
+        @input="$emit('update:treatmentAdherence', $event.target.valueAsNumber)"
+      />
+    </FormField>
     <TooltipHelp trigger-text="How do I calculate this?">
       <span>This number is the percentage of patients that attended for treatment in past 3 months.</span>
       <span><b>Numerator:</b> Patients that attended for treatment in past 3 months.</span>
@@ -58,6 +59,7 @@
 </template>
 
 <script setup>
+import FormField from './FormField.vue'
 import TooltipHelp from './TooltipHelp.vue'
 
 function numericOrEmpty(v) {
@@ -79,22 +81,7 @@ defineEmits([
 </script>
 
 <style scoped>
-h4 {
-  margin-top: 4rem;
-  color: #888;
-  font-weight: 500;
-  font-size: 0.90rem;
-  letter-spacing: 0.06em;
-  margin-bottom: 0.2rem;
+.title-margin-alt {
+  margin-top: 3.5rem;
 }
-
-@media print {
-  h4 {
-    color: #000;
-    font-weight: 650;
-    margin-top: 0.9rem;
-    margin-bottom: 0.05rem;
-  }
-}
-
 </style>

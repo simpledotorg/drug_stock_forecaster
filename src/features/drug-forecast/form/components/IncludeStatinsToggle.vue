@@ -1,24 +1,31 @@
 <template>
-  <div v-if="!protocolHasStatin" class="form-group include-statins">
-    <label class="include-statins__row" for="includeStatins">
-      Include statin?
-      <span class="switch">
-        <input
-          id="includeStatins"
-          class="switch__input"
-          type="checkbox"
-          role="switch"
-          :checked="includeStatins"
-          :aria-checked="includeStatins"
-          @change="$emit('update:includeStatins', $event.target.checked)"
-        />
-        <span class="switch__track" aria-hidden="true"></span>
-      </span>
-    </label>
-  </div>
+  <template v-if="!protocolHasStatin" >
+    <div class="include-statins" >
+
+      <FormField input-id="includeStatins">
+        <div class="include-statins__row" >
+          Include statin
+          <span class="switch">
+            <input
+            id="includeStatins"
+            class="switch__input"
+            type="checkbox"
+            role="switch"
+            :checked="includeStatins"
+            :aria-checked="includeStatins"
+            @change="$emit('update:includeStatins', $event.target.checked)"
+            />
+            <span class="switch__track" aria-hidden="true"></span>
+          </span>
+        </div>
+      </FormField>
+    </div>
+  </template>
 </template>
 
 <script setup>
+import FormField from './FormField.vue'
+
 defineProps({
   includeStatins: { type: Boolean, required: true },
   protocolHasStatin: { type: Boolean, required: true },
@@ -28,8 +35,14 @@ defineEmits(['update:includeStatins'])
 </script>
 
 <style scoped>
+
 .include-statins {
-  margin-top: 0.4rem;
+  cursor: pointer;
+}
+
+/* FormField's <label> fills this card; UA `label { cursor: default }` overrides inheritance. */
+.include-statins :deep(.form-group) {
+  cursor: pointer;
 }
 
 .include-statins__row {
@@ -38,16 +51,20 @@ defineEmits(['update:includeStatins'])
   justify-content: space-between;
   gap: 0.75rem;
   width: 100%;
-  cursor: pointer;
   user-select: none;
+  font-weight: 600;
+  font-family: var(--font-sans-spline);
+  color: #000;
+  font-size: 0.85rem;
 }
 
 .switch {
   position: relative;
   display: inline-flex;
   flex-shrink: 0;
-  width: 2.5rem;
+  width: 2.8rem;
   height: 1.4rem;
+  transform: translateX(0.1rem);
 }
 
 .switch__input {
@@ -77,10 +94,10 @@ defineEmits(['update:includeStatins'])
   content: '';
   position: absolute;
   top: 0.15rem;
-  left: 0.15rem;
-  width: 1.1rem;
+  left: 0.1rem;
+  width: 1.6rem;
   height: 1.1rem;
-  border-radius: 50%;
+  border-radius: 1.1rem;
   background: #fff;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.28);
   transition: transform 0.15s ease;
@@ -91,7 +108,7 @@ defineEmits(['update:includeStatins'])
 }
 
 .switch__input:checked + .switch__track::after {
-  transform: translateX(1.1rem);
+  transform: translateX(0.92rem);
 }
 
 .switch__input:focus-visible + .switch__track {

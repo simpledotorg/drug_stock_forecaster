@@ -9,6 +9,17 @@
  *     'amlodipine-5mg': 0.12,
  *     'losartan-50mg': 0.08,
  *   },
+ *
+ * Optional statin (toggle): if the protocol has no statin in `steps` / `otherDrugs`, the form
+ * shows Include statin. Override the injected drug with `optionalStatin` (same shape as an
+ * otherDrugs line). Omit it to keep Atorvastatin 20mg. Do not put that drug in `otherDrugs`
+ * or the toggle is hidden.
+ *
+ *   optionalStatin: {
+ *     label: 'Simvastatin 20mg',
+ *     drugIds: ['simvastatin-20mg'],
+ *     percentage: 30,
+ *   },
  */
 
 /** Illustrative default cost per tablet (same currency units as the rest of the app). */
@@ -26,6 +37,7 @@ const DEFAULT_COST_PER_TABLET = {
     'hctz-25mg': 0.3,
     'atorvastatin-10mg': 0.8,
     'atorvastatin-20mg': 0.9,
+    'simvastatin-20mg': 0.5,
 }
 
 export function createInitialDrugCatalog() {
@@ -43,7 +55,32 @@ export function createInitialDrugCatalog() {
         // Statins
         { id: 'atorvastatin-10mg', name: 'Atorvastatin 10mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-10mg'] },
         { id: 'atorvastatin-20mg', name: 'Atorvastatin 20mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-20mg'] },
+        { id: 'simvastatin-20mg', name: 'Simvastatin 20mg', costPerTablet: DEFAULT_COST_PER_TABLET['simvastatin-20mg'] },
     ]
+}
+
+/** Injected when Include statin is on and the protocol does not already list a statin. */
+export const DEFAULT_OPTIONAL_STATIN = {
+    label: 'Atorvastatin 20mg',
+    drugIds: ['atorvastatin-20mg'],
+    percentage: 30,
+}
+
+export function resolveOptionalStatinLine(protocol) {
+    const override = protocol?.optionalStatin
+    if (!override?.drugIds?.length) {
+        return {
+            label: DEFAULT_OPTIONAL_STATIN.label,
+            drugIds: [...DEFAULT_OPTIONAL_STATIN.drugIds],
+            percentage: DEFAULT_OPTIONAL_STATIN.percentage,
+        }
+    }
+    const pct = override.percentage
+    return {
+        label: override.label || DEFAULT_OPTIONAL_STATIN.label,
+        drugIds: [...override.drugIds],
+        percentage: typeof pct === 'number' && Number.isFinite(pct) ? pct : DEFAULT_OPTIONAL_STATIN.percentage,
+    }
 }
 
 /** Catalog fallback, or protocol `defaultCosts[drugId]` when that protocol defines one. */
@@ -58,7 +95,12 @@ export function resolveDefaultCostPerTablet(drugId, protocol) {
 export function applyProtocolDefaultCosts(protocol, drugCatalog) {
     if (!protocol || !Array.isArray(drugCatalog)) return
     const ids = new Set()
-    for (const line of [...(protocol.steps ?? []), ...(protocol.otherDrugs ?? [])]) {
+    const lines = [
+        ...(protocol.steps ?? []),
+        ...(protocol.otherDrugs ?? []),
+        resolveOptionalStatinLine(protocol),
+    ]
+    for (const line of lines) {
         for (const id of line?.drugIds ?? []) ids.add(id)
     }
     for (const id of ids) {
@@ -229,14 +271,18 @@ export function createInitialProtocols() {
                 { label: 'HCTZ 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amlodipine 10mg + Lisinopril 20mg + Hydrochlorothiazide 25mg' },
                 { label: 'HCTZ 25mg', drugIds: ['hctz-25mg'], percentage: 1, fullRegimen: 'Amlodipine 10mg + Lisinopril 20mg + Hydrochlorothiazide 50mg' },
             ],
-            // otherDrugs: [
-            //     { label: 'Atorvastatin 10mg', drugIds: ['atorvastatin-10mg'], percentage: 30 },
-            // ],
+            // Keep statin off `otherDrugs` so the Include statin toggle stays available.
+            optionalStatin: {
+                label: 'Simvastatin 20mg',
+                drugIds: ['simvastatin-20mg'],
+                percentage: 30,
+            },
             defaultCosts: {
-                'amlodipine-5mg': 120,
-                'amlodipine-10mg': 180,
-                'lisinopril-10mg': 350,
-                'hctz-25mg': 370,
+                'amlodipine-5mg': 80,
+                'amlodipine-10mg': 130,
+                'lisinopril-10mg': 270,
+                'hctz-25mg': 145,
+                'simvastatin-20mg': 160,
             },
         },
         {

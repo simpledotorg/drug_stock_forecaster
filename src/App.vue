@@ -52,7 +52,7 @@
       <p class="small-text">
         Created by <a href="https://resolvetosavelives.org" target="_blank">Resolve to Save Lives</a>
       </p>
-      <p class="small-text">Version 0.2.0</p>
+      <p class="small-text">Version 0.3.0</p>
       <!-- <p class="small-text">
           Source: <a href="https://www.who.int/news-room/fact-sheets/detail/hypertension" target="_blank">WHO Fact
             Sheet on Hypertension</a>

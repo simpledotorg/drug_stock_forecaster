@@ -1,6 +1,5 @@
 <template>
-  <div class="form-group">
-    <label for="activeProtocolId">Treatment protocol</label>
+  <FormField input-id="activeProtocolId" label="Treatment protocol">
     <select
       id="activeProtocolId"
       class="input input-select"
@@ -14,11 +13,12 @@
         <option v-else :value="section.protocol.id">{{ section.protocol.name }}</option>
       </template>
     </select>
-  </div>
+  </FormField>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import FormField from './FormField.vue'
 
 const props = defineProps({
   activeProtocolId: { type: String, required: true },

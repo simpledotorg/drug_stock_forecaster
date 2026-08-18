@@ -118,7 +118,10 @@ function printForecast() {
   transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease;
   font-size: 0.8rem;
   font-weight: 600;
-  box-shadow: var(--shadow-2);
+  /* box-shadow: var(--shadow-2); */
+  box-shadow:
+    /* 0 0 0 0px color-mix(in oklab, var(--ink) 5%, transparent), */
+    0 2px 2px rgba(15, 23, 42, 0.06);
 }
 
 .share-button span {

@@ -53,6 +53,20 @@ const {
 </script>
 
 <style>
+.form-group-title {
+  font-size: 0.85rem;
+  font-weight: 1000;
+  color: #444;
+  margin-top: 0.4rem;
+  margin-bottom: -0.2rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.form-group-title--spaced {
+  margin-top: 1.3rem;
+}
+
 .form-container {
   width: 100%;
   min-width: 0;
@@ -76,8 +90,12 @@ const {
     font-family: var(--font-display);
   }
 
-  h4 {
+  .form-group-title {
     grid-column: span 3;
+    margin: 0.25rem 0 0.05rem;
+    color: #000;
+    font-weight: 750;
+    letter-spacing: 0.08em;
   }
 
   .new-page {
@@ -89,47 +107,6 @@ const {
     grid-template-columns: 1fr 1fr 1fr;
     gap: 0.9rem 1.25rem;
     align-items: start;
-  }
-
-  .form-group {
-    gap: 0.2rem;
-    break-inside: avoid;
-  }
-
-  .form-group-title {
-    margin: 0.25rem 0 0.05rem;
-    color: #000;
-    font-weight: 750;
-    letter-spacing: 0.08em;
-  }
-
-  label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #000;
-  }
-
-  .input {
-    padding: 0.38rem 0.5rem;
-    border-radius: 6px;
-    background: transparent !important;
-    box-shadow: none !important;
-    border: 1px solid rgba(0, 0, 0, 0.55) !important;
-    font-size: 0.92rem;
-    color: #000;
-    height: auto;
-  }
-
-  .input::placeholder {
-    color: transparent !important;
-  }
-
-  .input-select {
-    background-image: none !important;
-    padding-right: 0.25rem;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
   }
 
   .segmented-control {
@@ -156,7 +133,7 @@ const {
 
 .form {
   display: grid;
-  gap: 0.85rem;
+  gap: 0.75rem;
   width: 100%;
 
   @media print {
@@ -165,153 +142,9 @@ const {
   }
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.form-group-title {
-  font-size: 0.85rem;
-  font-weight: 1000;
-  color: #444;
-  margin-top: 0.4rem;
-  margin-bottom: -0.3rem;
-  text-transform: uppercase;
-}
-
-label {
-  font-weight: 600;
-  color: #333;
-  font-size: 0.85rem;
-}
-
-.input {
-  padding: 0.7rem 0.7rem;
-  border: none;
-  border-radius: 12px;
-  background-color: #fff;
-  font-size: 0.9rem;
-  box-shadow:
-    0 0 0 1px color-mix(in oklab, var(--ink) 14%, transparent),
-    0 1px 2px rgba(15, 23, 42, 0.06);
-  transition: box-shadow 0.3s ease;
-  font-family: var(--font-sans-spline);
-}
-
-.input-select {
-  padding-left: 0.75rem;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding-right: 2rem;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='black'><path d='M5 7l5 5 5-5'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 0.7rem center;
-  background-size: 1rem;
-}
-
-.input:disabled {
-  background-color: #eee;
-  color: #444;
-  cursor: not-allowed;
-  box-shadow: 0 0 0 1px #ccc;
-}
-
-.input:focus {
-  outline: none;
-  box-shadow:
-    0 0 0 2px var(--focus-ring),
-    0 0 0 5px var(--focus-ring-glow),
-    0 10px 18px rgba(15, 23, 42, 0.08);
-}
-
-.input::placeholder {
-  color: #999;
-  font-size: 0.9rem;
-}
-
-/* Empty or invalid (required) — red border / light tint; optional fields use .input--optional */
-.input:not(:disabled):not(.input--optional):placeholder-shown,
-.input:not(:disabled):not(.input--optional):invalid {
-  box-shadow:
-    0 0 0 2px color-mix(in oklab, #e11d48 65%, transparent),
-    0 0 0 1px color-mix(in oklab, #e11d48 45%, transparent),
-    0 2px 8px rgba(225, 29, 72, 0.14);
-  background-color: color-mix(in oklab, var(--paper, #fff) 86%, #fecdd3 14%);
-}
-
-.input:not(:disabled):not(.input--optional):placeholder-shown:focus,
-.input:not(:disabled):not(.input--optional):invalid:focus {
-  box-shadow:
-    0 0 0 2px var(--focus-ring),
-    0 0 0 5px var(--focus-ring-glow),
-    0 0 0 1px color-mix(in oklab, #e11d48 40%, transparent),
-    0 10px 18px rgba(15, 23, 42, 0.08);
-  background-color: var(--paper, #fff);
-}
-
 .small-text {
   font-size: 0.8rem;
   color: #666;
-}
-
-.tooltip-trigger {
-  position: relative;
-  display: inline-block;
-  width: fit-content;
-  cursor: help;
-  align-self: flex-start;
-  margin: 0 !important;
-}
-
-.tooltip-trigger-text {
-  display: inline-block;
-  text-decoration: underline;
-  text-decoration-style: dashed;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
-  text-decoration-color: #888;
-}
-
-.tooltip-bubble {
-  position: absolute;
-  bottom: calc(100% + 0.3rem);
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 0.5rem 0.75rem;
-  max-width: 240px;
-  width: 100%;
-  font-size: 0.8rem;
-  line-height: 1.35;
-  background: #2d2d2d;
-  color: #f0f0f0;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  white-space: normal;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s, visibility 0.2s;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.tooltip-bubble::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -6px;
-  border: 6px solid transparent;
-  border-top-color: #2d2d2d;
-}
-
-.tooltip-trigger:hover .tooltip-bubble,
-.tooltip-trigger.tooltip-open .tooltip-bubble {
-  opacity: 1;
-  visibility: visible;
 }
 
 .segmented-control {

@@ -3,16 +3,11 @@ import {
   applyProtocolDefaultCosts,
   createInitialDrugCatalog,
   createInitialProtocols,
+  resolveOptionalStatinLine,
 } from '../../../../stores/treatmentProtocols'
 import { otherDrugsForProtocol, uniqueDrugIdsFromProtocol } from '../../utils/forecastMath'
 
-const STATIN_DRUG_IDS = new Set(['atorvastatin-10mg', 'atorvastatin-20mg'])
-const OPTIONAL_STATIN_ID = 'atorvastatin-20mg'
-const OPTIONAL_STATIN_LINE = {
-  label: 'Atorvastatin 20mg',
-  drugIds: [OPTIONAL_STATIN_ID],
-  percentage: 30,
-}
+const STATIN_DRUG_IDS = new Set(['atorvastatin-10mg', 'atorvastatin-20mg', 'simvastatin-20mg'])
 
 function protocolIncludesStatin(protocol) {
   return uniqueDrugIdsFromProtocol(protocol).some((id) => STATIN_DRUG_IDS.has(id))
@@ -26,6 +21,7 @@ export function createProtocolsModule() {
   const optionalStatinPercentage = ref(30)
 
   const activeProtocol = computed(() => protocols.value.find((p) => p.id === activeProtocolId.value))
+  const optionalStatinLine = computed(() => resolveOptionalStatinLine(activeProtocol.value))
   const protocolHasStatin = computed(() => protocolIncludesStatin(activeProtocol.value))
   const effectiveOtherDrugs = computed(() => {
     const base = otherDrugsForProtocol(activeProtocol.value)
@@ -33,8 +29,8 @@ export function createProtocolsModule() {
     return [
       ...base,
       {
-        label: OPTIONAL_STATIN_LINE.label,
-        drugIds: OPTIONAL_STATIN_LINE.drugIds,
+        label: optionalStatinLine.value.label,
+        drugIds: optionalStatinLine.value.drugIds,
         percentage: optionalStatinPercentage.value,
       },
     ]
@@ -68,7 +64,7 @@ export function createProtocolsModule() {
         if (oc[i] && ob[i]) oc[i].percentage = ob[i].percentage
       }
     }
-    optionalStatinPercentage.value = OPTIONAL_STATIN_LINE.percentage
+    optionalStatinPercentage.value = resolveOptionalStatinLine(initial).percentage
     triggerRef(protocols)
   }
 
@@ -79,7 +75,8 @@ export function createProtocolsModule() {
       .filter(Boolean)
 
     if (protocolHasStatin.value || !includeStatins.value) return protocolDrugs
-    const statin = drugCatalog.value.find((d) => d.id === OPTIONAL_STATIN_ID)
+    const statinId = optionalStatinLine.value.drugIds[0]
+    const statin = drugCatalog.value.find((d) => d.id === statinId)
     if (!statin || protocolDrugs.some((d) => d.id === statin.id)) return protocolDrugs
     return [...protocolDrugs, statin]
   })
@@ -92,6 +89,7 @@ export function createProtocolsModule() {
     activeProtocol,
     includeStatins,
     optionalStatinPercentage,
+    optionalStatinLine,
     protocolHasStatin,
     effectiveOtherDrugs,
     activeOtherDrugs,

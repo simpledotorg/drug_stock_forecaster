@@ -69,7 +69,7 @@
               </td>
             </tr>
             <tr v-if="showOptionalStatin" :key="activeProtocol.id + '-optional-statin'">
-              <td class="regimen-cell left-align">Atorvastatin 20mg</td>
+              <td class="regimen-cell left-align">{{ optionalStatinLine.label }}</td>
               <td>
                 <div class="assumption-cell">
                   <span
@@ -118,9 +118,10 @@ const {
   includeStatins,
   protocolHasStatin,
   optionalStatinPercentage,
+  optionalStatinLine,
 } = storeToRefs(store)
 
-const optionalStatinDefaultPct = 30
+const optionalStatinDefaultPct = computed(() => optionalStatinLine.value.percentage)
 
 const activeProtocol = computed(() => {
   const id = activeProtocolId.value
@@ -130,7 +131,7 @@ const activeProtocol = computed(() => {
 const protocolOtherDrugs = computed(() => activeProtocol.value?.otherDrugs ?? [])
 const showOptionalStatin = computed(() => includeStatins.value && !protocolHasStatin.value)
 const otherDrugs = computed(() => {
-  if (showOptionalStatin.value) return [...protocolOtherDrugs.value, { label: 'Atorvastatin 20mg' }]
+  if (showOptionalStatin.value) return [...protocolOtherDrugs.value, { label: optionalStatinLine.value.label }]
   return protocolOtherDrugs.value
 })
 
@@ -171,7 +172,7 @@ const isActiveProtocolAssumptionsDirty = computed(() => {
   for (let i = 0; i < co.length; i++) {
     if (Number(co[i]?.percentage) !== Number(io[i]?.percentage)) return true
   }
-  if (showOptionalStatin.value && Number(optionalStatinPercentage.value) !== Number(optionalStatinDefaultPct)) {
+  if (showOptionalStatin.value && Number(optionalStatinPercentage.value) !== Number(optionalStatinDefaultPct.value)) {
     return true
   }
   return false

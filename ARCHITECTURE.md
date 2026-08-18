@@ -9,7 +9,7 @@ Location: `src/features/drug-forecast/`
 
 - **Form**: `src/features/drug-forecast/form/`
   - `DrugForecastForm.vue`: composes small field components
-  - `components/`: `ProgramDataFields`, `ProtocolSelect`, `DrugCostList`, `CurrencyField`, `TooltipHelp`
+  - `components/`: `FormField`, `ProgramDataFields`, `ProtocolSelect`, `DrugCostList`, `CurrencyField`, `IncludeStatinsToggle`, `TooltipHelp`
 - **Dashboard**: `src/features/drug-forecast/components/`
   - `ForecastDashboard.vue`: composes `ForecastSummary` + `ForecastTable`
   - `ForecastControls.vue`: share/copy/print controls
