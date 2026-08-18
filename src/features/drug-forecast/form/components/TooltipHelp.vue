@@ -1,11 +1,11 @@
 <template>
   <p
     ref="rootRef"
-    class="small-text tooltip-trigger"
+    class="tooltip-trigger"
     :class="{ 'tooltip-open': open }"
     @click.stop="open = !open"
   >
-    <span class="smaller-text tooltip-trigger-text hide-on-print">{{ triggerText }}</span>
+    <span class="tooltip-trigger-text hide-on-print">{{ triggerText }}</span>
     <span class="tooltip-bubble hide-on-print">
       <span class="tooltip-bubble-arrow"></span>
       <span class="tooltip-bubble-content">
@@ -38,9 +38,6 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
 </script>
 
 <style scoped>
-.smaller-text {
-  font-size: 0.7rem;
-}
 
 .tooltip-trigger {
   position: relative;
@@ -48,23 +45,24 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   width: 100%;
   cursor: help;
   align-self: flex-start;
-  margin: 0 !important;
+  margin: 0;
 }
 
 .tooltip-trigger-text {
+  font-size: 0.72rem;
   display: inline-block;
   margin-left: 0.6rem;
   text-decoration: underline;
   text-decoration-style: dashed;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
-  text-decoration-color: #555;
+  text-decoration-color: #666;
   anchor-name: --tooltip-trigger-text;
 }
 
 .tooltip-bubble {
   position: absolute;
-  top: 98%;
+  top: 80%;
   left: 50%;
   transform: translateX(-50%);
   max-width: 240px;
@@ -73,15 +71,18 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   visibility: hidden;
   transition: opacity 0.2s, visibility 0.2s;
   z-index: 10;
-  display: flex;
-  flex-direction: column;
+
   position-anchor: --tooltip-trigger-text;
 }
 
 .tooltip-bubble-content {
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
   padding: 0.5rem 0.75rem;
+
 
   background: #2d2d2d;
   color: #f0f0f0;
