@@ -43,12 +43,12 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   position: relative;
   display: inline-block;
   width: 100%;
-  cursor: help;
   align-self: flex-start;
   margin: 0;
 }
 
 .tooltip-trigger-text {
+  cursor: help;
   font-size: 0.72rem;
   display: inline-block;
   margin-left: 0.6rem;
@@ -62,7 +62,7 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
 
 .tooltip-bubble {
   position: absolute;
-  top: 80%;
+  top: 85%;
   left: 50%;
   transform: translateX(-50%);
   max-width: 240px;
@@ -71,7 +71,6 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   visibility: hidden;
   transition: opacity 0.2s, visibility 0.2s;
   z-index: 10;
-
   position-anchor: --tooltip-trigger-text;
 }
 
@@ -83,7 +82,6 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   gap: 0.4rem;
   padding: 0.5rem 0.75rem;
 
-
   background: #2d2d2d;
   color: #f0f0f0;
   border-radius: 6px;
@@ -93,12 +91,12 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   line-height: 1.35;
 }
 
-.tooltip-trigger:hover .tooltip-bubble {
+.tooltip-trigger-text:hover + .tooltip-bubble {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.1s ease-out 0.15s, visibility 0s linear 0.15s;
 }
-.tooltip-trigger.tooltip-open .tooltip-bubble {
+.tooltip-trigger-text.tooltip-open + .tooltip-bubble {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.1s ease-out, visibility 0s;
@@ -106,11 +104,12 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
 
 .tooltip-bubble-arrow {
   position: relative;
-  top: 100%;
-  left: 32%;
+  left: 30%;
   transform: translateX(-50%);
   border: 6px solid transparent;
   border-bottom-color: #2d2d2d;
   width: 6px;
+  /* margin-bottom: -10px; */
+  display: block;
 }
 </style>
