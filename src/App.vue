@@ -99,8 +99,9 @@ a {
   flex-direction: column;
   width: 100%;
   max-width: 1320px;
-  margin: 40px auto 0;
-  padding: var(--space-4);
+  margin: 0 auto;
+  /* Top offset must be padding, not margin: margin + min-height: 100dvh always overflows the viewport. */
+  padding: calc(40px + var(--space-4)) var(--space-4) var(--space-4);
   gap: var(--space-3);
 }
 
@@ -131,7 +132,7 @@ a {
 
 @media (max-width: 900px) {
   .wrapper {
-    padding: var(--space-3);
+    padding: calc(40px + var(--space-3)) var(--space-3) var(--space-3);
   }
 
   .app aside .aside-content {
@@ -314,6 +315,7 @@ footer {
 
   .wrapper {
     max-width: none;
+    margin: 0;
     padding: 0;
     gap: 0;
   }

@@ -16,6 +16,7 @@
       <DrugCostList :drugs="catalogDrugsForActiveProtocol" />
 
       <CurrencyField :currency-symbol="currencySymbol" :currency-symbol-position="currencySymbolPosition"
+        :default-currency-symbol="activeProtocol?.defaultCurrency?.symbol ?? ''"
         @update:currencySymbol="currencySymbol = $event"
         @update:currencySymbolPosition="currencySymbolPosition = $event" />
     </form>
@@ -45,6 +46,7 @@ const {
   catalogDrugsForActiveProtocol,
   protocols,
   activeProtocolId,
+  activeProtocol,
   includeStatins,
   protocolHasStatin,
   currencySymbol,

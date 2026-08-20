@@ -182,9 +182,9 @@ const NUMERIC_KEYS = [
 ] as const
 
 const STRING_KEYS = [
+  'activeProtocolId',
   'currencySymbol',
   'currencySymbolPosition',
-  'activeProtocolId',
 ] as const
 
 const BOOLEAN_KEYS = ['includeStatins'] as const

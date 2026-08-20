@@ -11,7 +11,7 @@
         step="any"
         min="0"
         class="input"
-        placeholder="200000"
+        placeholder="1000"
         @input="$emit('update:patientsUnderCare', $event.target.valueAsNumber)"
       />
     </FormField>
@@ -20,19 +20,20 @@
     </TooltipHelp>
   </div>
 
+  
   <FormField input-id="targetEnrolment" :label="`Target enrolment over ${forecastMonths} months`">
     <input
-      id="targetEnrolment"
+    id="targetEnrolment"
       :value="numericOrEmpty(targetEnrolment)"
       required
       type="number"
       step="any"
       min="0"
       class="input"
-      placeholder="10000"
+      placeholder="1200"
       @input="$emit('update:targetEnrolment', $event.target.valueAsNumber)"
-    />
-  </FormField>
+      />
+    </FormField>
 
   <div>
     <FormField input-id="treatmentAdherence" label="% Treatment adherence">
@@ -84,4 +85,18 @@ defineEmits([
 .title-margin-alt {
   margin-top: 3.5rem;
 }
+
+input {
+  background-color: transparent;
+}
+
+/* :deep(.form-group:has(.input:not(:disabled):not(.input--optional):placeholder-shown:focus)),
+:deep(.form-group:has(.input:not(:disabled):not(.input--optional):invalid:focus)) {
+  box-shadow:
+    0 0 0 2px var(--focus-ring),
+    0 0 0 5px var(--focus-ring-glow),
+    0 0 0 1px color-mix(in oklab, #e11d48 40%, transparent),
+    0 10px 18px rgba(15, 23, 42, 0.08);
+  background-color: var(--paper, #fff);
+} */
 </style>

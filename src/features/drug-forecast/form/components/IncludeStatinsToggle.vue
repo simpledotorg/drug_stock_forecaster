@@ -108,7 +108,7 @@ defineEmits(['update:includeStatins'])
 }
 
 .switch__input:checked + .switch__track::after {
-  transform: translateX(0.92rem);
+  transform: translateX(1rem);
 }
 
 .switch__input:focus-visible + .switch__track {

@@ -9,7 +9,10 @@ export const useDrugForecastStore = defineStore('drugCalc', () => {
   const showCalculation = ref(false)
 
   const inputs = createInputsModule()
-  const protocols = createProtocolsModule()
+  const protocols = createProtocolsModule({
+    currencySymbol: inputs.currencySymbol,
+    currencySymbolPosition: inputs.currencySymbolPosition,
+  })
   const pipeline = createForecastPipelineModule({
     forecastMonths: inputs.forecastMonths,
     patientsTreatedFromAdherence: inputs.patientsTreatedFromAdherence,

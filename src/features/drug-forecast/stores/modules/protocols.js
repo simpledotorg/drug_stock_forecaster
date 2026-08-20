@@ -1,6 +1,7 @@
 import { ref, computed, triggerRef } from 'vue'
 import {
   applyProtocolDefaultCosts,
+  applyProtocolDefaultCurrency,
   createInitialDrugCatalog,
   createInitialProtocols,
   resolveOptionalStatinLine,
@@ -13,7 +14,7 @@ function protocolIncludesStatin(protocol) {
   return uniqueDrugIdsFromProtocol(protocol).some((id) => STATIN_DRUG_IDS.has(id))
 }
 
-export function createProtocolsModule() {
+export function createProtocolsModule({ currencySymbol, currencySymbolPosition } = {}) {
   const drugCatalog = ref(createInitialDrugCatalog())
   const protocols = ref(structuredClone(createInitialProtocols()))
   const activeProtocolId = ref(protocols.value[0]?.id ?? '')
@@ -37,13 +38,18 @@ export function createProtocolsModule() {
   })
   const activeOtherDrugs = effectiveOtherDrugs
 
+  function applyActiveProtocolDefaults() {
+    applyProtocolDefaultCosts(activeProtocol.value, drugCatalog.value)
+    applyProtocolDefaultCurrency(activeProtocol.value, currencySymbol, currencySymbolPosition)
+  }
+
   function setActiveProtocolId(id) {
     if (activeProtocolId.value === id) return
     activeProtocolId.value = id
-    applyProtocolDefaultCosts(activeProtocol.value, drugCatalog.value)
+    applyActiveProtocolDefaults()
   }
 
-  applyProtocolDefaultCosts(activeProtocol.value, drugCatalog.value)
+  applyActiveProtocolDefaults()
 
   /** Restore step and other-drug control % from canonical protocol definitions (`createInitialProtocols`). */
   function resetActiveProtocolAssumptions() {

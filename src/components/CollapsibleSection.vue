@@ -109,7 +109,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px var(--space-6);
+  padding: 12px var(--space-5) 12px var(--space-4);
   cursor: pointer;
   user-select: none;
   /* border-bottom: 0.5px solid var(--color-border-tertiary, rgba(0, 0, 0, 0.08)); */

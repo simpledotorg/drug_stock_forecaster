@@ -10,6 +10,15 @@
  *     'losartan-50mg': 0.08,
  *   },
  *
+ * Optional per-protocol currency: add `defaultCurrency` to seed the currency field when the
+ * protocol is selected. `position` is `'before'` (symbol then number) or `'after'`
+ * (`'start'` / `'end'` also work). Omit the object to keep $ before the number.
+ *
+ *   defaultCurrency: {
+ *     symbol: 'Rp',
+ *     position: 'before',
+ *   },
+ *
  * Optional statin (toggle): if the protocol has no statin in `steps` / `otherDrugs`, the form
  * shows Include statin. Override the injected drug with `optionalStatin` (same shape as an
  * otherDrugs line). Omit it to keep Atorvastatin 20mg. Do not put that drug in `otherDrugs`
@@ -37,7 +46,7 @@ const DEFAULT_COST_PER_TABLET = {
     'hctz-25mg': 0.3,
     'atorvastatin-10mg': 0.8,
     'atorvastatin-20mg': 0.9,
-    'simvastatin-20mg': 0.5,
+    'simvastatin-10mg': 0.5,
 }
 
 export function createInitialDrugCatalog() {
@@ -55,7 +64,7 @@ export function createInitialDrugCatalog() {
         // Statins
         { id: 'atorvastatin-10mg', name: 'Atorvastatin 10mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-10mg'] },
         { id: 'atorvastatin-20mg', name: 'Atorvastatin 20mg', costPerTablet: DEFAULT_COST_PER_TABLET['atorvastatin-20mg'] },
-        { id: 'simvastatin-20mg', name: 'Simvastatin 20mg', costPerTablet: DEFAULT_COST_PER_TABLET['simvastatin-20mg'] },
+        { id: 'simvastatin-10mg', name: 'Simvastatin 10mg', costPerTablet: DEFAULT_COST_PER_TABLET['simvastatin-10mg'] },
     ]
 }
 
@@ -81,6 +90,36 @@ export function resolveOptionalStatinLine(protocol) {
         drugIds: [...override.drugIds],
         percentage: typeof pct === 'number' && Number.isFinite(pct) ? pct : DEFAULT_OPTIONAL_STATIN.percentage,
     }
+}
+
+const DEFAULT_CURRENCY_SYMBOL = '$'
+const DEFAULT_CURRENCY_POSITION = 'start'
+
+function normalizeCurrencyPosition(position) {
+    if (position === 'end' || position === 'after') return 'end'
+    if (position === 'start' || position === 'before') return 'start'
+    return DEFAULT_CURRENCY_POSITION
+}
+
+/** App default, or protocol `defaultCurrency` when that protocol defines one. */
+export function resolveDefaultCurrency(protocol) {
+    const raw = protocol?.defaultCurrency
+    if (!raw || typeof raw !== 'object') {
+        return { symbol: DEFAULT_CURRENCY_SYMBOL, position: DEFAULT_CURRENCY_POSITION }
+    }
+    const symbol = typeof raw.symbol === 'string' ? raw.symbol : DEFAULT_CURRENCY_SYMBOL
+    return {
+        symbol,
+        position: normalizeCurrencyPosition(raw.position),
+    }
+}
+
+/** Seed the currency field from this protocol (falls back to $ before the number). */
+export function applyProtocolDefaultCurrency(protocol, currencySymbolRef, currencyPositionRef) {
+    if (!currencySymbolRef || !currencyPositionRef) return
+    const { symbol, position } = resolveDefaultCurrency(protocol)
+    currencySymbolRef.value = symbol
+    currencyPositionRef.value = position
 }
 
 /** Catalog fallback, or protocol `defaultCosts[drugId]` when that protocol defines one. */
@@ -273,16 +312,20 @@ export function createInitialProtocols() {
             ],
             // Keep statin off `otherDrugs` so the Include statin toggle stays available.
             optionalStatin: {
-                label: 'Simvastatin 20mg',
-                drugIds: ['simvastatin-20mg'],
+                label: 'Simvastatin 10mg',
+                drugIds: ['simvastatin-10mg'],
                 percentage: 30,
+            },
+            defaultCurrency: {
+                symbol: 'Rp',
+                position: 'before',
             },
             defaultCosts: {
                 'amlodipine-5mg': 80,
                 'amlodipine-10mg': 130,
                 'lisinopril-10mg': 270,
                 'hctz-25mg': 145,
-                'simvastatin-20mg': 160,
+                'simvastatin-10mg': 160,
             },
         },
         {
