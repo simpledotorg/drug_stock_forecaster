@@ -17,7 +17,7 @@ function protocolIncludesStatin(protocol) {
 export function createProtocolsModule({ currencySymbol, currencySymbolPosition } = {}) {
   const drugCatalog = ref(createInitialDrugCatalog())
   const protocols = ref(structuredClone(createInitialProtocols()))
-  const activeProtocolId = ref(protocols.value[0]?.id ?? '')
+  const activeProtocolId = ref('philippines-alalh')
   const includeStatins = ref(true)
   const optionalStatinPercentage = ref(30)
 

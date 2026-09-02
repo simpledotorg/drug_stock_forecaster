@@ -357,6 +357,16 @@ export function createInitialProtocols() {
                 },
                 { label: 'Hydrochlorothiazide 25mg', drugIds: ['hctz-25mg'], percentage: 5, fullRegimen: 'Amoldipine 10mg + Losartan 100mg + Hydrochlorothiazide 25mg' },
             ],
+            defaultCurrency: {
+                symbol: '₱',
+                position: 'before',
+            },
+            defaultCosts: {
+                'amlodipine-5mg': 0.33,
+                'losartan-50mg': 0.78,
+                'hctz-25mg': 1,
+                'atorvastatin-20mg': 1.98,
+            },
         },
         {
             id: 'rwanda-aalilihh',
