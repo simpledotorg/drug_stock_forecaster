@@ -41,8 +41,6 @@ const DEFAULT_COST_PER_TABLET = {
     'valsartan-80mg-amlodipine-5mg-spc': 0.4,
     'valsartan-160mg-amlodipine-10mg-spc': 0.6,
     'chlorthalidone-12.5mg': 0.4,
-    'atorvastatin-10mg': 0.8,
-    'atorvastatin-20mg': 0.5,
     'hctz-25mg': 0.3,
     'atorvastatin-10mg': 0.8,
     'atorvastatin-20mg': 0.9,
